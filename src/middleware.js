@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export function middleware(req) {
   const response = NextResponse.next();
-  response.headers.set("Access-Control-Allow-Origin", "http://localhost:5173");
+  response.headers.set("Access-Control-Allow-Origin", "http://localhost:3000/");
   response.headers.set(
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, DELETE, OPTIONS"

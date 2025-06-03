@@ -1,24 +1,30 @@
 import prisma from "@/lib/prisma";
+import { ErrorResponse } from "@/lib/response/ErrorResponse";
+import { StatusCodes } from "http-status-codes";
+import { NextResponse } from "next/server";
 
-export default async function handler(req, res) {
-  switch (req.method) {
-    case "GET":
-      const sections = await prisma.section.findMany();
-      return res.json(sections);
-    case "POST":
-      const { section } = req.body;
-      try {
-        const insert = await prisma.section.create({
-          data: {
-            section,
-          },
-        });
-        return res.status(201).json(insert);
-      } catch (error) {
-        return res.status(400).json({ error: error });
-      }
-    default:
-      res.setHeader("Allow", ["GET", "POST"]);
-      return res.status(405).end(`Method ${req.method} Not Allowed`);
+export async function GET(req) {
+  try {
+    const result = await prisma.section.findMany();
+    return NextResponse.json({ data: result }, { status: StatusCodes.OK });
+  } catch (error) {
+    return ErrorResponse(error);
+  }
+}
+
+export async function POST(req, res) {
+  try {
+    const body = await req.json();
+    const { section } = body;
+    const result = await prisma.section.create({
+      data: { section: section },
+    });
+    return NextResponse.json({
+      data: result,
+      message: "Data berhasil dibuat",
+      status: StatusCodes.CREATED,
+    });
+  } catch (error) {
+    return ErrorResponse(error);
   }
 }
