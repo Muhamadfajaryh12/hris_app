@@ -3,6 +3,11 @@ import { ErrorResponse } from "@/lib/response/ErrorResponse";
 import { StatusCodes } from "http-status-codes";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+
+BigInt.prototype.toJSON = function () {
+  return this.toString();
+};
+
 export async function GET(req) {}
 
 export async function POST(req, res) {
@@ -18,7 +23,7 @@ export async function POST(req, res) {
         password: hash,
         name: name,
         gender: gender,
-        no_telp: no_telp.toString(),
+        no_telp: no_telp,
         levelId: parseInt(levelId),
         sectionId: parseInt(sectionId),
       },
