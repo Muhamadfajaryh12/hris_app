@@ -39,3 +39,13 @@ model User {
   level Level @relation(fields: [levelId], references: [id])
   section Section @relation(fields: [sectionId], references: [id])
 }
+
+model Attendence {
+  id Int @id @default(autoincrement())
+  time_in DateTime
+  time_out DateTime?
+  status String
+  created_at DateTime @default(now())
+  userId Int
+  user User @relation(fields:[userId],references:[id])
+}

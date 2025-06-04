@@ -8,7 +8,36 @@ BigInt.prototype.toJSON = function () {
   return this.toString();
 };
 
-export async function GET(req) {}
+export async function GET(req) {
+  try {
+    const result = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        npk: true,
+        email: true,
+        gender: true,
+        no_telp: true,
+        level: {
+          select: {
+            level: true,
+          },
+        },
+        section: {
+          select: {
+            section: true,
+          },
+        },
+      },
+    });
+    return NextResponse.json({
+      data: result,
+      status: StatusCodes.OK,
+    });
+  } catch (error) {
+    return ErrorResponse(error);
+  }
+}
 
 export async function POST(req, res) {
   try {
