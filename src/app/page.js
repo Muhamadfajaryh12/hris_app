@@ -1,10 +1,40 @@
+"use client";
+import CustomInput from "@/components/CustomInput";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast, Toaster } from "sonner";
 
 export default function Home() {
+  const form = useForm({
+    defaultValues: {
+      npk: "",
+      password: "",
+    },
+  });
+
+  const route = useRouter();
+
+  const Submit = async (data) => {
+    try {
+      const response = await fetch("http://localhost:3000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ npk: data.npk, password: data.password }),
+      });
+
+      route.push("/dashboard");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div>
       <main className="w-screen h-screen flex justify-center items-center">
@@ -13,29 +43,27 @@ export default function Home() {
             <CardTitle>Login to your account</CardTitle>
           </CardHeader>
           <CardContent>
-            <form>
-              <div className="flex flex-col gap-6">
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="email@gmail.com"
-                    required
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(Submit)}>
+                <div className="flex flex-col gap-6">
+                  <CustomInput
+                    control={form.control}
+                    name="npk"
+                    label="NPK"
+                    placeholder="0000"
+                    type="number"
                   />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="password">Password</Label>
-                  <Input
-                    id="password"
+                  <CustomInput
+                    control={form.control}
+                    name="password"
+                    label="Password"
+                    placeholder="***"
                     type="password"
-                    placeholder="*****"
-                    required
                   />
+                  <Button type="submit">Login</Button>
                 </div>
-                <Button type="submit">Login</Button>
-              </div>
-            </form>
+              </form>
+            </Form>
           </CardContent>
         </Card>
       </main>

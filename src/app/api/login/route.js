@@ -4,13 +4,14 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { StatusCodes } from "http-status-codes";
+import { cookies } from "next/headers";
 export async function POST(req, res) {
   try {
     const body = await req.json();
     const { npk, password } = body;
     const userValid = await prisma.user.findUnique({
       where: {
-        npk: npk,
+        npk: parseInt(npk),
       },
     });
 
@@ -29,6 +30,16 @@ export async function POST(req, res) {
       "123456",
       { expiresIn: "7d" }
     );
+
+    cookies().set({
+      name: "token",
+      value: token,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7,
+    });
 
     return NextResponse.json({
       data: {

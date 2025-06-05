@@ -42,19 +42,24 @@ const AppSidebar = () => {
     management_system: {
       master_data: [
         {
-          link: "/",
+          link: "/master/master_section",
           name: "Master Section",
           icon: <FaUser />,
         },
         {
-          link: "/",
+          link: "/master/master_level",
+          name: "Master Level",
+          icon: <FaUser />,
+        },
+        {
+          link: "/master/master_employee",
           name: "Master Employee",
           icon: <FaUser />,
         },
       ],
       attendence: [
         {
-          link: "/",
+          link: "/attendence",
           name: "Attendence",
           icon: <FaRegCalendar />,
         },
@@ -93,7 +98,6 @@ const AppSidebar = () => {
                 <SidebarGroupContent>
                   {Object.entries(primaryValue).map(([secondaryKey, items]) => (
                     <Collapsible
-                      defaultOpen
                       className="group/collapsible"
                       key={secondaryKey}
                     >

@@ -1,7 +1,18 @@
 import { NextResponse } from "next/server";
 
-export function middleware(req) {
+export default function middleware(req) {
   const response = NextResponse.next();
+  const token = req.cookies.get("token").value;
+  const protectedPath = ["/dashboard", "/master"];
+
+  const isProtected = protectedPath.some((path) =>
+    req.nextUrl.pathname.startsWith(path)
+  );
+
+  if (!token && isProtected) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
   response.headers.set("Access-Control-Allow-Origin", "http://localhost:3000/");
   response.headers.set(
     "Access-Control-Allow-Methods",
@@ -17,5 +28,5 @@ export function middleware(req) {
 }
 
 export const config = {
-  matcher: "/api/:path*",
+  matcher: ["/api/:path*", "/dashboard/:path*", "/master/:path*"],
 };
