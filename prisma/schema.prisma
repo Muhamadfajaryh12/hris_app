@@ -38,6 +38,7 @@ model User {
   sectionId Int
   level Level @relation(fields: [levelId], references: [id])
   section Section @relation(fields: [sectionId], references: [id])
+  attendence Attendence[]
 }
 
 model Attendence {

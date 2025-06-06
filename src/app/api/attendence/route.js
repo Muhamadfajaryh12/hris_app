@@ -3,13 +3,12 @@ import { ErrorResponse } from "@/lib/response/ErrorResponse";
 import { StatusCodes } from "http-status-codes";
 import { NextResponse } from "next/server";
 
-export async function GET(req) {
+export async function GET(req, { params }) {
   try {
-    const params = await req.params;
-    const { id } = params;
+    const { id } = await params;
     const result = await prisma.attendence.findMany({
       where: {
-        userId: id,
+        userId: Number(id),
       },
     });
 
@@ -25,12 +24,20 @@ export async function GET(req) {
 export async function POST(req, res) {
   try {
     const body = await req.json();
-    const { time_in, status, userId } = body;
-    const result = prisma.attendence.create({
+    const { time_in, userId } = body;
+
+    const timeDate = new Date(time_in);
+
+    const setTime = new Date(timeDate);
+    setTime.setHours(8, 0, 0, 0);
+
+    const status = timeDate > setTime ? "Late" : "On-Time";
+
+    const result = await prisma.attendence.create({
       data: {
-        time_in,
-        userId,
-        status,
+        time_in: time_in,
+        userId: userId,
+        status: status,
       },
     });
 

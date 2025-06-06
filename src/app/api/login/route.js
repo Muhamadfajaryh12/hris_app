@@ -31,7 +31,7 @@ export async function POST(req, res) {
       { expiresIn: "7d" }
     );
 
-    cookies().set({
+    await cookies().set({
       name: "token",
       value: token,
       httpOnly: true,
