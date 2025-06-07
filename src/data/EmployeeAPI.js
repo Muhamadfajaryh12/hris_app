@@ -30,8 +30,35 @@ const EmployeeAPI = (() => {
     }
   };
 
+  const PutEmployee = async ({
+    name,
+    email,
+    no_telp,
+    npk,
+    gender,
+    levelId,
+    sectionId,
+    id,
+  }) => {
+    try {
+      const response = await axios.put(`${BASE_URL}/employee/${id}`, {
+        name,
+        email,
+        no_telp,
+        npk,
+        gender,
+        levelId,
+        sectionId,
+      });
+
+      return response.data;
+    } catch (error) {
+      return console.log(error);
+    }
+  };
   return {
     PostEmployee,
+    PutEmployee,
   };
 })();
 

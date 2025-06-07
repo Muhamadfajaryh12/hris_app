@@ -8,8 +8,12 @@ import Link from "next/link";
 import { useFetch } from "@/hooks/useFetch";
 
 const page = () => {
-  const { data } = useFetch(`http://localhost:3000/api/attendence/1`);
+  const { data } = useFetch(`http://localhost:3000/api/attendence?id=1`);
   console.log(data);
+
+  const backgroundColorValidate = (data) => {
+    return data == "Late" ? "#FFEB3B" : "#4CAF50";
+  };
   return (
     <MainLayout>
       <Button asChild>
@@ -18,32 +22,11 @@ const page = () => {
       <FullCalendar
         plugins={[dayGridPlugin]}
         initialView="dayGridMonth"
-        events={[
-          {
-            start: "2025-06-01",
-            display: "background",
-            color: "#4CAF50", // Hijau (on-time)
-            extendedProps: {
-              status: "On Time", // Tambahkan data status
-            },
-          },
-          {
-            start: "2025-06-02",
-            display: "background",
-            color: "#FFEB3B", // Kuning (late)
-            extendedProps: {
-              status: "Late",
-            },
-          },
-          {
-            start: "2025-06-03",
-            display: "background",
-            color: "#F44336", // Merah (absent)
-            extendedProps: {
-              status: "Absent",
-            },
-          },
-        ]}
+        events={data.map((item) => ({
+          start: item.created_at,
+          display: "background",
+          color: backgroundColorValidate(item.status),
+        }))}
         dayCellContent={(cellInfo) => {
           const dateStr = cellInfo.date.toISOString().split("T")[0];
           const event = cellInfo.view.calendar
@@ -52,12 +35,10 @@ const page = () => {
 
           return (
             <div className="fc-daygrid-day-content">
-              {/* Tanggal */}
               <div className="fc-daygrid-day-number">
                 {cellInfo.dayNumberText}
               </div>
 
-              {/* Status Text */}
               {event && (
                 <div
                   className="fc-daygrid-status"

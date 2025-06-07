@@ -3,17 +3,24 @@ import { ErrorResponse } from "@/lib/response/ErrorResponse";
 import { StatusCodes } from "http-status-codes";
 import { NextResponse } from "next/server";
 
-export async function GET(req, { params }) {
+export async function PUT(req, { params }) {
   try {
+    const body = await req.json();
     const { id } = await params;
-    const result = await prisma.attendence.findMany({
+    const { time_out } = body;
+
+    const result = await prisma.attendence.update({
       where: {
-        userId: Number(id),
+        id: Number(id),
+      },
+      data: {
+        time_out: time_out,
       },
     });
 
     return NextResponse.json({
       data: result,
+      message: "Berhasil Clock-out",
       status: StatusCodes.OK,
     });
   } catch (error) {

@@ -6,13 +6,18 @@ import { Form } from "@/components/ui/form";
 import EmployeeAPI from "@/data/EmployeeAPI";
 import { useFetch } from "@/hooks/useFetch";
 import MainLayout from "@/layouts/MainLayout";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import dataGender from "@/utils/data/dataGender";
+import { useParams } from "next/navigation";
 const page = () => {
+  const params = useParams();
   const { data: dataSection } = useFetch(`http://localhost:3000/api/section`);
   const { data: dataLevel } = useFetch(`http://localhost:3000/api/level`);
+  const { data: dataEmployee } = useFetch(
+    `http://localhost:3000/api/employee/${params.id}`
+  );
 
   const form = useForm({
     defaultValues: {
@@ -21,10 +26,22 @@ const page = () => {
       no_telp: "",
       npk: "",
       gender: "",
-      level: "",
-      section: "",
     },
   });
+
+  useEffect(() => {
+    if (dataEmployee && dataLevel && dataSection) {
+      form.reset({
+        name: dataEmployee.name,
+        email: dataEmployee.email,
+        no_telp: dataEmployee.no_telp,
+        npk: dataEmployee.npk,
+        gender: dataEmployee.gender,
+        level: String(dataEmployee?.levelId),
+        section: String(dataEmployee?.sectionId),
+      });
+    }
+  }, [dataEmployee, dataLevel, dataSection]);
 
   const dataSectionMaster = dataSection?.map((item) => ({
     id: item.id.toString(),
@@ -37,7 +54,7 @@ const page = () => {
   }));
 
   const Submit = async (data) => {
-    const response = await EmployeeAPI.PostEmployee({
+    const response = await EmployeeAPI.PutEmployee({
       name: data.name,
       email: data.email,
       no_telp: data.no_telp,
@@ -45,20 +62,21 @@ const page = () => {
       gender: data.gender,
       levelId: data.level,
       sectionId: data.section,
-      password: data.npk,
+      id: params.id,
     });
 
-    if (response?.status == 201) {
+    if (response?.status == 200) {
       toast("Successfully", {
         description: response.message,
       });
     }
   };
+
   return (
     <MainLayout title="Form Master Employee">
       <Form {...form}>
         <form
-          className="w-full flex flex-col gap-4"
+          className="w-full flex flex-col gap-4 "
           onSubmit={form.handleSubmit(Submit)}
         >
           <CustomInput

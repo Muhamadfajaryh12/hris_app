@@ -15,8 +15,20 @@ const AttendenceAPI = (() => {
       console.log(error);
     }
   };
+
+  const UpdateAttendence = async ({ id, time_out }) => {
+    try {
+      const response = await axios.put(`${BASE_URL}/attendence/${id}`, {
+        time_out,
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return {
     InsertAttendence,
+    UpdateAttendence,
   };
 })();
 

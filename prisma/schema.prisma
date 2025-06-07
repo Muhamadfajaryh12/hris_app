@@ -45,6 +45,7 @@ model Attendence {
   id Int @id @default(autoincrement())
   time_in DateTime
   time_out DateTime?
+  time_working Int?
   status String
   created_at DateTime @default(now())
   userId Int

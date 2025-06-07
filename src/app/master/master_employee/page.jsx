@@ -1,13 +1,24 @@
 "use client";
+import CustomAlertDialog from "@/components/CustomAlertDialog";
 import CustomDataTable from "@/components/CustomDataTable";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useFetch } from "@/hooks/useFetch";
 import MainLayout from "@/layouts/MainLayout";
+import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
 const page = () => {
   const { data } = useFetch(`http://localhost:3000/api/employee`);
+  const [isOpen, setIsOpen] = useState(false);
 
   const columns = [
     {
@@ -43,16 +54,43 @@ const page = () => {
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
-        return <Button variant="secondary">Action</Button>;
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem>
+                <Link href={`/master/master_employee/form/${row.original.id}`}>
+                  Update
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setIsOpen(true)}>
+                Delete
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>View employee</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
       },
     },
   ];
   return (
     <MainLayout title="Master Employee">
-      <Button asChild size="sm">
-        <Link href="/master_employee/form">Create</Link>
-      </Button>
-      <CustomDataTable columns={columns} data={data} />
+      <CustomDataTable
+        columns={columns}
+        data={data}
+        link={"/master/master_employee/form"}
+        titleButton="Create employee"
+        filterColumn="name"
+        placeholder="Search by name"
+      />
+      <CustomAlertDialog setIsOpen={setIsOpen} isOpen={isOpen} />
     </MainLayout>
   );
 };
