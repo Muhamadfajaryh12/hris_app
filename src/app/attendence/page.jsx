@@ -16,9 +16,14 @@ const page = () => {
   };
   return (
     <MainLayout>
-      <Button asChild>
-        <Link href="/attendence/form">Attendence</Link>
-      </Button>
+      <div className="flex gap-2">
+        <Button asChild>
+          <Link href="/attendence/form">Attendence</Link>
+        </Button>
+        <Button asChild variant="destructive">
+          <Link href="/request_leave/form">Leave Request</Link>
+        </Button>
+      </div>
       <FullCalendar
         plugins={[dayGridPlugin]}
         initialView="dayGridMonth"

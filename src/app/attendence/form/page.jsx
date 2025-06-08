@@ -14,7 +14,6 @@ const page = () => {
   const { data } = useFetch(
     `http://localhost:3000/api/attendence?id=1&date=${dates}`
   );
-  console.log(data[0]?.id);
   const form = useForm();
   const Submit = async (datas) => {
     if (data) {

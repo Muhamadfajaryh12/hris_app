@@ -4,6 +4,7 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import React, { useState } from "react";
@@ -28,17 +29,22 @@ const CustomDataTable = ({
   placeholder,
 }) => {
   const [columnFilters, setColumnFilters] = useState();
+  const [sorting, setSorting] = useState();
   const table = useReactTable({
     data,
     columns,
+    onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     state: {
       columnFilters,
+      sorting,
     },
   });
+
   return (
     <div className="">
       <div className="flex items-center py-4 justify-between gap-2">

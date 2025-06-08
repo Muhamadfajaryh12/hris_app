@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useFetch } from "@/hooks/useFetch";
 import MainLayout from "@/layouts/MainLayout";
-import { MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 
@@ -23,7 +23,17 @@ const page = () => {
   const columns = [
     {
       accessorKey: "npk",
-      header: "NPK",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+          >
+            NPK
+            <ArrowUpDown />
+          </Button>
+        );
+      },
     },
     {
       accessorKey: "name",

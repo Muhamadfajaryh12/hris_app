@@ -39,6 +39,7 @@ model User {
   level Level @relation(fields: [levelId], references: [id])
   section Section @relation(fields: [sectionId], references: [id])
   attendence Attendence[]
+  annual_leave AnnualLeave[]
 }
 
 model Attendence {
@@ -47,7 +48,20 @@ model Attendence {
   time_out DateTime?
   time_working Int?
   status String
+  emotion String?
   created_at DateTime @default(now())
   userId Int
   user User @relation(fields:[userId],references:[id])
 }
+
+model AnnualLeave {
+  id Int @id @default(autoincrement())
+  date_leave DateTime
+  approval_hrd String?
+  approval_leader String?
+  status String?
+  reason String
+  userId Int
+  user User @relation(fields:[userId],references:[id])
+}
+
