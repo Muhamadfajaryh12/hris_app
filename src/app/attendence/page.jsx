@@ -1,70 +1,20 @@
-"use client";
+"use server";
 import MainLayout from "@/layouts/MainLayout";
-import FullCalendar from "@fullcalendar/react";
 import React from "react";
-import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { useFetch } from "@/hooks/useFetch";
+import AttendenceComponent from "@/components/attendence/AttendenceComponent";
+import { cookies } from "next/headers";
+import AttendenceAPI from "@/data/AttendenceAPI";
+import AnnualLeaveAPI from "@/data/AnnualLeaveAPI";
 
-const page = () => {
-  const { data } = useFetch(`http://localhost:3000/api/attendence?id=1`);
-  console.log(data);
-
-  const backgroundColorValidate = (data) => {
-    return data == "Late" ? "#FFEB3B" : "#4CAF50";
-  };
+const page = async () => {
+  const cookieStore = await cookies();
+  const userId = cookieStore.get("user_id")?.value;
+  const dataAttendence = await AttendenceAPI.GetAttendence({ id: userId });
+  const dataAnnualLeave = await AnnualLeaveAPI.GetAnnualLeave({ id: userId });
+  console.log(dataAnnualLeave, dataAttendence);
   return (
     <MainLayout>
-      <div className="flex gap-2">
-        <Button asChild>
-          <Link href="/attendence/form">Attendence</Link>
-        </Button>
-        <Button asChild variant="destructive">
-          <Link href="/request_leave/form">Leave Request</Link>
-        </Button>
-      </div>
-      <FullCalendar
-        plugins={[dayGridPlugin]}
-        initialView="dayGridMonth"
-        events={data.map((item) => ({
-          start: item.created_at,
-          display: "background",
-          color: backgroundColorValidate(item.status),
-        }))}
-        dayCellContent={(cellInfo) => {
-          const dateStr = cellInfo.date.toISOString().split("T")[0];
-          const event = cellInfo.view.calendar
-            .getEvents()
-            .find((e) => e.startStr === dateStr && e.display === "background");
-
-          return (
-            <div className="fc-daygrid-day-content">
-              <div className="fc-daygrid-day-number">
-                {cellInfo.dayNumberText}
-              </div>
-
-              {event && (
-                <div
-                  className="fc-daygrid-status"
-                  style={{
-                    fontSize: "0.7rem",
-                    fontWeight: "bold",
-                    textAlign: "center",
-                    marginTop: "2px",
-                    color: event.color === "#FFEB3B" ? "#000" : "#fff", // Kuning pakai text hitam
-                    backgroundColor: event.color + "CC", // Tambah opacity
-                    borderRadius: "4px",
-                    padding: "1px 3px",
-                  }}
-                >
-                  {event.extendedProps.status}
-                </div>
-              )}
-            </div>
-          );
-        }}
-      />
+      <AttendenceComponent data={dataAttendence} />
     </MainLayout>
   );
 };

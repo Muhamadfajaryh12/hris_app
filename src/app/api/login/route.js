@@ -30,16 +30,29 @@ export async function POST(req, res) {
       "123456",
       { expiresIn: "7d" }
     );
+    const cookieStore = await cookies();
 
-    await cookies().set({
-      name: "token",
-      value: token,
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-    });
+    if (token) {
+      cookieStore.set({
+        name: "token",
+        value: token,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+      });
+
+      cookieStore.set({
+        name: "user_id",
+        value: userValid.id,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+      });
+    }
 
     return NextResponse.json({
       data: {

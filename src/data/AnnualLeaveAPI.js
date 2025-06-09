@@ -1,0 +1,34 @@
+import axios from "axios";
+
+const BASE_URL = `http://localhost:3000/api`;
+
+const GetAnnualLeave = async ({ id }) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/annual_leave?id=${id}`);
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const PostAnnualLeave = async ({ reason, date_leave }) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/annual_leave`, {
+      reason,
+      date_leave,
+    });
+    console.log(response);
+    return {
+      data: response.data.data,
+      message: response.data.message,
+      status: response.data.status,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export default {
+  PostAnnualLeave,
+  GetAnnualLeave,
+};

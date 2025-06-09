@@ -3,6 +3,15 @@ import axios from "axios";
 const AttendenceAPI = (() => {
   const BASE_URL = "http://localhost:3000/api";
 
+  const GetAttendence = async ({ id }) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/attendence?id=${id}`);
+      return response.data.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const InsertAttendence = async ({ userId, time_in }) => {
     try {
       const response = await axios.post(`${BASE_URL}/attendence`, {
@@ -29,6 +38,7 @@ const AttendenceAPI = (() => {
   return {
     InsertAttendence,
     UpdateAttendence,
+    GetAttendence,
   };
 })();
 

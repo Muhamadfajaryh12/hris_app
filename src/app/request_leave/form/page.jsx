@@ -1,17 +1,40 @@
 "use client";
+import MainLayout from "@/layouts/MainLayout";
+import React from "react";
 import CustomInput from "@/components/CustomInput";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import MainLayout from "@/layouts/MainLayout";
-import React from "react";
 import { useForm } from "react-hook-form";
+import AnnualLeaveAPI from "@/data/AnnualLeaveAPI";
+import { toast } from "sonner";
 
 const page = () => {
-  const form = useForm();
+  const form = useForm({
+    defaultValues: {
+      date: "",
+      reason: "",
+    },
+  });
+
+  const Submit = async (data) => {
+    const response = await AnnualLeaveAPI.PostAnnualLeave({
+      reason: data.reason,
+      date_leave: new Date(data.date),
+    });
+    if (response?.status == 200) {
+      toast("Successfully", {
+        description: response.message,
+      });
+    }
+  };
+
   return (
     <MainLayout>
       <Form {...form}>
-        <form className="flex flex-col gap-4">
+        <form
+          className="flex flex-col gap-4"
+          onSubmit={form.handleSubmit(Submit)}
+        >
           <CustomInput
             control={form.control}
             name="date"

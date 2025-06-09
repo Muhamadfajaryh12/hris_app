@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export default function middleware(req) {
   const response = NextResponse.next();
-  const token = req.cookies.get("token").value;
+  const token = req.cookies.get("token")?.value || null;
   const protectedPath = ["/dashboard", "/master"];
 
   const isProtected = protectedPath.some((path) =>

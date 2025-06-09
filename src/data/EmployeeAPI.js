@@ -2,6 +2,14 @@ import axios from "axios";
 
 const EmployeeAPI = (() => {
   const BASE_URL = "http://localhost:3000/api";
+  const GetEmployee = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/employee`);
+      return response.data.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const PostEmployee = async ({
     name,
     email,
@@ -59,6 +67,7 @@ const EmployeeAPI = (() => {
   return {
     PostEmployee,
     PutEmployee,
+    GetEmployee,
   };
 })();
 
