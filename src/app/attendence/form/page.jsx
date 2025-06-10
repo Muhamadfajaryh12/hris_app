@@ -14,9 +14,10 @@ const page = () => {
   const { data } = useFetch(
     `http://localhost:3000/api/attendence?id=1&date=${dates}`
   );
+
   const form = useForm();
   const Submit = async (datas) => {
-    if (data) {
+    if (data?.length > 0) {
       const response = await AttendenceAPI.UpdateAttendence({
         id: data[0]?.id,
         time_out: new Date(),
@@ -44,7 +45,7 @@ const page = () => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(Submit)}>
             <Button variant="secondary" type="submit">
-              <FaClock /> {data ? "Clock Out" : "Clock In"}
+              <FaClock /> {data?.length > 0 ? "Clock Out" : "Clock In"}
             </Button>
           </form>
         </Form>

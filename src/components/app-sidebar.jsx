@@ -56,6 +56,11 @@ const AppSidebar = () => {
           name: "Master Employee",
           icon: <FaUser />,
         },
+        {
+          link: "/master/master_shift",
+          name: "Master Shift",
+          icon: <FaUser />,
+        },
       ],
       attendence: [
         {

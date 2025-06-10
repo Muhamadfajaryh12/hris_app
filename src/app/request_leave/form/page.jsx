@@ -21,7 +21,7 @@ const page = () => {
       reason: data.reason,
       date_leave: new Date(data.date),
     });
-    if (response?.status == 200) {
+    if (response?.status == 201) {
       toast("Successfully", {
         description: response.message,
       });

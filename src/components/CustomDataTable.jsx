@@ -47,19 +47,23 @@ const CustomDataTable = ({
 
   return (
     <div className="">
-      <div className="flex items-center py-4 justify-between gap-2">
-        <Input
-          placeholder={placeholder}
-          value={table.getColumn(filterColumn)?.getFilterValue() ?? ""}
-          onChange={(event) =>
-            table.getColumn(filterColumn)?.setFilterValue(event.target.value)
-          }
-          className="w-72"
-        />
-        <Button asChild size="sm">
-          <Link href={link}>{titleButton}</Link>
-        </Button>
-      </div>
+      {filterColumn ? (
+        <div className="flex items-center py-4 justify-between gap-2">
+          <Input
+            placeholder={placeholder}
+            value={table.getColumn(filterColumn)?.getFilterValue() ?? ""}
+            onChange={(event) =>
+              table.getColumn(filterColumn)?.setFilterValue(event.target.value)
+            }
+            className="w-72"
+          />
+          <Button asChild size="sm">
+            <Link href={link}>{titleButton}</Link>
+          </Button>
+        </div>
+      ) : (
+        ""
+      )}
       <div className="rounded-md border">
         <Table>
           <TableHeader>
