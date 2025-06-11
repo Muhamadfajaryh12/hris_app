@@ -1,7 +1,16 @@
+import CustomDataTable from "@/components/CustomDataTable";
+import OvertimeComponent from "@/components/overtime/OvertimeComponent";
+import OvertimeAPI from "@/data/OvertimeAPI";
+import MainLayout from "@/layouts/MainLayout";
 import React from "react";
 
-const page = () => {
-  return <div>page</div>;
+const page = async () => {
+  const data = await OvertimeAPI.GetOvertime({ url: "" });
+  return (
+    <MainLayout>
+      <OvertimeComponent data={data} />
+    </MainLayout>
+  );
 };
 
 export default page;

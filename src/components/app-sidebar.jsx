@@ -68,6 +68,11 @@ const AppSidebar = () => {
           name: "Attendence",
           icon: <FaRegCalendar />,
         },
+        {
+          link: "/overtime",
+          name: "Overtime",
+          icon: <FaRegCalendar />,
+        },
       ],
       training_and_development: [
         {

@@ -7,12 +7,13 @@ import { useForm } from "react-hook-form";
 import dataCompensation from "@/utils/data/dataCompensation";
 import OvertimeAPI from "@/data/OvertimeAPI";
 import { Button } from "../ui/button";
+import { toast } from "sonner";
 
 const FormOvertime = ({ dataShift }) => {
   const form = useForm({
     defaultValues: {
       date: "",
-      shift: "",
+      shiftId: "",
       work_note: "",
       upload: "",
       overtime_duration: "",
@@ -25,18 +26,21 @@ const FormOvertime = ({ dataShift }) => {
     id: item.id.toString(),
     value: `${item.title} - ${item.work_time}`,
   }));
-
   const Submit = async (data) => {
     const formData = new FormData();
     formData.append("date", data.date);
-    formData.append("shift", data.shift);
+    formData.append("shiftId", data.shiftId);
     formData.append("work_note", data.work_note);
     formData.append("overtime_duration", data.overtime_duration);
     formData.append("break_duration", data.break_duration);
     formData.append("compensation", data.compensation);
-    formData.append("upload", data.upload);
+    formData.append("file", data.upload);
     const response = await OvertimeAPI.PostOvertime({ formData: formData });
-    console.log(response);
+    if (response?.status == 201) {
+      toast("Successfuly", {
+        title: response.message,
+      });
+    }
   };
   return (
     <Form {...form}>
@@ -52,7 +56,7 @@ const FormOvertime = ({ dataShift }) => {
           <CustomSelect
             control={form.control}
             label="Shift"
-            name="shift"
+            name="shiftId"
             placeholder="Select shift"
             data={MasterDataShift}
           />

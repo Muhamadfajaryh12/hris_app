@@ -1,0 +1,22 @@
+[
+  {
+    "id": "Sick Leave",
+    "value": "Sick Leave"
+  },
+  {
+    "id": "Annual Leave",
+    "value": "Annual Leave"
+  },
+  {
+    "id": "Maternity Leave",
+    "value": "Maternity Leave"
+  },
+  {
+    "id": "Bereavement Leave",
+    "value": "Bereavement Leave"
+  },
+  {
+    "id": "Compensation Leave",
+    "value": "Compensation Leave"
+  }
+]

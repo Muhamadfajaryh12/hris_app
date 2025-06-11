@@ -27,12 +27,21 @@ const CustomInput = ({
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input
-              placeholder={placeholder}
-              type={type}
-              {...field}
-              {...props}
-            />
+            {type == "file" ? (
+              <Input
+                placeholder={placeholder}
+                type={type}
+                onChange={(e) => field.onChange(e.target?.files?.[0])}
+                {...props}
+              />
+            ) : (
+              <Input
+                placeholder={placeholder}
+                type={type}
+                {...field}
+                {...props}
+              />
+            )}
           </FormControl>
           <FormMessage />
         </FormItem>

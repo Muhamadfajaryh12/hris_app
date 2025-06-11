@@ -59,12 +59,19 @@ model Attendence {
 
 model AnnualLeave {
   id Int @id @default(autoincrement())
-  date_leave DateTime
+  date_start DateTime
+  date_end DateTime
+  data_count Int
   approval_hrd String?
   approval_leader String?
   status String?
   reason String
+  type String
   userId Int
+  hrdId Int
+  leaderId Int
+  hrd User @relation(fields:[hrdId],references:[id])
+  leader User @relation(fields:[leaderId],references:[id])
   user User @relation(fields:[userId],references:[id])
 }
 
@@ -74,13 +81,15 @@ model Overtime {
   approval_leader String?
   compensation String
   overtime_duration Int
-  break_duration Int?
+  break_duration Int @default(0)
   work_note String
   file String?
   status_paid String?
-  shiftId int
+  shiftId Int
   userId Int
+  leaderId Int
   user User @relation(fields:[userId],references:[id])
+  leader User @relation(fields:[leaderId],references:[id])
   shift Shift @relation(fields:[shiftId],references:[id])
 }
 

@@ -15,4 +15,13 @@ const PostOvertime = async ({ formData }) => {
   }
 };
 
-export default { PostOvertime };
+const GetOvertime = async ({ url = "" }) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/overtime${url}`);
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export default { PostOvertime, GetOvertime };
