@@ -138,7 +138,7 @@ const AppSidebar = () => {
                             <SidebarMenuSub>
                               {items.map((item, index) => (
                                 <SidebarMenuSubItem key={index}>
-                                  <Link href={item.link}>
+                                  <Link href={item.link} prefetch={false}>
                                     <span>{item.name}</span>
                                   </Link>
                                 </SidebarMenuSubItem>

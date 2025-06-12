@@ -22,7 +22,44 @@ const GetLevel = async () => {
   }
 };
 
+const GetDetailLevel = async ({ id }) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/level/${id}`);
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const UpdateLevel = async ({ id, level }) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/level/${id}`, { level });
+    return {
+      message: response.data.emssage,
+      data: response.data.data,
+      status: response.data.status,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const DeleteLevel = async ({ id }) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/level/${id}`);
+    return {
+      message: response.data.emssage,
+      data: response.data.data,
+      status: response.data.status,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
 export default {
   PostLevel,
   GetLevel,
+  GetDetailLevel,
+  UpdateLevel,
+  DeleteLevel,
 };

@@ -5,9 +5,16 @@ import { NextResponse } from "next/server";
 
 export async function GET(req, { params }) {
   try {
-    const { id } = await params;
-    const result = await prisma.level.findUnique({ where: { id: Number(id) } });
-    return NextResponse.json({ data: result }, { status: StatusCodes.OK });
+    const { id } = params;
+    const result = await prisma.section.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+    return NextResponse.json({
+      data: result,
+      status: StatusCodes.OK,
+    });
   } catch (error) {
     return ErrorResponse(error);
   }
@@ -15,13 +22,15 @@ export async function GET(req, { params }) {
 
 export async function PUT(req, { params }) {
   try {
+    const { id } = params;
     const body = await req.json();
-    const { id } = await params;
-    const { level } = body;
-    const result = await prisma.level.update({
-      where: { id: Number(id) },
+    const { section } = body;
+    const result = await prisma.section.update({
+      where: {
+        id: Number(id),
+      },
       data: {
-        level: level,
+        section: section,
       },
     });
     return NextResponse.json({
@@ -29,15 +38,19 @@ export async function PUT(req, { params }) {
       status: StatusCodes.OK,
       message: "Berhasil",
     });
-  } catch (error) {
+  } catch (erorr) {
     return ErrorResponse(error);
   }
 }
 
 export async function DELETE(req, { params }) {
   try {
-    const { id } = await params;
-    const result = await prisma.level.delete({ where: { id: Number(id) } });
+    const { id } = params;
+    const result = await prisma.section.delete({
+      where: {
+        id: Number(id),
+      },
+    });
     return NextResponse.json({
       data: result,
       status: StatusCodes.OK,

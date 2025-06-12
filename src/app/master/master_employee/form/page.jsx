@@ -6,9 +6,12 @@ import MainLayout from "@/layouts/MainLayout";
 import React from "react";
 
 const page = async () => {
-  const dataSection = await SectionAPI.GetSection();
-  const dataLevel = await LevelAPI.GetLevel();
-  const dataPosition = await PositionAPI.GetPosition();
+  const [dataSection, dataLevel, dataPosition] = await Promise.all([
+    SectionAPI.GetSection(),
+    LevelAPI.GetLevel(),
+    PositionAPI.GetPosition(),
+  ]);
+
   return (
     <MainLayout>
       <FormMasterEmployeComponent

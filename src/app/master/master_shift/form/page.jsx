@@ -26,6 +26,7 @@ const page = () => {
       toast("Successfuly", {
         title: response.message,
       });
+      form.reset();
     }
   };
   return (

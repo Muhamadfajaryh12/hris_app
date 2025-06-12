@@ -23,4 +23,44 @@ const GetSection = async () => {
   }
 };
 
-export default { PostSection, GetSection };
+const GetDetailSection = async ({ id }) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/section/${id}`);
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const UpdateSection = async ({ id, section }) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/section/${id}`, { section });
+    return {
+      status: response.data.status,
+      data: response.data.data,
+      message: response.data.message,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const DeleteSection = async ({ id }) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/section/${id}`);
+    return {
+      status: response.data.status,
+      data: response.data.data,
+      message: response.data.message,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+export default {
+  PostSection,
+  GetSection,
+  GetDetailSection,
+  UpdateSection,
+  DeleteSection,
+};

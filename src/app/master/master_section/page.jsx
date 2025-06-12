@@ -1,29 +1,13 @@
-"use client";
-import CustomDataTable from "@/components/CustomDataTable";
-import { Button } from "@/components/ui/button";
-import { useFetch } from "@/hooks/useFetch";
+import MasterSectionComponent from "@/components/master_section/MasterSectionComponent";
+import SectionAPI from "@/data/SectionAPI";
 import MainLayout from "@/layouts/MainLayout";
 import React from "react";
 
-const page = () => {
-  const { data } = useFetch(`http://localhost:3000/api/section`);
-
-  const columns = [
-    {
-      accessorKey: "section",
-      header: "Name Section",
-    },
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => {
-        return <Button>Action</Button>;
-      },
-    },
-  ];
+const page = async () => {
+  const data = await SectionAPI.GetSection();
   return (
     <MainLayout>
-      <CustomDataTable columns={columns} data={data} />
+      <MasterSectionComponent data={data} />
     </MainLayout>
   );
 };

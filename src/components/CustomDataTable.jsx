@@ -62,7 +62,11 @@ const CustomDataTable = ({
           </Button>
         </div>
       ) : (
-        ""
+        <div className="flex items-center py-4 justify-end gap-2">
+          <Button asChild size="sm">
+            <Link href={link}>{titleButton}</Link>
+          </Button>
+        </div>
       )}
       <div className="rounded-md border">
         <Table>
