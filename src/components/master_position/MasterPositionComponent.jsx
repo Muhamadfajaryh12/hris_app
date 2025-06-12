@@ -1,7 +1,6 @@
 "use client";
-import CustomAlertDialog from "@/components/CustomAlertDialog";
-import CustomDataTable from "@/components/CustomDataTable";
-import { Button } from "@/components/ui/button";
+import React, { useState } from "react";
+import CustomDataTable from "../CustomDataTable";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,56 +8,18 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+} from "../ui/dropdown-menu";
+import { MoreHorizontal } from "lucide-react";
+import { Button } from "../ui/button";
 import Link from "next/link";
-import React, { useState } from "react";
+import CustomAlertDialog from "../CustomAlertDialog";
 
-const MasterEmployee = ({ data }) => {
+const MasterPositionComponent = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
-
   const columns = [
     {
-      accessorKey: "npk",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
-          >
-            NPK
-            <ArrowUpDown />
-          </Button>
-        );
-      },
-    },
-    {
-      accessorKey: "name",
-      header: "Name Employee",
-    },
-    {
-      accessorKey: "email",
-      header: "Email",
-    },
-    {
-      accessorKey: "no_telp",
-      header: "Contact",
-    },
-    {
-      accessorKey: "gender",
-      header: "Gender",
-    },
-    {
-      accessorKey: "section.section",
-      header: "Section",
-    },
-    {
-      accessorKey: "position.position",
+      accessorKey: "position",
       header: "Position",
-    },
-    {
-      accessorKey: "level.level",
-      header: "Level",
     },
     {
       header: "Action",
@@ -95,15 +56,13 @@ const MasterEmployee = ({ data }) => {
     <div>
       <CustomDataTable
         columns={columns}
+        link={"/master/master_position/form"}
+        titleButton="Create position"
         data={data}
-        link={"/master/master_employee/form"}
-        titleButton="Create employee"
-        filterColumn="name"
-        placeholder="Search by name"
       />
       <CustomAlertDialog setIsOpen={setIsOpen} isOpen={isOpen} />
     </div>
   );
 };
 
-export default MasterEmployee;
+export default MasterPositionComponent;

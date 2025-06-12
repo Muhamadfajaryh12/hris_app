@@ -10,6 +10,14 @@ const EmployeeAPI = (() => {
       console.log(error);
     }
   };
+  const GetDetailEmployee = async ({ id }) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/employee/${id}`);
+      return response.data.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const PostEmployee = async ({
     name,
     email,
@@ -19,6 +27,7 @@ const EmployeeAPI = (() => {
     levelId,
     sectionId,
     password,
+    positionId,
   }) => {
     try {
       const response = await axios.post(`${BASE_URL}/employee`, {
@@ -30,6 +39,7 @@ const EmployeeAPI = (() => {
         levelId,
         sectionId,
         password,
+        positionId,
       });
       console.log(response);
       return response.data;
@@ -46,6 +56,7 @@ const EmployeeAPI = (() => {
     gender,
     levelId,
     sectionId,
+    positionId,
     id,
   }) => {
     try {
@@ -57,9 +68,13 @@ const EmployeeAPI = (() => {
         gender,
         levelId,
         sectionId,
+        positionId,
       });
 
-      return response.data;
+      return {
+        status: response.data.status,
+        message: response.data.message,
+      };
     } catch (error) {
       return console.log(error);
     }
@@ -68,6 +83,7 @@ const EmployeeAPI = (() => {
     PostEmployee,
     PutEmployee,
     GetEmployee,
+    GetDetailEmployee,
   };
 })();
 

@@ -28,6 +28,12 @@ model Level {
   schedule_event Schedule_Event[]
 }
 
+model Position {
+  id Int @id @default(autoincrement())
+  position String @unique
+  users User[]
+}
+
 model User {
   id Int @id @default(autoincrement())
   npk Int @unique @default(autoincrement())
@@ -38,11 +44,16 @@ model User {
   no_telp BigInt
   levelId Int
   sectionId Int
+  positionId Int
   level Level @relation(fields: [levelId], references: [id])
   section Section @relation(fields: [sectionId], references: [id])
+  position Position @relation(fields:[positionId], references:[id])
   attendence Attendence[]
-  annual_leave AnnualLeave[]
-  overtime Overtime[]
+  annualLeavesAsHrd    AnnualLeave[] @relation("AnnualLeaveToHrd")
+  annualLeavesAsLeader AnnualLeave[] @relation("AnnualLeaveToLeader")
+  annualLeavesAsUser   AnnualLeave[] @relation("AnnualLeaveToUser")
+  overtimeUser Overtime[] @relation("OvertimeUser")
+  overtimeLeader Overtime[] @relation("OvertimeLeader")
 }
 
 model Attendence {
@@ -70,9 +81,9 @@ model AnnualLeave {
   userId Int
   hrdId Int
   leaderId Int
-  hrd User @relation(fields:[hrdId],references:[id])
-  leader User @relation(fields:[leaderId],references:[id])
-  user User @relation(fields:[userId],references:[id])
+  hrd    User @relation("AnnualLeaveToHrd", fields: [hrdId], references: [id])
+  leader User @relation("AnnualLeaveToLeader", fields: [leaderId], references: [id])
+  user   User @relation("AnnualLeaveToUser", fields: [userId], references: [id])
 }
 
 model Overtime {
@@ -88,8 +99,8 @@ model Overtime {
   shiftId Int
   userId Int
   leaderId Int
-  user User @relation(fields:[userId],references:[id])
-  leader User @relation(fields:[leaderId],references:[id])
+  user User @relation("OvertimeUser",fields:[userId],references:[id])
+  leader User @relation("OvertimeLeader",fields:[leaderId],references:[id])
   shift Shift @relation(fields:[shiftId],references:[id])
 }
 

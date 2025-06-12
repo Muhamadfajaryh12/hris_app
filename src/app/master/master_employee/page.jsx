@@ -5,7 +5,7 @@ import MainLayout from "@/layouts/MainLayout";
 import React from "react";
 
 const page = async () => {
-  const data = await EmployeeAPI.GetEmployee();
+  const data = await EmployeeAPI.GetEmployee({ id: "" });
   return (
     <MainLayout title="Master Employee">
       <MasterEmployee data={data} />

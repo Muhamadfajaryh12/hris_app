@@ -33,6 +33,12 @@ export async function GET(req, { params }) {
             section: true,
           },
         },
+        positionId: true,
+        position: {
+          select: {
+            position: true,
+          },
+        },
       },
     });
 
@@ -49,7 +55,16 @@ export async function PUT(req, { params }) {
   try {
     const { id } = await params;
     const body = await req.json();
-    const { npk, email, name, gender, no_telp, levelId, sectionId } = body;
+    const {
+      npk,
+      email,
+      name,
+      gender,
+      no_telp,
+      levelId,
+      sectionId,
+      positionId,
+    } = body;
     const result = await prisma.user.update({
       where: { id: Number(id) },
       data: {
@@ -60,6 +75,7 @@ export async function PUT(req, { params }) {
         no_telp: no_telp,
         levelId: parseInt(levelId),
         sectionId: parseInt(sectionId),
+        positionId: parseInt(positionId),
       },
     });
 

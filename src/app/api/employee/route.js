@@ -28,6 +28,11 @@ export async function GET(req) {
             section: true,
           },
         },
+        position: {
+          select: {
+            position: true,
+          },
+        },
       },
       orderBy: {
         npk: "asc",
@@ -45,8 +50,17 @@ export async function GET(req) {
 export async function POST(req, res) {
   try {
     const body = await req.json();
-    const { npk, email, password, name, gender, no_telp, levelId, sectionId } =
-      body;
+    const {
+      npk,
+      email,
+      password,
+      name,
+      gender,
+      no_telp,
+      levelId,
+      sectionId,
+      positionId,
+    } = body;
     const hash = await bcrypt.hash(password, 10);
     const result = await prisma.user.create({
       data: {
@@ -58,6 +72,7 @@ export async function POST(req, res) {
         no_telp: no_telp,
         levelId: parseInt(levelId),
         sectionId: parseInt(sectionId),
+        positionId: parseInt(positionId),
       },
     });
     return NextResponse.json({

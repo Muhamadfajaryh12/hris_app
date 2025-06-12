@@ -1,22 +1,28 @@
 import axios from "axios";
 
-const LevelAPI = (() => {
-  const BASE_URL = "http://localhost:3000/api";
-  const PostLevel = async ({ level }) => {
-    try {
-      const response = await axios.post(`${BASE_URL}/level`, {
-        level,
-      });
+const BASE_URL = "http://localhost:3000/api";
+const PostLevel = async ({ level }) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/level`, {
+      level,
+    });
 
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-  return {
-    PostLevel,
-  };
-})();
+const GetLevel = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/level`);
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-export default LevelAPI;
+export default {
+  PostLevel,
+  GetLevel,
+};

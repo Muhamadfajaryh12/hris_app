@@ -62,7 +62,7 @@ const AppSidebar = () => {
           icon: <FaUser />,
         },
       ],
-      attendence: [
+      attendence_and_time: [
         {
           link: "/attendence",
           name: "Attendence",
@@ -71,6 +71,11 @@ const AppSidebar = () => {
         {
           link: "/overtime",
           name: "Overtime",
+          icon: <FaRegCalendar />,
+        },
+        {
+          link: "/request_leave",
+          name: "Request Leave",
           icon: <FaRegCalendar />,
         },
       ],
