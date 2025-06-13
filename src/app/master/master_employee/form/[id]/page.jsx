@@ -7,12 +7,13 @@ import LevelAPI from "@/data/LevelAPI";
 import PositionAPI from "@/data/PositionAPI";
 import EmployeeAPI from "@/data/EmployeeAPI";
 const page = async ({ params }) => {
+  const { id } = await params;
   const [dataSection, dataLevel, dataPosition, dataEmployee] =
     await Promise.all([
       SectionAPI.GetSection(),
       LevelAPI.GetLevel(),
       PositionAPI.GetPosition(),
-      EmployeeAPI.GetDetailEmployee({ id: params.id }),
+      EmployeeAPI.GetDetailEmployee({ id: id }),
     ]);
 
   return (

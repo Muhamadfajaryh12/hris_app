@@ -11,11 +11,51 @@ const GetAnnualLeave = async ({ id }) => {
   }
 };
 
-const PostAnnualLeave = async ({ reason, date_leave }) => {
+const PostAnnualLeave = async ({
+  reason,
+  date_start,
+  date_end,
+  type,
+  data_count,
+}) => {
   try {
     const response = await axios.post(`${BASE_URL}/annual_leave`, {
       reason,
-      date_leave,
+      date_start,
+      date_end,
+      type,
+      data_count,
+    });
+
+    return {
+      data: response.data.data,
+      message: response.data.message,
+      status: response.data.status,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const GetDetailAnnualLeave = async ({ id }) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/annual_leave/${id}`);
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const UpdateAnnualLeave = async ({
+  url,
+  id,
+  approval_hrd,
+  approval_leader,
+}) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/annual_leave/${id}?${url}`, {
+      approval_hrd,
+      approval_leader,
     });
     console.log(response);
     return {
@@ -27,8 +67,9 @@ const PostAnnualLeave = async ({ reason, date_leave }) => {
     console.log(error);
   }
 };
-
 export default {
   PostAnnualLeave,
   GetAnnualLeave,
+  GetDetailAnnualLeave,
+  UpdateAnnualLeave,
 };

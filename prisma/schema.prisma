@@ -79,10 +79,10 @@ model AnnualLeave {
   reason String
   type String
   userId Int
-  hrdId Int
-  leaderId Int
-  hrd    User @relation("AnnualLeaveToHrd", fields: [hrdId], references: [id])
-  leader User @relation("AnnualLeaveToLeader", fields: [leaderId], references: [id])
+  hrdId Int?
+  leaderId Int?
+  hrd    User? @relation("AnnualLeaveToHrd", fields: [hrdId], references: [id])
+  leader User? @relation("AnnualLeaveToLeader", fields: [leaderId], references: [id])
   user   User @relation("AnnualLeaveToUser", fields: [userId], references: [id])
 }
 
@@ -98,9 +98,9 @@ model Overtime {
   status_paid String?
   shiftId Int
   userId Int
-  leaderId Int
+  leaderId Int?
   user User @relation("OvertimeUser",fields:[userId],references:[id])
-  leader User @relation("OvertimeLeader",fields:[leaderId],references:[id])
+  leader User? @relation("OvertimeLeader",fields:[leaderId],references:[id])
   shift Shift @relation(fields:[shiftId],references:[id])
 }
 

@@ -27,6 +27,12 @@ export async function GET(req, res) {
           work_note: true,
           file: true,
           approval_leader: true,
+          leaderId: true,
+          leader: {
+            select: {
+              name: true,
+            },
+          },
           shift: {
             select: {
               title: true,
@@ -61,6 +67,7 @@ export async function GET(req, res) {
           overtime_duration: true,
           break_duration: true,
           work_note: true,
+          leaderId: true,
           shift: {
             select: {
               title: true,
@@ -104,6 +111,7 @@ export async function POST(req, res) {
         date: new Date(date),
         shiftId: Number(shiftId),
         compensation: compensation,
+        approval_leader: "Waiting",
         overtime_duration: TimeToMnt(overtime_duration),
         break_duration: TimeToMnt(break_duration) || 0,
         work_note: work_note,

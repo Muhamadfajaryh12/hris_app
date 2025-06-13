@@ -36,10 +36,12 @@ const FormOvertime = ({ dataShift }) => {
     formData.append("compensation", data.compensation);
     formData.append("file", data.upload);
     const response = await OvertimeAPI.PostOvertime({ formData: formData });
+
     if (response?.status == 201) {
       toast("Successfuly", {
         title: response.message,
       });
+      form.reset();
     }
   };
   return (

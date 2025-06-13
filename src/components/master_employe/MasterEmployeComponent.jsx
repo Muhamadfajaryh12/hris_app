@@ -84,7 +84,7 @@ const MasterEmployee = ({ data }) => {
                 Delete
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>View employee</DropdownMenuItem>
+              <DropdownMenuItem>View Employee</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );

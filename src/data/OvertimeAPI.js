@@ -9,7 +9,10 @@ const PostOvertime = async ({ formData }) => {
       },
     });
 
-    console.log(response);
+    return {
+      status: response.data.status,
+      message: response.data.message,
+    };
   } catch (error) {
     console.log(error);
   }
@@ -24,4 +27,21 @@ const GetOvertime = async ({ url = "" }) => {
   }
 };
 
-export default { PostOvertime, GetOvertime };
+const ApprovalOvertime = async ({ approval_leader, leaderId, id }) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/overtime/${id}`, {
+      approval_leader,
+      leaderId,
+    });
+    console.log(response);
+    return {
+      status: response.data.status,
+      message: response.data.message,
+      data: response.data.data,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export default { PostOvertime, GetOvertime, ApprovalOvertime };

@@ -1,9 +1,56 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { FaCheck } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
+import OvertimeAPI from "@/data/OvertimeAPI";
+import { toast } from "sonner";
+import Badge from "../Badge";
 
-const FormDetailOvertime = ({ data }) => {
+const FormDetailOvertime = ({ data, leaderId }) => {
+  const [status, setStatus] = useState();
+
+  useEffect(() => {
+    setStatus({
+      leader: data?.leader?.name,
+      status: data?.approval_leader,
+    });
+  }, []);
+
+  const approveHandle = async () => {
+    const response = await OvertimeAPI.ApprovalOvertime({
+      approval_leader: "Approved",
+      leaderId: leaderId,
+      id: data.id,
+    });
+    if (response?.status == 200) {
+      toast("Successfuly", {
+        title: response.message,
+      });
+      setStatus({
+        leader: data?.leader.name,
+        status: data?.approval_leader,
+      });
+    }
+  };
+
+  const rejectHandle = async () => {
+    const response = await OvertimeAPI.ApprovalOvertime({
+      approval_leader: "Rejected",
+      leaderId: leaderId,
+      id: data.id,
+    });
+    if (response?.status == 200) {
+      toast("Successfuly", {
+        title: response.message,
+      });
+      setStatus({
+        leader: data?.leader.name,
+        status: data?.approval_leader,
+      });
+    }
+  };
+
   return (
     <table className=" border border-black w-full">
       <thead>
@@ -85,14 +132,27 @@ const FormDetailOvertime = ({ data }) => {
         </tr>
         <tr>
           <td className="border border-black p-2">
-            {data?.approval_leader ? (
-              <div>{data?.approval_leader}</div>
+            {status?.leader != null ? (
+              <div className="flex flex-col justify-center items-center gap-5">
+                <h1 className="font-semibold">{status?.leader}</h1>
+                <Badge status={status?.status} />
+              </div>
             ) : (
               <div className="flex justify-center gap-2 items-center">
-                <Button size="sm" variant="">
+                <Button
+                  size="sm"
+                  variant=""
+                  type="button"
+                  onClick={() => approveHandle()}
+                >
                   <FaCheck />
                 </Button>
-                <Button size="sm" variant="destructive">
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  type="button"
+                  onClick={() => rejectHandle()}
+                >
                   <IoMdClose />
                 </Button>
               </div>

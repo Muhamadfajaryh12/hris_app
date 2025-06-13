@@ -29,13 +29,16 @@ export async function POST(req) {
     const body = await req.json();
     const cookieStore = await cookies();
     const userId = cookieStore.get("user_id")?.value;
-    const { date_leave, reason } = body;
+    const { date_start, date_end, data_count, reason, type } = body;
 
     const result = await prisma.annualLeave.create({
       data: {
-        status: "Pending",
+        status: "Waiting",
         reason: reason,
-        date_leave: date_leave,
+        date_start: date_start,
+        date_end: date_end,
+        type: type,
+        data_count: Number(data_count),
         userId: Number(userId),
       },
     });

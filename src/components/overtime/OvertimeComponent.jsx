@@ -13,6 +13,7 @@ import {
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
+import Badge from "../Badge";
 const OvertimeComponent = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -59,24 +60,7 @@ const OvertimeComponent = ({ data }) => {
       id: "approval_leader",
       enableHiding: false,
       cell: ({ row }) => {
-        if (row.original.approval_leader === null)
-          return (
-            <div className="p-2 text-xs text-white font-semibold rounded-sm bg-blue-500 w-24 text-center ">
-              Waiting
-            </div>
-          );
-        if (row.original.approval_leader === true)
-          return (
-            <div className="p-2 text-xs text-white font-semibold rounded-sm bg-green-500 w-24 text-center ">
-              Approved
-            </div>
-          );
-        if (row.original.approval_leader === false)
-          return (
-            <div className="p-2 text-xs text-white font-semibold rounded-sm bg-red-500 w-24 text-center ">
-              Rejected
-            </div>
-          );
+        return <Badge status={row.original.approval_leader} />;
       },
     },
     {

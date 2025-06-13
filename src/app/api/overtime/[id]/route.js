@@ -5,9 +5,9 @@ import { NextResponse } from "next/server";
 
 export async function PUT(req, { params }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await req.json();
-    const { approval_leader, approval_leader_id } = body;
+    const { approval_leader, leaderId } = body;
 
     const result = await prisma.overtime.update({
       where: {
@@ -15,13 +15,23 @@ export async function PUT(req, { params }) {
       },
       data: {
         approval_leader: approval_leader,
-        approval_leader_id: approval_leader_id,
+        leaderId: Number(leaderId),
+      },
+      select: {
+        approval_leader: true,
+        leaderId: true,
+        leader: {
+          select: {
+            name: true,
+          },
+        },
       },
     });
 
     return NextResponse.json({
       message: "Berhasil",
       status: StatusCodes.OK,
+      data: result,
     });
   } catch (error) {
     return ErrorResponse(error);

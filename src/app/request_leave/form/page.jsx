@@ -41,7 +41,10 @@ const page = () => {
   const Submit = async (data) => {
     const response = await AnnualLeaveAPI.PostAnnualLeave({
       reason: data.reason,
-      date_leave: new Date(data.date),
+      date_start: new Date(data.date_start),
+      date_end: new Date(data.date_end),
+      data_count: data.count_date,
+      type: data.type,
     });
     if (response?.status == 201) {
       toast("Successfully", {
