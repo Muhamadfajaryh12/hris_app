@@ -7,7 +7,7 @@ import React from "react";
 const page = async () => {
   const data = await OvertimeAPI.GetOvertime({ url: "" });
   return (
-    <MainLayout>
+    <MainLayout title="Overtime">
       <OvertimeComponent data={data} />
     </MainLayout>
   );

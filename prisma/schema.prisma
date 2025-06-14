@@ -113,6 +113,7 @@ model Schedule_Event {
   description String?
   sectionId Int
   levelId Int
+  category String @default("Meeting")
   section Section @relation(fields:[sectionId],references:[id])
   level Level @relation(fields:[levelId],references:[id])
 }

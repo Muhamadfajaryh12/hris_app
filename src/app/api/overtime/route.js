@@ -5,6 +5,9 @@ import { UploadFile } from "@/lib/UploadFile";
 import { StatusCodes } from "http-status-codes";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+BigInt.prototype.toJSON = function () {
+  return this.toString();
+};
 
 export async function GET(req, res) {
   try {
@@ -59,32 +62,46 @@ export async function GET(req, res) {
       });
     } else {
       query = prisma.overtime.findMany({
-        select: {
-          id: true,
-          date: true,
-          approval_leader: true,
-          compensation: true,
-          overtime_duration: true,
-          break_duration: true,
+        omit: {
           work_note: true,
-          leaderId: true,
-          shift: {
-            select: {
-              title: true,
-            },
-          },
+          file: true,
+          compensation: true,
+        },
+        include: {
           user: {
             select: {
               name: true,
               npk: true,
+              position: {
+                select: {
+                  position: true,
+                },
+              },
             },
           },
+          shift: true,
         },
       });
     }
+
     const result = await query;
+    const countByStatus = await prisma.overtime.groupBy({
+      by: ["approval_leader"],
+      _count: {
+        approval_leader: true,
+      },
+    });
+    const countByStatusDTO = countByStatus.map(
+      ({ approval_leader, _count }) => ({
+        approval_leader,
+        count: _count.approval_leader,
+      })
+    );
     return NextResponse.json({
-      data: result,
+      data: {
+        data: result,
+        status_count: countByStatusDTO,
+      },
       status: StatusCodes.OK,
     });
   } catch (error) {

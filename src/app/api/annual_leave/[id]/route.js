@@ -37,7 +37,7 @@ export async function PUT(req, { params }) {
     const leaderId = searchParams.get("leaderId");
     const hrdId = searchParams.get("hrdId");
     const body = await req.json();
-    const { approval_hrd, approval_leader } = body;
+    const { approval_hrd, approval_leader, status } = body;
 
     let query;
 
@@ -64,6 +64,7 @@ export async function PUT(req, { params }) {
         data: {
           hrdId: Number(hrdId),
           approval_hrd: approval_hrd,
+          status: status,
         },
         include: {
           hrd: true,

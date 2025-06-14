@@ -14,6 +14,7 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 import Badge from "../Badge";
+import SectionCard from "../SectionCard";
 const OvertimeComponent = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -56,7 +57,11 @@ const OvertimeComponent = ({ data }) => {
       header: "Shift",
     },
     {
-      header: "Approval Leader",
+      accessorKey: "user.position.position",
+      header: "Position",
+    },
+    {
+      header: "Status",
       id: "approval_leader",
       enableHiding: false,
       cell: ({ row }) => {
@@ -96,11 +101,30 @@ const OvertimeComponent = ({ data }) => {
       },
     },
   ];
+
   return (
     <div>
+      <div className="grid grid-cols-3 gap-4">
+        {data.status_count.map((item, index) => (
+          <SectionCard
+            title={item.approval_leader}
+            count={item.count}
+            key={index}
+            styleCard={
+              item.approval_leader === "Waiting"
+                ? "bg-blue-100 border-blue-300 text-blue-800"
+                : item.approval_leader === "Rejected"
+                ? "bg-red-100 border-red-300 text-red-800"
+                : item.approval_leader === "Approved"
+                ? "bg-green-100 border-green-300 text-green-800"
+                : ""
+            }
+          />
+        ))}
+      </div>
       <CustomDataTable
         columns={columns}
-        data={data}
+        data={data.data}
         link={"/overtime/form"}
         titleButton="Request Overtime"
         filterColumn="name"

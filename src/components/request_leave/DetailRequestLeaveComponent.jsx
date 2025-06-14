@@ -44,6 +44,7 @@ const DetailRequestLeaveComponent = ({ data, id }) => {
       url: `hrdId=${id}`,
       approval_hrd: approval,
       id: data?.id,
+      status: approval,
     });
     if (response?.status == 200) {
       toast("Success", {
@@ -116,7 +117,7 @@ const DetailRequestLeaveComponent = ({ data, id }) => {
           </tr>
           <tr>
             <td className="border border-black p-2">
-              {statusLeader?.status != null ? (
+              {statusLeader?.leader != null ? (
                 <div className="flex flex-col justify-center items-center gap-5">
                   <h1>{statusLeader?.leader}</h1>
                   <Badge status={statusLeader?.status} />
@@ -143,7 +144,7 @@ const DetailRequestLeaveComponent = ({ data, id }) => {
               )}
             </td>
             <td className="border border-black p-2">
-              {statusHRD?.status != null ? (
+              {statusHRD?.hrd != null ? (
                 <div className="flex flex-col justify-center items-center gap-5">
                   <h1>{statusHRD?.hrd}</h1>
                   <Badge status={statusHRD?.status} />

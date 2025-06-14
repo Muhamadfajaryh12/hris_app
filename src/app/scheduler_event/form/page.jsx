@@ -7,20 +7,6 @@ import MainLayout from "@/layouts/MainLayout";
 import React from "react";
 import { useForm } from "react-hook-form";
 
-const dataType = [
-  {
-    id: "Meeting",
-    value: "Meeting",
-  },
-  {
-    id: "Company_Event",
-    value: "Company Event",
-  },
-  {
-    id: "Training",
-    value: "Training",
-  },
-];
 const page = () => {
   const { data: dataSection } = useFetch(`http://localhost:3000/api/section`);
   const { data: dataLevel } = useFetch(`http://localhost:3000/api/level`);

@@ -86,6 +86,13 @@ const AppSidebar = () => {
           icon: <FaBook />,
         },
       ],
+      Schedule_and_Event: [
+        {
+          link: "/schedule",
+          name: "Schedule",
+          icon: <FaCalendar />,
+        },
+      ],
     },
   };
 

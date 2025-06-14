@@ -52,6 +52,16 @@ export async function POST(req, res) {
         path: "/",
         maxAge: 60 * 60 * 24 * 7,
       });
+
+      cookieStore.set({
+        name: "section_id",
+        value: userValid.sectionId,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+      });
     }
 
     return NextResponse.json({

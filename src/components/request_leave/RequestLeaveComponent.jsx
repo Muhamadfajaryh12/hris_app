@@ -13,22 +13,40 @@ import {
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import Badge from "../Badge";
+import SectionCard from "../SectionCard";
 
 const RequestLeaveComponent = ({ data }) => {
+  console.log(data);
   const columns = [
     {
-      header: "Date",
+      accessorKey: "user.npk",
+      header: "NPK",
+    },
+    {
+      accessorKey: "user.name",
+      header: "Employer",
+    },
+    {
+      accessorKey: "user.position.position",
+      header: "Position",
+    },
+    {
+      accessorKey: "type",
+      header: "Type",
+    },
+    {
+      header: "Date Leave",
       id: "date",
       cell: ({ row }) => {
         return (
-          <p>{new Date(row?.original?.date_leave).toLocaleDateString()}</p>
+          <p>
+            {new Date(row?.original?.date_start).toLocaleDateString()} -{" "}
+            {new Date(row?.original?.date_end).toLocaleDateString()}
+          </p>
         );
       },
     },
-    {
-      accessorKey: "reason",
-      header: "Reason",
-    },
+
     {
       header: "Approval Leader",
       id: "approval_leader",
@@ -51,7 +69,7 @@ const RequestLeaveComponent = ({ data }) => {
       id: "status",
       enableHiding: false,
       cell: ({ row }) => {
-        return <Badge />;
+        return <Badge status={row?.original?.status} />;
       },
     },
     {
@@ -89,12 +107,32 @@ const RequestLeaveComponent = ({ data }) => {
     },
   ];
   return (
-    <CustomDataTable
-      data={data}
-      columns={columns}
-      link={"/request_leave/form"}
-      titleButton="Request leave"
-    />
+    <div>
+      <div className="grid grid-cols-3 gap-4">
+        {data.status_count?.map((item, index) => (
+          <SectionCard
+            title={item.status}
+            count={item.count}
+            key={index}
+            styleCard={
+              item.status === "Waiting"
+                ? "bg-blue-100 border-blue-300 text-blue-800"
+                : item.status === "Rejected"
+                ? "bg-red-100 border-red-300 text-red-800"
+                : item.status === "Approved"
+                ? "bg-green-100 border-green-300 text-green-800"
+                : ""
+            }
+          />
+        ))}
+      </div>
+      <CustomDataTable
+        data={data.data}
+        columns={columns}
+        link={"/request_leave/form"}
+        titleButton="Request leave"
+      />
+    </div>
   );
 };
 

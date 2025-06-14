@@ -51,11 +51,13 @@ const UpdateAnnualLeave = async ({
   id,
   approval_hrd,
   approval_leader,
+  status,
 }) => {
   try {
     const response = await axios.put(`${BASE_URL}/annual_leave/${id}?${url}`, {
       approval_hrd,
       approval_leader,
+      status,
     });
     console.log(response);
     return {

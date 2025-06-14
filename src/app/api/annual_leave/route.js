@@ -13,10 +13,44 @@ export async function GET(req) {
       where: {
         userId: Number(id),
       },
+      include: {
+        user: {
+          select: {
+            npk: true,
+            name: true,
+            position: {
+              select: {
+                position: true,
+              },
+            },
+          },
+        },
+      },
     });
 
+    const countByStatus = await prisma.annualLeave.groupBy({
+      by: ["status"],
+      _count: {
+        status: true,
+      },
+    });
+    const countByStatusDTO = [
+      { status: "Waiting", count: 0 },
+      { status: "Approved", count: 0 },
+      { status: "Rejected", count: 0 },
+    ].map((defaultItem) => {
+      const foundItem = countByStatus.find(
+        (dbItem) => dbItem.status === defaultItem.status
+      );
+      return foundItem
+        ? { ...defaultItem, count: foundItem._count.status }
+        : defaultItem;
+    });
     return NextResponse.json({
-      data: result,
+      data: {
+        data: result,
+        status_count: countByStatusDTO,
+      },
       status: StatusCodes.OK,
     });
   } catch (error) {
@@ -38,6 +72,8 @@ export async function POST(req) {
         date_start: date_start,
         date_end: date_end,
         type: type,
+        approval_hrd: "Waiting",
+        approval_leader: "Waiting",
         data_count: Number(data_count),
         userId: Number(userId),
       },
