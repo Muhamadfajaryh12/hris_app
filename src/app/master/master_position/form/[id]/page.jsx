@@ -1,11 +1,15 @@
 import FormMasterPositionComponent from "@/components/master_position/FormMasterPositionComponent";
+import PositionAPI from "@/data/PositionAPI";
 import MainLayout from "@/layouts/MainLayout";
 import React from "react";
 
-const page = () => {
+const page = async ({ params }) => {
+  const { id } = await params;
+  const data = await PositionAPI.GetDetailPosition({ id: id });
+
   return (
     <MainLayout>
-      <FormMasterPositionComponent />
+      <FormMasterPositionComponent dataPosition={data} />
     </MainLayout>
   );
 };

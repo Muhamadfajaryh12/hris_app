@@ -13,6 +13,7 @@ import { MoreHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import CustomAlertDialog from "../CustomAlertDialog";
+import { useCurrency } from "@/hooks/useCurrency";
 
 const MasterPositionComponent = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,6 +21,12 @@ const MasterPositionComponent = ({ data }) => {
     {
       accessorKey: "position",
       header: "Position",
+    },
+    {
+      header: "Base Salary",
+      cell: ({ row }) => {
+        return <p>{useCurrency(row?.original?.base_salary)}</p>;
+      },
     },
     {
       header: "Action",
@@ -37,7 +44,7 @@ const MasterPositionComponent = ({ data }) => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem>
-                <Link href={`/master/master_employee/form/${row.original.id}`}>
+                <Link href={`/master/master_position/form/${row.original.id}`}>
                   Update
                 </Link>
               </DropdownMenuItem>

@@ -31,6 +31,7 @@ model Level {
 model Position {
   id Int @id @default(autoincrement())
   position String @unique
+  base_salary Int?
   users User[]
 }
 
@@ -54,6 +55,9 @@ model User {
   annualLeavesAsUser   AnnualLeave[] @relation("AnnualLeaveToUser")
   overtimeUser Overtime[] @relation("OvertimeUser")
   overtimeLeader Overtime[] @relation("OvertimeLeader")
+  salary Salary []
+  contract Contract []
+  payroll Payroll[]
 }
 
 model Attendence {
@@ -107,6 +111,7 @@ model Overtime {
 model Schedule_Event {
   id Int @id @default(autoincrement())
   date DateTime
+  date_end DateTime? 
   hours_start  String?
   hours_end    String?
   title String
@@ -123,4 +128,41 @@ model Shift {
   title String
   work_time String
   overtime Overtime[]
+}
+
+model Salary{
+  id Int @id @default(autoincrement())
+  basic_salary Int
+  increase_salary Int?
+  start_date DateTime?  
+  end_date DateTime ?
+  employeeId Int
+  employee User @relation(fields:[employeeId],references:[id])
+}
+
+model Contract {
+  id Int @id @default(autoincrement())
+  start_date  DateTime?
+  end_date    DateTime?
+  contract_type String
+  status String
+  file_contract String?
+  employeeId Int
+  employee User @relation(fields:[employeeId],references:[id])
+}
+
+model Payroll {
+  id Int @id @default(autoincrement())
+  pay_date DateTime
+  period_moth Int?
+  period_year Int?
+  bonus Int?
+  bonus_overtime Int?
+  deduction_bpjs Int
+  decution_pph Int
+  deduction_attendence Int?
+  total_salary Int
+  status String
+  employeeId Int
+  employee User @relation(fields:[employeeId],references:[id])
 }

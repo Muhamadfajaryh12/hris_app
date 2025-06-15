@@ -19,6 +19,11 @@ const AttendenceComponent = ({ data }) => {
       <FullCalendar
         plugins={[dayGridPlugin]}
         initialView="dayGridMonth"
+        headerToolbar={{
+          left: "prev,next today",
+          center: "title",
+          right: "dayGridMonth",
+        }}
         events={data?.map((item) => ({
           start: item.created_at,
           display: "background",
