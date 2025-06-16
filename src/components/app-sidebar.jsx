@@ -16,7 +16,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./ui/collapsible";
-import { LuLayoutDashboard, LuUsers } from "react-icons/lu";
+import { LuDollarSign, LuLayoutDashboard, LuUsers } from "react-icons/lu";
 import { GoDatabase } from "react-icons/go";
 import { FiBook } from "react-icons/fi";
 import { AiOutlineSchedule } from "react-icons/ai";
@@ -42,6 +42,11 @@ const AppSidebar = () => {
         link: "/employee",
         name: "Employee",
         icon: <LuUsers />,
+      },
+      {
+        link: "/salary",
+        name: "Salary",
+        icon: <LuDollarSign />,
       },
     ],
     master_data: [
@@ -98,11 +103,7 @@ const AppSidebar = () => {
       },
     ],
   };
-  const test = Object.entries(dataSidebar).map(([primary, items]) => ({
-    primary: primary,
-    item: items,
-  }));
-  console.log(test);
+
   return (
     <Sidebar>
       <SidebarHeader />

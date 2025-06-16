@@ -8,7 +8,14 @@ import {
   SelectValue,
 } from "./ui/select";
 
-const CustomSelect = ({ control, name, label, data, placeholder }) => {
+const CustomSelect = ({
+  control,
+  name,
+  label,
+  data,
+  placeholder,
+  onChange,
+}) => {
   return (
     <FormField
       control={control}
@@ -17,7 +24,10 @@ const CustomSelect = ({ control, name, label, data, placeholder }) => {
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <Select
-            onValueChange={field.onChange}
+            onValueChange={(value) => {
+              field.onChange(value);
+              onChange?.(value);
+            }}
             defaultValue={field.value}
             value={field.value}
           >

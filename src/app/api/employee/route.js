@@ -31,6 +31,7 @@ export async function GET(req) {
         position: {
           select: {
             position: true,
+            base_salary: true,
           },
         },
       },

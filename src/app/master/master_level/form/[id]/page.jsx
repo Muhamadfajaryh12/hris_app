@@ -4,7 +4,8 @@ import MainLayout from "@/layouts/MainLayout";
 import React from "react";
 
 const page = async ({ params }) => {
-  const data = await LevelAPI.GetDetailLevel({ id: params.id });
+  const { id } = await params;
+  const data = await LevelAPI.GetDetailLevel({ id: id });
   return (
     <MainLayout>
       <FormMasterLevelComponent dataLevel={data} />

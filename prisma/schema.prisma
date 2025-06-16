@@ -134,6 +134,7 @@ model Salary{
   id Int @id @default(autoincrement())
   basic_salary Int
   increase_salary Int?
+  total_salary Int?
   start_date DateTime?  
   end_date DateTime ?
   employeeId Int
