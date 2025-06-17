@@ -63,7 +63,7 @@ export async function GET(req, { params }) {
       level: employe.level.level,
       position: employe.position.position,
       section: employe.section.section,
-      salary: employe.salary.total_salary,
+      salary: employe.salary[0]?.total_salary || 0,
       count_overtime_duration: countOvertime._sum.overtime_duration || 0,
       count_leave: countLeave._count.status || 0,
     };

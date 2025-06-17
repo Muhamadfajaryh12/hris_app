@@ -18,6 +18,15 @@ const EmployeeAPI = (() => {
       console.log(error);
     }
   };
+
+  const GetDetailMasterEmployee = async ({ id }) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/employee/detail/${id}`);
+      return response.data.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const PostEmployee = async ({
     name,
     email,
@@ -84,6 +93,7 @@ const EmployeeAPI = (() => {
     PutEmployee,
     GetEmployee,
     GetDetailEmployee,
+    GetDetailMasterEmployee,
   };
 })();
 

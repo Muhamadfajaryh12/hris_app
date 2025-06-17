@@ -154,13 +154,13 @@ model Contract {
 
 model Payroll {
   id Int @id @default(autoincrement())
-  pay_date DateTime
-  period_moth Int?
+  pay_date DateTime?
+  period_month Int?
   period_year Int?
   bonus Int?
   bonus_overtime Int?
   deduction_bpjs Int
-  decution_pph Int
+  deduction_pph Int
   deduction_attendence Int?
   total_salary Int
   status String

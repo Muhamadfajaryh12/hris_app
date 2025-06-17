@@ -48,6 +48,11 @@ const AppSidebar = () => {
         name: "Salary",
         icon: <LuDollarSign />,
       },
+      {
+        link: "/payroll",
+        name: "Payroll",
+        icon: <LuDollarSign />,
+      },
     ],
     master_data: [
       {

@@ -43,6 +43,7 @@ const CustomInput = ({
               />
             )}
           </FormControl>
+          {description ? <FormDescription>{description}</FormDescription> : ""}
           <FormMessage />
         </FormItem>
       )}

@@ -32,7 +32,7 @@ const CustomSelect = ({
             value={field.value}
           >
             <FormControl>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full border-black">
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
             </FormControl>
