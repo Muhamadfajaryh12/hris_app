@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Form } from "../ui/form";
 import CustomSelect from "../CustomSelect";
@@ -9,32 +9,39 @@ import { Button } from "../ui/button";
 import PayRollAPI from "@/data/PayRollAPI";
 import { toast } from "sonner";
 
-const FormPayrollComponent = ({ dataEmploye }) => {
+const FormPayrollComponent = ({ dataEmploye, dataPayroll, datas }) => {
   const form = useForm({
     defaultValues: {
-      employee: "",
-      npk: "",
-      position: "",
-      section: "",
-      level: "",
-      salary: "",
-      leave_attendence: "",
-      deduction_attendence: "",
-      salary: "",
-      overtime_duration: "",
-      bonus_overtime: "",
-      bonus: "",
-      total_salary: "",
-      deduction_bpjs: "",
-      deduction_pph: "",
-      date: "",
+      employee: datas?.id?.toString() || "",
+      npk: datas?.npk || "",
+      position: datas?.position || "",
+      section: datas?.section || "",
+      level: datas?.level || "",
+      salary: Number(datas?.salary) || 0,
+      leave_attendence: Number(datas?.count_leave) || 0,
+      deduction_attendence: Number(dataPayroll?.deduction_attendence) || 0,
+      overtime_duration: Number(datas?.count_overtime_duration) || 0,
+      bonus_overtime: Number(dataPayroll?.bonus_overtime) || 0,
+      bonus: Number(dataPayroll?.bonus) || 0,
+      total_salary: Number(dataPayroll?.total_salary) || 0,
+      deduction_bpjs: Number(dataPayroll?.deduction_bpjs) || 0,
+      deduction_pph: Number(dataPayroll?.deduction_pph) || 0,
+      date: dataPayroll
+        ? `${dataPayroll.period_year}-${String(
+            dataPayroll.period_month
+          ).padStart(2, "0")}`
+        : "",
     },
   });
 
-  const dataEmployeMaster = dataEmploye.map((item) => ({
-    id: item.id.toString(),
-    value: item.name,
-  }));
+  const dataEmployeMaster = useMemo(
+    () =>
+      dataEmploye.map((item) => ({
+        id: item.id.toString(),
+        value: item.name,
+      })) || [],
+    [dataEmploye]
+  );
 
   const [
     leave_attendence,
@@ -54,6 +61,30 @@ const FormPayrollComponent = ({ dataEmploye }) => {
       "bonus",
     ],
   });
+
+  useEffect(() => {
+    if (dataPayroll && datas) {
+      form.reset({
+        employee: datas.id?.toString() || "",
+        npk: datas.npk || "",
+        position: datas.position || "",
+        section: datas.section || "",
+        level: datas.level || "",
+        salary: Number(datas.salary) || 0,
+        leave_attendence: Number(datas.count_leave) || 0,
+        deduction_attendence: Number(dataPayroll.deduction_attendence) || 0,
+        overtime_duration: Number(datas.count_overtime_duration) || 0,
+        bonus_overtime: Number(dataPayroll.bonus_overtime) || 0,
+        bonus: Number(dataPayroll.bonus) || 0,
+        total_salary: Number(dataPayroll.total_salary) || 0,
+        deduction_bpjs: Number(dataPayroll.deduction_bpjs) || 0,
+        deduction_pph: Number(dataPayroll.deduction_pph) || 0,
+        date: `${dataPayroll.period_year}-${String(
+          dataPayroll.period_month
+        ).padStart(2, "0")}`,
+      });
+    }
+  }, [dataPayroll, datas, form]);
 
   useEffect(() => {
     const totalSalaryDay = Math.round(Number(salary) / 26);
@@ -91,7 +122,6 @@ const FormPayrollComponent = ({ dataEmploye }) => {
     bonus,
   ]);
 
-  useEffect(() => {});
   const onChange = async (value) => {
     const response = await EmployeeAPI.GetDetailMasterEmployee({ id: value });
     if (response) {
@@ -107,22 +137,34 @@ const FormPayrollComponent = ({ dataEmploye }) => {
 
   const Submit = async (data) => {
     const [year, month] = data.date.split("-");
-    const response = await PayRollAPI.PostPayRoll({
-      period_month: Number(month),
-      period_year: Number(year),
-      bonus: Number(data.bonus),
-      bonus_overtime: Number(data.bonus_overtime),
-      deduction_bpjs: Number(data.deduction_bpjs),
-      deduction_pph: Number(data.deduction_pph),
-      deduction_attendence: Number(data.deduction_attendence),
-      total_salary: Number(data.total_salary),
-      employeeId: Number(data.employee),
-    });
-    console.log(data, month, year);
-    if (response.status == 201) {
-      toast("Success", {
-        title: response.message,
+    if (dataPayroll) {
+      const response = await PayRollAPI.UpdatePayRoll({
+        bonus: Number(data.bonus),
+        id: dataPayroll.id,
+        total_salary: Number(data.total_salary),
       });
+      if (response?.status == 200) {
+        toast("Success", {
+          title: response.message,
+        });
+      }
+    } else {
+      const response = await PayRollAPI.PostPayRoll({
+        period_month: Number(month),
+        period_year: Number(year),
+        bonus: Number(data.bonus),
+        bonus_overtime: Number(data.bonus_overtime),
+        deduction_bpjs: Number(data.deduction_bpjs),
+        deduction_pph: Number(data.deduction_pph),
+        deduction_attendence: Number(data.deduction_attendence),
+        total_salary: Number(data.total_salary),
+        employeeId: Number(data.employee),
+      });
+      if (response.status == 201) {
+        toast("Success", {
+          title: response.message,
+        });
+      }
     }
   };
   return (
@@ -142,14 +184,25 @@ const FormPayrollComponent = ({ dataEmploye }) => {
           />
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <CustomSelect
-            control={form.control}
-            name="employee"
-            label="Employee"
-            placeholder="Select employee"
-            data={dataEmployeMaster}
-            onChange={onChange}
-          />
+          {!dataPayroll ? (
+            <CustomSelect
+              control={form.control}
+              name="employee"
+              label="Employee"
+              placeholder="Select employee"
+              data={dataEmployeMaster}
+              onChange={onChange}
+            />
+          ) : (
+            <CustomSelect
+              control={form.control}
+              name="employee"
+              label="Employee"
+              placeholder="Select employee"
+              data={dataEmployeMaster}
+              disabled
+            />
+          )}
           <CustomInput
             control={form.control}
             name="npk"
@@ -212,6 +265,7 @@ const FormPayrollComponent = ({ dataEmploye }) => {
             label="Tax BPJS"
             className="border-red-600 text-red-600"
             description="Tax 3%"
+            disabled
           />
           <CustomInput
             control={form.control}
@@ -219,6 +273,7 @@ const FormPayrollComponent = ({ dataEmploye }) => {
             label="Tax PPH"
             className="border-red-600 text-red-600"
             description="Tax 5%"
+            disabled
           />
           <CustomInput
             control={form.control}
@@ -226,6 +281,7 @@ const FormPayrollComponent = ({ dataEmploye }) => {
             label="Deduction Attendence"
             className="border-red-600 text-red-600"
             description="Pinalty leave"
+            disabled
           />
         </div>
         <h1 className="font-bold">Bonus & Total</h1>
@@ -241,6 +297,7 @@ const FormPayrollComponent = ({ dataEmploye }) => {
             name="bonus_overtime"
             label="Bonus Overtime"
             className="border-green-600 text-green-600"
+            disabled
           />
           <CustomInput
             control={form.control}

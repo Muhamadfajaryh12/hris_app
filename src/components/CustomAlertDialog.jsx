@@ -10,7 +10,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-const CustomAlertDialog = ({ isOpen, setIsOpen }) => {
+const CustomAlertDialog = ({ isOpen, setIsOpen, handleClick, id }) => {
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
@@ -25,7 +25,9 @@ const CustomAlertDialog = ({ isOpen, setIsOpen }) => {
           <AlertDialogCancel onClick={() => setIsOpen(false)}>
             Cancel
           </AlertDialogCancel>
-          <AlertDialogAction>Confirm</AlertDialogAction>
+          <AlertDialogAction onClick={() => handleClick(id)}>
+            Confirm
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

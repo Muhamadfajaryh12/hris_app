@@ -21,6 +21,12 @@ const Badge = ({ status }) => {
           <span>{status}</span>
         </div>
       );
+    case "Paid":
+      return (
+        <div className="p-2  bg-green-100 rounded-sm text-green-800 font-semibold text-sm w-24 text-center border-green-300">
+          <span>{status}</span>
+        </div>
+      );
   }
 };
 

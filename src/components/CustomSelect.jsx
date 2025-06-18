@@ -38,7 +38,7 @@ const CustomSelect = ({
             </FormControl>
             <SelectContent>
               {data?.map((item) => (
-                <SelectItem key={item.id} value={item.id}>
+                <SelectItem key={item.value} value={item.id}>
                   {item.value}
                 </SelectItem>
               ))}

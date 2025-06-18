@@ -2,7 +2,7 @@
 import CustomInput from "@/components/CustomInput";
 import CustomSelect from "@/components/CustomSelect";
 import { Form } from "@/components/ui/form";
-import React from "react";
+import React, { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import dataCompensation from "@/utils/data/dataCompensation";
 import OvertimeAPI from "@/data/OvertimeAPI";
@@ -22,10 +22,15 @@ const FormOvertime = ({ dataShift }) => {
     },
   });
 
-  const MasterDataShift = dataShift?.map((item) => ({
-    id: item.id.toString(),
-    value: `${item.title} - ${item.work_time}`,
-  }));
+  const MasterDataShift = useMemo(
+    () =>
+      dataShift?.map((item) => ({
+        id: item.id.toString(),
+        value: `${item.title} - ${item.work_time}`,
+      })) || [],
+    [dataShift]
+  );
+
   const Submit = async (data) => {
     const formData = new FormData();
     formData.append("date", data.date);

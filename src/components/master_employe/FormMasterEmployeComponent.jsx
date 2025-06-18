@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import CustomInput from "@/components/CustomInput";
@@ -16,46 +16,58 @@ const FormMasterEmployeComponent = ({
 }) => {
   const form = useForm({
     defaultValues: {
-      name: "",
-      email: "",
-      no_telp: "",
-      npk: "",
-      gender: "",
-      level: "",
-      section: "",
-      position: "",
+      name: dataEmployee?.name || "",
+      email: dataEmployee?.email || "",
+      no_telp: dataEmployee?.no_telp || "",
+      npk: dataEmployee?.npk || "",
+      gender: dataEmployee?.gender || "",
+      level: dataEmployee?.levelId?.toString() || "",
+      section: dataEmployee?.sectionId?.toString() || "",
+      position: dataEmployee?.positionId?.toString() || "",
     },
   });
 
-  if (dataEmployee && dataGender && dataLevel && dataPosition) {
-    useEffect(() => {
+  const dataLevelMaster = useMemo(
+    () =>
+      dataLevel?.map((item) => ({
+        id: item.id.toString(),
+        value: item.level,
+      })) || [],
+    [dataLevel]
+  );
+
+  const dataPositionMaster = useMemo(
+    () =>
+      dataPosition?.map((item) => ({
+        id: item.id.toString(),
+        value: item.position,
+      })) || [],
+    [dataPosition]
+  );
+
+  const dataSectionMaster = useMemo(
+    () =>
+      dataSection?.map((item) => ({
+        id: item.id.toString(),
+        value: item.section,
+      })) || [],
+    [dataSection]
+  );
+
+  useEffect(() => {
+    if (dataEmployee) {
       form.reset({
         name: dataEmployee.name,
         email: dataEmployee.email,
         no_telp: dataEmployee.no_telp,
         npk: dataEmployee.npk,
-        gender: dataEmployee.gender,
-        level: dataEmployee.levelId,
-        section: dataEmployee.sectionId,
-        position: dataEmployee.positionId,
+        gender: dataEmployee.gender.toString(),
+        level: dataEmployee.levelId.toString(),
+        section: dataEmployee.sectionId.toString(),
+        position: dataEmployee.positionId.toString(),
       });
-    }, [dataEmployee, dataGender, dataLevel, dataPosition]);
-  }
-
-  const dataSectionMaster = dataSection?.map((item) => ({
-    id: item.id.toString(),
-    value: item.section,
-  }));
-
-  const dataPositionMaster = dataPosition?.map((item) => ({
-    id: item.id.toString(),
-    value: item.position,
-  }));
-
-  const dataLevelMaster = dataLevel?.map((item) => ({
-    id: item.id.toString(),
-    value: item.level,
-  }));
+    }
+  }, [dataEmployee]);
 
   const Submit = async (data) => {
     if (dataEmployee) {
@@ -109,6 +121,7 @@ const FormMasterEmployeComponent = ({
           label="Name"
           placeholder="name"
           type="text"
+          className="border-black"
         />
         <CustomInput
           control={form.control}
@@ -116,6 +129,7 @@ const FormMasterEmployeComponent = ({
           label="Email"
           placeholder="email"
           type="email"
+          className="border-black"
         />
         <div className="grid grid-cols-2 gap-4">
           <CustomInput
@@ -124,6 +138,7 @@ const FormMasterEmployeComponent = ({
             label="NPK"
             placeholder="0000"
             type="number"
+            className="border-black"
           />
           <CustomInput
             control={form.control}
@@ -131,6 +146,7 @@ const FormMasterEmployeComponent = ({
             label="Telephone"
             placeholder="0896"
             type="number"
+            className="border-black"
           />
         </div>
         <div className="grid grid-cols-4 gap-4">

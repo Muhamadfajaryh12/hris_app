@@ -10,7 +10,17 @@ export async function GET(req, res) {
   try {
     const result = await prisma.payroll.findMany({
       include: {
-        employee: true,
+        employee: {
+          select: {
+            name: true,
+            npk: true,
+            position: {
+              select: {
+                position: true,
+              },
+            },
+          },
+        },
       },
     });
     return NextResponse.json({
@@ -36,7 +46,7 @@ export async function POST(req, res) {
       total_salary,
       employeeId,
     } = body;
-    console.log(body);
+
     const result = await prisma.payroll.create({
       data: {
         employeeId: Number(employeeId),
