@@ -7,7 +7,19 @@ export async function PUT(req, { params }) {
   try {
     const body = await req.json();
     const { id } = await params;
-    const { time_out } = body;
+    const { time_out, emotion } = body;
+
+    const detailAttendence = await prisma.attendence.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    const timeIn = new Date(detailAttendence.time_in);
+    const timeOut = new Date(time_out);
+    const timeWorkingMs = timeOut - timeIn;
+    const timeWorkingMinutes = Math.floor(timeWorkingMs / 60000);
+    const timeWorkingHour = Math.floor(timeWorkingMinutes / 60);
 
     const result = await prisma.attendence.update({
       where: {
@@ -15,6 +27,8 @@ export async function PUT(req, { params }) {
       },
       data: {
         time_out: time_out,
+        time_working: timeWorkingHour,
+        emotion: emotion,
       },
     });
 

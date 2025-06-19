@@ -12,7 +12,7 @@ export async function GET(req) {
     let query;
     if (date) {
       query = prisma.$queryRaw`SELECT * from "Attendence"
-      WHERE "userId" = ${Number(id)} AND DATE("created_at") = DATE(${date})
+      WHERE "userId" = ${Number(id)} AND DATE("time_in") = DATE(${date})
       `;
     } else {
       query = prisma.$queryRaw`SELECT * from "Attendence"
@@ -23,7 +23,7 @@ export async function GET(req) {
     const result = await query;
     const formattedResults = result.map((data) => ({
       ...data,
-      created_at: new Date(data.created_at).toISOString().split("T")[0], // Fixed date formatting
+      created_at: new Date(data.time_in).toISOString().split("T")[0],
     }));
 
     return NextResponse.json({

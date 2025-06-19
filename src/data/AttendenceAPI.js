@@ -19,18 +19,27 @@ const AttendenceAPI = (() => {
         time_in,
       });
 
-      console.log(response);
+      return {
+        status: response.data.status,
+        data: response.data.data,
+        message: response.data.message,
+      };
     } catch (error) {
       console.log(error);
     }
   };
 
-  const UpdateAttendence = async ({ id, time_out }) => {
+  const UpdateAttendence = async ({ id, time_out, emotion }) => {
     try {
       const response = await axios.put(`${BASE_URL}/attendence/${id}`, {
         time_out,
+        emotion,
       });
-      return response.data;
+      return {
+        status: response.data.status,
+        data: response.data.data,
+        message: response.data.message,
+      };
     } catch (error) {
       console.log(error);
     }
