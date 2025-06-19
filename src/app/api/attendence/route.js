@@ -55,8 +55,12 @@ export async function POST(req, res) {
       },
     });
 
+    const formattedResult = {
+      ...result,
+      created_at: new Date(result.time_in).toISOString().split("T")[0],
+    };
     return NextResponse.json({
-      data: result,
+      data: formattedResult,
       message: "Berhasil absen",
       status: StatusCodes.CREATED,
     });

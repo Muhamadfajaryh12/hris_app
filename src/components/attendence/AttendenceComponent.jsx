@@ -14,6 +14,7 @@ const AttendenceComponent = ({ data }) => {
     return data == "Late" ? "#FFEB3B" : "#4CAF50";
   };
   useEffect(() => {
+    console.log(datas);
     if (calendarRef.current) {
       const calendarApi = calendarRef.current.getApi();
       calendarApi.removeAllEvents();
