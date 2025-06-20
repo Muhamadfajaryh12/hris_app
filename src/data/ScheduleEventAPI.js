@@ -100,10 +100,24 @@ const UpdateSchedule = async ({
   }
 };
 
+const DeleteSchedule = async ({ id }) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/schedule/${id}`);
+    return {
+      data: response.data.data,
+      status: response.data.status,
+      message: response.data.message,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export default {
   GetSchedule,
   PostSchedule,
   GetScheduleByDate,
   GetScheduleDetail,
   UpdateSchedule,
+  DeleteSchedule,
 };

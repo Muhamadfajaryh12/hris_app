@@ -8,6 +8,7 @@ const CustomTableDialog = ({
   setIsOpen,
   listSchedules,
   handleClickDetail,
+  handleClickDelete,
 }) => {
   if (!isOpen) return null;
 
@@ -53,7 +54,10 @@ const CustomTableDialog = ({
                     <Button onClick={() => handleClickDetail(item.id)}>
                       <FaPencil />
                     </Button>
-                    <Button variant="destructive">
+                    <Button
+                      variant="destructive"
+                      onClick={() => handleClickDelete(item.id)}
+                    >
                       <FaTrash />
                     </Button>
                   </div>

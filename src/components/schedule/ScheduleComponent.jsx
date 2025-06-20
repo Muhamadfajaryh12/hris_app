@@ -6,6 +6,7 @@ import FormScheduleComponent from "./FormScheduleComponent";
 import interactionPlugin from "@fullcalendar/interaction";
 import CustomTableDialog from "../CustomTableDialog";
 import ScheduleEventAPI from "@/data/ScheduleEventAPI";
+import { toast } from "sonner";
 const ScheduleComponent = ({ dataSchedule, dataSection, dataLevel }) => {
   const [dataSchedules, setDataSchedules] = useState([]);
   const calendarRef = useRef(null);
@@ -46,6 +47,18 @@ const ScheduleComponent = ({ dataSchedule, dataSection, dataLevel }) => {
     setIsOpen(false);
   };
 
+  const handleClickDelete = async (id) => {
+    const response = await ScheduleEventAPI.DeleteSchedule({ id: id });
+    if (response?.status == 200) {
+      setDataSchedules(
+        dataSchedules.filter((item) => item.id !== response?.data?.id)
+      );
+      toast("Successfully", {
+        title: response?.message,
+      });
+      setIsOpen(false);
+    }
+  };
   const ColorValidate = (category) => {
     switch (category) {
       case "Meeting":
@@ -86,6 +99,7 @@ const ScheduleComponent = ({ dataSchedule, dataSection, dataLevel }) => {
         isOpen={isOpen}
         listSchedules={listSchedules}
         handleClickDetail={handleClickDetail}
+        handleClickDelete={handleClickDelete}
       />
     </div>
   );
