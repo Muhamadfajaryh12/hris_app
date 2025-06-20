@@ -14,7 +14,6 @@ const AttendenceComponent = ({ data }) => {
     return data == "Late" ? "#FFEB3B" : "#4CAF50";
   };
   useEffect(() => {
-    console.log(datas);
     if (calendarRef.current) {
       const calendarApi = calendarRef.current.getApi();
       calendarApi.removeAllEvents();
@@ -42,41 +41,6 @@ const AttendenceComponent = ({ data }) => {
             right: "next",
           }}
           height={600}
-
-          // dayCellContent={(cellInfo) => {
-          //   const dateStr = cellInfo.date.toISOString().split("T")[0];
-          //   const event = cellInfo.view.calendar
-          //     .getEvents()
-          //     .find(
-          //       (e) => e.startStr === dateStr && e.display === "background"
-          //     );
-
-          //   return (
-          //     <div className="fc-daygrid-day-content">
-          //       <div className="fc-daygrid-day-number">
-          //         {cellInfo.dayNumberText}
-          //       </div>
-
-          //       {event && (
-          //         <div
-          //           className="fc-daygrid-status"
-          //           style={{
-          //             fontSize: "0.7rem",
-          //             fontWeight: "bold",
-          //             textAlign: "center",
-          //             marginTop: "2px",
-          //             color: event.color === "#FFEB3B" ? "#000" : "#fff", // Kuning pakai text hitam
-          //             backgroundColor: event.color + "CC", // Tambah opacity
-          //             borderRadius: "4px",
-          //             padding: "1px 3px",
-          //           }}
-          //         >
-          //           {event.extendedProps.status}
-          //         </div>
-          //       )}
-          //     </div>
-          //   );
-          // }}
         />
       </div>
       <FormAttendenceComponent setDatas={setDatas} datas={datas} />

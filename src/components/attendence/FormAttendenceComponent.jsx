@@ -26,7 +26,7 @@ const dataEmotion = [
 
 const FormAttendenceComponent = ({ setDatas, datas }) => {
   const [time, setTime] = useState(new Date());
-  const dates = new Date("2025-06-01T07:00:00").toISOString().split("T")[0];
+  const dates = new Date().toISOString().split("T")[0];
   const { data, setData } = useFetch(
     `http://localhost:3000/api/attendence?id=1&date=${dates}`
   );
@@ -59,7 +59,7 @@ const FormAttendenceComponent = ({ setDatas, datas }) => {
     } else {
       const response = await AttendenceAPI.InsertAttendence({
         userId: 1,
-        time_in: new Date("2025-06-01T07:00:00"),
+        time_in: new Date(),
       });
       if (response?.status == 201) {
         toast("Success Clock in", {

@@ -5,10 +5,21 @@ import { NextResponse } from "next/server";
 
 export async function GET(req, res) {
   try {
-    const result = await prisma.schedule_Event.findMany();
+    const { searchParams } = await new URL(req.url);
+    const date = searchParams.get("date");
+    let query;
+
+    if (date) {
+      query = prisma.$queryRaw`SELECT * from "Schedule_Event"
+      WHERE DATE("date") = DATE(${date})`;
+    } else {
+      query = prisma.schedule_Event.findMany();
+    }
+    const result = await query;
     const formattedResults = result.map((data) => ({
       ...data,
-      date: new Date(data.date).toISOString().split("T")[0], // Fixed date formatting
+      date_start: new Date(data.date).toISOString().split("T")[0],
+      date_end: new Date(data.date_end).toISOString().split("T")[0],
     }));
     return NextResponse.json({
       data: formattedResults,
@@ -31,11 +42,13 @@ export async function POST(req, res) {
       levelId,
       sectionId,
       category,
+      date_end,
     } = body;
     const result = await prisma.schedule_Event.create({
       data: {
         title: title,
         date: date,
+        date_end: date_end,
         hours_start: hours_start,
         hours_end: hours_end,
         description: description,
@@ -45,8 +58,14 @@ export async function POST(req, res) {
       },
     });
 
+    const formattedResults = {
+      ...result,
+      date_start: new Date(result.date).toISOString().split("T")[0],
+      date_end: new Date(result.date_end).toISOString().split("T")[0],
+    };
+
     return NextResponse.json({
-      data: result,
+      data: formattedResults,
       message: "Berhasil",
       status: StatusCodes.CREATED,
     });
