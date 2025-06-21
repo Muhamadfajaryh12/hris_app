@@ -15,8 +15,8 @@ const dataEmotion = [
     value: "Very Good",
   },
   {
-    id: " Good",
-    value: " Good",
+    id: "Good",
+    value: "Good",
   },
   {
     id: "Not Good",

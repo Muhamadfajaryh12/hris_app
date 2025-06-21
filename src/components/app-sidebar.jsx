@@ -25,6 +25,7 @@ import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import { IoMdTime } from "react-icons/io";
 import { usePathname } from "next/navigation";
+import { FaChartLine } from "react-icons/fa6";
 
 const AppSidebar = () => {
   const path = usePathname();
@@ -32,9 +33,14 @@ const AppSidebar = () => {
   const dataSidebar = {
     dashboard: [
       {
-        link: "/",
-        name: "Master Employee",
+        link: "/dashboard",
+        name: "Dashboard",
         icon: <LuLayoutDashboard />,
+      },
+      {
+        link: "/analytic",
+        name: "Analytic",
+        icon: <FaChartLine />,
       },
     ],
     employeer: [
