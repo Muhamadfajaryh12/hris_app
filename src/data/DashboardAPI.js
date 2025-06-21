@@ -10,7 +10,16 @@ const getDashboard = async ({ date }) => {
     console.log(error);
   }
 };
+const getAnalyticDashboard = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/employee/dashboard`);
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export default {
   getDashboard,
+  getAnalyticDashboard,
 };
