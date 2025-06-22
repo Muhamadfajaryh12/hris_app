@@ -9,16 +9,24 @@ export async function POST(req, res) {
   try {
     const body = await req.json();
     const { npk, password } = body;
+    console.log(password);
     const userValid = await prisma.user.findUnique({
       where: {
         npk: parseInt(npk),
       },
     });
 
-    const passwordValid = await bcrypt.compare(password, userValid.password);
-
-    if (!userValid || !passwordValid) {
+    if (!userValid) {
       return NextResponse.json({
+        status: StatusCodes.BAD_REQUEST,
+        message: "NPK or Password doesn't macth",
+      });
+    }
+
+    const passwordValid = await bcrypt.compare(password, userValid.password);
+    if (!passwordValid) {
+      return NextResponse.json({
+        status: StatusCodes.BAD_REQUEST,
         message: "NPK or Password doesn't macth",
       });
     }

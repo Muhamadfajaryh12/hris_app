@@ -83,15 +83,21 @@ const OvertimeComponent = ({ data }) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem>
-                <Link href={`/master/master_employee/form/${row.original.id}`}>
-                  Update
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setIsOpen(true)}>
-                Delete
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
+              {row.original.approval_leader == "Waiting" ? (
+                <>
+                  <DropdownMenuItem>
+                    <Link href={`/overtime/form/${row.original.id}`}>
+                      Update
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setIsOpen(true)}>
+                    Delete
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </>
+              ) : (
+                ""
+              )}
               <DropdownMenuItem>
                 <Link href={`/overtime/${row.original.id}`}>View request</Link>
               </DropdownMenuItem>

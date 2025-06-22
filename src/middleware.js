@@ -5,12 +5,15 @@ export default function middleware(req) {
   const token = req.cookies.get("token")?.value || null;
   const protectedPath = ["/dashboard", "/master"];
 
-  const isProtected = protectedPath.some((path) =>
-    req.nextUrl.pathname.startsWith(path)
-  );
+  if (
+    protectedPath.some((route) => req.nextUrl.pathname.startsWith(route)) &&
+    !token
+  ) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
 
-  if (!token && isProtected) {
-    return NextResponse.redirect(new URL("/", request.url));
+  if (["/"].includes(req.nextUrl.pathname) && token) {
+    return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
   response.headers.set("Access-Control-Allow-Origin", "http://localhost:3000/");
@@ -28,5 +31,5 @@ export default function middleware(req) {
 }
 
 export const config = {
-  matcher: ["/api/:path*", "/dashboard/:path*", "/master/:path*"],
+  matcher: ["/", "/api/:path*", "/dashboard/:path*", "/master/:path*"],
 };

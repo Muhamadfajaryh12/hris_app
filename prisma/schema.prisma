@@ -167,3 +167,13 @@ model Payroll {
   employeeId Int
   employee User @relation(fields:[employeeId],references:[id])
 }
+
+model Training {
+  id Int @id @default(autoincrement())
+  title String
+  sectionId Int
+  training_type String
+  file String
+}
+
+model 

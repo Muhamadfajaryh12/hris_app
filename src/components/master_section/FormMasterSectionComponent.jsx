@@ -3,16 +3,25 @@ import CustomInput from "@/components/CustomInput";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import SectionAPI from "@/data/SectionAPI";
+import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { z } from "zod";
+
+const formSchema = z.object({
+  section: z.string().min(2, {
+    message: "section cannot be empty",
+  }),
+});
 const FormMasterSectionComponent = ({ dataSection }) => {
   const form = useForm({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       section: "",
     },
   });
-  console.log(dataSection);
+
   if (dataSection) {
     useEffect(() => {
       form.reset({

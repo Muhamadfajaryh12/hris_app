@@ -3,11 +3,20 @@ import CustomInput from "@/components/CustomInput";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import LevelAPI from "@/data/LevelAPI";
+import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { z } from "zod";
+
+const formSchema = z.object({
+  level: z.string().min(2, {
+    message: "level cannot be empty",
+  }),
+});
 const FormMasterLevelComponent = ({ dataLevel }) => {
   const form = useForm({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       level: "",
     },

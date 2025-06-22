@@ -7,9 +7,16 @@ import CustomInput from "../CustomInput";
 import { Button } from "../ui/button";
 import SalaryAPI from "@/data/SalaryAPI";
 import { toast } from "sonner";
-
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+const formSchema = z.object({
+  employeeId: z.string().nonempty("employee cannot be empty"),
+  start_date: z.string().nonempty("start date cannot be empty"),
+  end_date: z.string().nonempty("end date cannot be empty"),
+});
 const FormSalaryComponent = ({ dataEmployee }) => {
   const form = useForm({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       employeeId: "",
       base_salary: "",

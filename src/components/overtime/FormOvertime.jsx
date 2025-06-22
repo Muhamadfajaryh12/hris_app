@@ -2,23 +2,37 @@
 import CustomInput from "@/components/CustomInput";
 import CustomSelect from "@/components/CustomSelect";
 import { Form } from "@/components/ui/form";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import dataCompensation from "@/utils/data/dataCompensation";
 import OvertimeAPI from "@/data/OvertimeAPI";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { MntToTime } from "@/lib/TimeToMnt";
 
-const FormOvertime = ({ dataShift }) => {
+const formSchema = z.object({
+  date: z.string().nonempty("date cannot be empty"),
+  shift: z.string().nonempty("shift cannot be empty"),
+  work_note: z.string().nonempty("work note cannot be empty"),
+  upload: z.string().nonempty("file cannot be empty"),
+  shiftId: z.string().nonempty("shift cannot be empty"),
+  overtime_duration: z.string().nonempty("overtime duration cannot be empty"),
+  compensation: z.string().nonempty("compensation cannot be empty"),
+});
+
+const FormOvertime = ({ dataShift, dataOvertime }) => {
   const form = useForm({
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      date: "",
-      shiftId: "",
-      work_note: "",
+      date: dataOvertime.date || "",
+      shiftId: dataOvertime.shiftId.toString() || "",
+      work_note: dataOvertime.work_note || "",
       upload: "",
-      overtime_duration: "",
-      break_duration: "",
-      compensation: "",
+      overtime_duration: MntToTime(dataOvertime.overtime_duration) || "",
+      break_duration: MntToTime(dataOvertime.break_duration) || "",
+      compensation: dataOvertime.compensation || "",
     },
   });
 
@@ -31,6 +45,16 @@ const FormOvertime = ({ dataShift }) => {
     [dataShift]
   );
 
+  useEffect(() => {
+    form.reset({
+      date: new Date(dataOvertime.date).toISOString().split("T")[0],
+      work_note: dataOvertime.work_note,
+      shiftId: dataOvertime.shiftId.toString(),
+      compensation: dataOvertime.compensation,
+      overtime_duration: MntToTime(dataOvertime.overtime_duration),
+      break_duration: MntToTime(dataOvertime.break_duration),
+    });
+  }, [dataOvertime]);
   const Submit = async (data) => {
     const formData = new FormData();
     formData.append("date", data.date);
@@ -46,7 +70,7 @@ const FormOvertime = ({ dataShift }) => {
       toast("Successfuly", {
         title: response.message,
       });
-      // form.reset();
+      form.reset();
     }
   };
   return (
@@ -59,6 +83,7 @@ const FormOvertime = ({ dataShift }) => {
             name="date"
             label="Overtime Date"
             type="date"
+            className="border border-black"
           />
           <CustomSelect
             control={form.control}
@@ -73,6 +98,7 @@ const FormOvertime = ({ dataShift }) => {
             name="work_note"
             label="Work Note"
             type="text"
+            className="border border-black"
           />{" "}
           <CustomInput
             control={form.control}
@@ -80,6 +106,7 @@ const FormOvertime = ({ dataShift }) => {
             name="upload"
             label="Upload file"
             type="file"
+            className="border border-black"
           />
           <div className="grid grid-cols-3 gap-4">
             <CustomInput
@@ -88,6 +115,7 @@ const FormOvertime = ({ dataShift }) => {
               name="overtime_duration"
               label="Overtime Duration"
               type="time"
+              className="border border-black"
             />
             <CustomInput
               control={form.control}
@@ -95,6 +123,7 @@ const FormOvertime = ({ dataShift }) => {
               name="break_duration"
               label="Break Duration"
               type="time"
+              className="border border-black"
             />
             <CustomSelect
               control={form.control}

@@ -27,6 +27,15 @@ const GetOvertime = async ({ url = "" }) => {
   }
 };
 
+const GetDetailOvertime = async ({ id }) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/overtime/${id}`);
+    return response?.data?.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const ApprovalOvertime = async ({ approval_leader, leaderId, id }) => {
   try {
     const response = await axios.put(`${BASE_URL}/overtime/${id}`, {
@@ -44,4 +53,9 @@ const ApprovalOvertime = async ({ approval_leader, leaderId, id }) => {
   }
 };
 
-export default { PostOvertime, GetOvertime, ApprovalOvertime };
+export default {
+  PostOvertime,
+  GetOvertime,
+  GetDetailOvertime,
+  ApprovalOvertime,
+};

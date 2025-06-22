@@ -1,5 +1,11 @@
 import React from "react";
-import { FormControl, FormField, FormItem, FormLabel } from "./ui/form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
 import {
   Select,
   SelectContent,
@@ -44,6 +50,7 @@ const CustomSelect = ({
               ))}
             </SelectContent>
           </Select>
+          <FormMessage />
         </FormItem>
       )}
     />

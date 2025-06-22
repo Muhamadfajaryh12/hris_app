@@ -8,6 +8,8 @@ import { FaClock } from "react-icons/fa6";
 import AttendenceAPI from "@/data/AttendenceAPI";
 import CustomSelect from "../CustomSelect";
 import { toast } from "sonner";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const dataEmotion = [
   {
@@ -24,6 +26,9 @@ const dataEmotion = [
   },
 ];
 
+const formSchema = z.object({
+  emotion: z.string().nonempty("emotion cannot be empty"),
+});
 const FormAttendenceComponent = ({ setDatas, datas }) => {
   const [time, setTime] = useState(new Date());
   const dates = new Date().toISOString().split("T")[0];
@@ -38,6 +43,7 @@ const FormAttendenceComponent = ({ setDatas, datas }) => {
   }, []);
 
   const form = useForm({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       emotion: "",
     },

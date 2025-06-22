@@ -3,15 +3,24 @@ import CustomInput from "@/components/CustomInput";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import Image from "next/image";
+import AuthenticationAPI from "@/data/AuthenticationAPI";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
+import { z } from "zod";
 
+const formSchema = z.object({
+  npk: z.string().min(1, {
+    message: "npk cannot be empty",
+  }),
+  password: z.string().min(1, {
+    message: "password cannot be empty",
+  }),
+});
 export default function Home() {
   const form = useForm({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       npk: "",
       password: "",
@@ -21,18 +30,17 @@ export default function Home() {
   const route = useRouter();
 
   const Submit = async (data) => {
-    try {
-      const response = await fetch("http://localhost:3000/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ npk: data.npk, password: data.password }),
-      });
-
+    const response = await AuthenticationAPI.Login({
+      npk: data.npk,
+      password: data.password,
+    });
+    console.log(response);
+    if (response.status == 200) {
       route.push("/dashboard");
-    } catch (error) {
-      console.log(error);
+    } else {
+      toast("Failed", {
+        title: response?.message,
+      });
     }
   };
   return (

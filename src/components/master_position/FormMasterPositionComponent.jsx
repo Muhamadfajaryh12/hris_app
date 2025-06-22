@@ -6,9 +6,21 @@ import PositionAPI from "@/data/PositionAPI";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const formSchema = z.object({
+  position: z.string().min(1, {
+    message: "position cannot be empty",
+  }),
+  base_salary: z.string().min(1, {
+    message: "base salary cannot be empty",
+  }),
+});
 
 const FormMasterPositionComponent = ({ dataPosition }) => {
   const form = useForm({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       position: "",
       base_salary: "",

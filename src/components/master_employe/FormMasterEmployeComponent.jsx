@@ -8,6 +8,30 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import EmployeeAPI from "@/data/EmployeeAPI";
 import dataGender from "@/utils/data/dataGender";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const formSchema = z.object({
+  name: z.string().min(1, {
+    message: "name cannot be empty",
+  }),
+  email: z
+    .string({
+      required_error: "email cannot be empty",
+    })
+    .email(),
+  no_telp: z.string().min(1, {
+    message: "telephone cannot be empty",
+  }),
+  npk: z.string().min(1, {
+    message: "npk cannot be empty",
+  }),
+  gender: z.string().nonempty("gender cannot be empty"),
+  level: z.string().nonempty("level cannot be empty"),
+  section: z.string().nonempty("section cannot be empty"),
+  position: z.string().nonempty("position cannot be empty"),
+});
+
 const FormMasterEmployeComponent = ({
   dataSection,
   dataLevel,
@@ -15,6 +39,7 @@ const FormMasterEmployeComponent = ({
   dataEmployee,
 }) => {
   const form = useForm({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       name: dataEmployee?.name || "",
       email: dataEmployee?.email || "",
