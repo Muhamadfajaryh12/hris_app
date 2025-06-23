@@ -7,7 +7,7 @@ import { IoMdClose } from "react-icons/io";
 import AnnualLeaveAPI from "@/data/AnnualLeaveAPI";
 import { toast } from "sonner";
 
-const DetailRequestLeaveComponent = ({ data, id }) => {
+const DetailRequestLeaveComponent = ({ data, userId }) => {
   const [statusLeader, setStatusLeader] = useState();
   const [statusHRD, setStatusHRD] = useState();
 
@@ -24,9 +24,9 @@ const DetailRequestLeaveComponent = ({ data, id }) => {
 
   const handleLeader = async ({ approval }) => {
     const response = await AnnualLeaveAPI.UpdateAnnualLeave({
-      url: `leaderId=${id}`,
       approval_leader: approval,
       id: data?.id,
+      leaderId: userId,
     });
     if (response?.status == 200) {
       toast("Success", {
@@ -41,10 +41,10 @@ const DetailRequestLeaveComponent = ({ data, id }) => {
 
   const handleHRD = async ({ approval }) => {
     const response = await AnnualLeaveAPI.UpdateAnnualLeave({
-      url: `hrdId=${id}`,
       approval_hrd: approval,
       id: data?.id,
       status: approval,
+      hrdId: userId,
     });
     if (response?.status == 200) {
       toast("Success", {

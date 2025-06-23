@@ -42,7 +42,6 @@ const ApprovalOvertime = async ({ approval_leader, leaderId, id }) => {
       approval_leader,
       leaderId,
     });
-    console.log(response);
     return {
       status: response.data.status,
       message: response.data.message,

@@ -47,19 +47,32 @@ const GetDetailAnnualLeave = async ({ id }) => {
 };
 
 const UpdateAnnualLeave = async ({
-  url,
   id,
   approval_hrd,
   approval_leader,
   status,
+  reason,
+  date_start,
+  date_end,
+  type,
+  data_count,
+  hrdId,
+  leaderId,
 }) => {
   try {
-    const response = await axios.put(`${BASE_URL}/annual_leave/${id}?${url}`, {
+    const response = await axios.put(`${BASE_URL}/annual_leave/${id}`, {
       approval_hrd,
       approval_leader,
       status,
+      reason,
+      date_start,
+      date_end,
+      type,
+      data_count,
+      hrdId,
+      leaderId,
     });
-    console.log(response);
+
     return {
       data: response.data.data,
       message: response.data.message,

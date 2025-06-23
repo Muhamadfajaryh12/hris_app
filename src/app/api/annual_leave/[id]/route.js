@@ -33,46 +33,43 @@ export async function GET(req, { params }) {
 export async function PUT(req, { params }) {
   try {
     const { id } = await params;
-    const { searchParams } = await new URL(req.url);
-    const leaderId = searchParams.get("leaderId");
-    const hrdId = searchParams.get("hrdId");
     const body = await req.json();
-    const { approval_hrd, approval_leader, status } = body;
+    const allowFields = [
+      "status",
+      "reason",
+      "date_start",
+      "date_end",
+      "type",
+      "approval_hrd",
+      "approval_leader",
+      "data_count",
+      "leaderId",
+      "hrdId",
+    ];
 
-    let query;
+    const updateData = Object.keys(body).reduce((acc, key) => {
+      if (allowFields.includes(key)) {
+        acc[key] = body[key];
+        if (key.endsWith("Id") && body[key] !== null) {
+          acc[key] = Number(body[key]);
+        }
+        if (key.toLowerCase() == "data_count" && body[key] !== null) {
+          acc[key] = Number(body[key]);
+        }
+      }
+      return acc;
+    }, {});
 
-    if (leaderId) {
-      query = prisma.annualLeave.update({
-        where: {
-          id: Number(id),
-        },
-        data: {
-          leaderId: Number(leaderId),
-          approval_leader: approval_leader,
-        },
-        include: {
-          leader: true,
-        },
-      });
-    }
-
-    if (hrdId) {
-      query = prisma.annualLeave.update({
-        where: {
-          id: Number(id),
-        },
-        data: {
-          hrdId: Number(hrdId),
-          approval_hrd: approval_hrd,
-          status: status,
-        },
-        include: {
-          hrd: true,
-        },
-      });
-    }
-
-    const result = await query;
+    const result = await prisma.annualLeave.update({
+      where: {
+        id: Number(id),
+      },
+      data: updateData,
+      include: {
+        leader: true,
+        hrd: true,
+      },
+    });
 
     return NextResponse.json({
       data: result,

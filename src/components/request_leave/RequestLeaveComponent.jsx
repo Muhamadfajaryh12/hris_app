@@ -16,7 +16,6 @@ import Badge from "../Badge";
 import SectionCard from "../SectionCard";
 
 const RequestLeaveComponent = ({ data }) => {
-  console.log(data);
   const columns = [
     {
       accessorKey: "user.npk",
@@ -87,13 +86,26 @@ const RequestLeaveComponent = ({ data }) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem>
-                <Link href={`/request_leave/${row.original.id}`}>Update</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setIsOpen(true)}>
-                Delete
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
+              {row.origin?.status == "Waiting" ? (
+                <>
+                  <DropdownMenuItem>
+                    <Link href={`/request_leave/form/${row.original.id}`}>
+                      Update
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href={`/request_leave/${row.original.id}`}>
+                      Approval
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setIsOpen(true)}>
+                    Delete
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </>
+              ) : (
+                ""
+              )}
               <DropdownMenuItem>
                 {" "}
                 <Link href={`/request_leave/${row.original.id}`}>
