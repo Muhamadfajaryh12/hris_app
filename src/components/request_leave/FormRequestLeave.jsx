@@ -112,21 +112,18 @@ const FormRequestLeave = ({ dataRequestLeave }) => {
             name="date_start"
             label="Date Start"
             type="date"
-            className="border border-black"
           />
           <CustomInput
             control={form.control}
             name="date_end"
             label="Date End"
             type="date"
-            className="border border-black"
           />
           <CustomInput
             control={form.control}
             name="count_date"
             label="Total Days Leave"
             type="text"
-            className="border border-black"
             disabled
           />
         </div>

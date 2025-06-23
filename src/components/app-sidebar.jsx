@@ -101,7 +101,7 @@ const AppSidebar = () => {
     ],
     training_and_development: [
       {
-        link: "/",
+        link: "/training",
         name: "Master Training ",
         icon: <FiBook />,
       },

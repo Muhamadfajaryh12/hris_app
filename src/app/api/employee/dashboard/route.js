@@ -50,11 +50,27 @@ export async function GET(req, res) {
     ORDER BY total_time_working DESC
     `;
 
+    const countTrainingBySection = await prisma.$queryRaw`
+    SELECT 
+    "Section".section as section_name,
+    COALESCE(count_total_training.total_training,0) as total
+    FROM "Section"
+    LEFT JOIN (
+      SELECT
+        "User"."sectionId",
+        COUNT("Training".id)::integer as total_training
+      FROM "User"
+      JOIN "Training" ON "Training"."userId" = "User"."id"
+      GROUP BY "User"."sectionId"
+    ) count_total_training on count_total_training."sectionId" = "Section"."id"
+        ORDER BY total DESC
+    `;
     return NextResponse.json({
       data: {
         countCostBySection,
         countEmployeeBySection,
         countWorkTimeAndOvertimeBySection,
+        countTrainingBySection,
       },
     });
   } catch (error) {

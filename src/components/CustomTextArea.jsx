@@ -12,7 +12,7 @@ const CustomTextArea = ({ control, name, label, props, placeholder }) => {
           <FormLabel>{label}</FormLabel>
           <FormControl>
             <Textarea
-              className="resize-none border border-black"
+              className="resize"
               placeholder={placeholder}
               {...field}
               {...props}

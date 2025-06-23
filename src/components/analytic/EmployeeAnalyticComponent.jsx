@@ -16,6 +16,13 @@ const EmployeeAnalyticComponent = ({ data }) => {
     },
   };
 
+  const CHART_CONFIG_TRAINING_BY_SECTION = {
+    total: {
+      label: "Total",
+      color: "#0087ff",
+    },
+  };
+
   const CHART_CONFIG_TIME_WORK_OVERTIME_BY_SECTION = {
     total_time_working: {
       label: "Total Time Working",
@@ -43,6 +50,13 @@ const EmployeeAnalyticComponent = ({ data }) => {
         title="Total Cost by Section"
         dataKeyX={"section_name"}
         bars={[{ dataKey: "cost_section", fill: "#0087ff" }]}
+      />
+      <CustomChartBar
+        chartConfig={CHART_CONFIG_TRAINING_BY_SECTION}
+        chartData={data?.countTrainingBySection}
+        title="Total Training by Section"
+        dataKeyX={"section_name"}
+        bars={[{ dataKey: "total", fill: "#0087ff" }]}
       />
       <CustomChartBar
         chartConfig={CHART_CONFIG_TIME_WORK_OVERTIME_BY_SECTION}
