@@ -58,6 +58,7 @@ model User {
   salary Salary []
   contract Contract []
   payroll Payroll[]
+  training Training[]
 }
 
 model Attendence {
@@ -169,11 +170,13 @@ model Payroll {
 }
 
 model Training {
-  id Int @id @default(autoincrement())
+  id Int @id @defaul  t(autoincrement())
   title String
-  sectionId Int
   training_type String
-  file String
+  training_category String
+  cost Int @default(0)
+  training_date DateTime
+  file String?
+  userId Int
+  user User @relation(fields:[userId],references:[id])
 }
-
-model 
