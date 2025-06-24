@@ -6,7 +6,7 @@ import React from "react";
 const page = async () => {
   const data = await EmployeeAPI.GetEmployee();
   return (
-    <MainLayout>
+    <MainLayout title={["Payroll", "Form"]}>
       <FormPayrollComponent dataEmploye={data} />
     </MainLayout>
   );

@@ -12,7 +12,7 @@ const page = async ({ params }) => {
   });
   const dataEmployee = await EmployeeAPI.GetEmployee();
   return (
-    <MainLayout>
+    <MainLayout title={["Payroll", "Form", "Edit"]}>
       <FormPayrollComponent
         dataEmploye={dataEmployee}
         dataPayroll={dataPayroll}

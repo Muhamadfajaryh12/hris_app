@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Form } from "../ui/form";
 import CustomSelect from "../CustomSelect";
@@ -13,16 +13,23 @@ const formSchema = z.object({
   employeeId: z.string().nonempty("employee cannot be empty"),
   start_date: z.string().nonempty("start date cannot be empty"),
   end_date: z.string().nonempty("end date cannot be empty"),
+  increase_salary: z.any(),
+  total_salary: z.any(),
+  base_salary: z.any(),
 });
-const FormSalaryComponent = ({ dataEmployee }) => {
+
+const FormSalaryComponent = ({ dataEmployee, dataSalary }) => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      employeeId: "",
-      base_salary: "",
-      increase_salary: "",
-      start_date: "",
-      end_date: "",
+      employeeId: dataSalary?.employeeId.toString() || "",
+      base_salary: dataSalary?.basic_salary || 0,
+      increase_salary: dataSalary?.increase_salary || 0,
+      total_salary: dataSalary?.total_salary || 0,
+      start_date:
+        new Date(dataSalary?.start_date).toISOString().split("T")[0] || "",
+      end_date:
+        new Date(dataSalary?.end_date).toISOString().split("T")[0] || "",
     },
   });
 
@@ -31,47 +38,64 @@ const FormSalaryComponent = ({ dataEmployee }) => {
     name: ["base_salary", "increase_salary"],
   });
 
+  const dataEmployeeMaster = useMemo(
+    () =>
+      dataEmployee.map((item) => ({
+        id: item.id.toString(),
+        value: item.name,
+      })) || [],
+    [dataEmployee]
+  );
+
   useEffect(() => {
-    if (base_salary && increase_salary) {
-      const total = Number(base_salary) + Number(increase_salary);
-      form.setValue("total_salary", total);
-    } else if (base_salary) {
-      form.setValue("total_salary", base_salary);
-    } else {
-      form.setValue("total_salary", "");
-    }
+    const total = Number(base_salary || 0) + Number(increase_salary || 0);
+    form.setValue("total_salary", total, { shouldValidate: true });
   }, [base_salary, increase_salary, form]);
 
-  const dataEmployeeMaster = dataEmployee.map((item) => ({
-    id: item.id.toString(),
-    value: item.name,
-  }));
+  useEffect(() => {
+    if (dataSalary) {
+      form.reset({
+        employeeId: dataSalary.employeeId.toString(),
+        base_salary: dataSalary.basic_salary,
+        increase_salary: dataSalary.increase_salary,
+        total_salary: dataSalary.total_salary,
+        start_date: new Date(dataSalary.start_date).toISOString().split("T")[0],
+        end_date: new Date(dataSalary.end_date).toISOString().split("T")[0],
+      });
+    }
+  }, [dataSalary, form]);
 
-  const onChange = (value) => {
+  const onChange = useCallback((value) => {
     const selectedEmployee = dataEmployee.find((item) => item.id == value);
     if (selectedEmployee) {
+      console.log("ini jalan");
       form.setValue("base_salary", selectedEmployee.position.base_salary);
       form.setValue("increase_salary", "");
     }
-  };
+  });
 
-  const Submit = async (data) => {
-    const response = await SalaryAPI.PostSalary({
+  const Submit = useCallback(async (data) => {
+    const payload = {
       basic_salary: data.base_salary,
       increase_salary: data.increase_salary,
       total_salary: data.total_salary,
       employeeId: data.employeeId,
       start_date: new Date(data.start_date),
       end_date: new Date(data.end_date),
-    });
+      ...(dataSalary && { id: dataSalary.id }),
+    };
 
-    if (response.status == 201) {
+    const response = dataSalary
+      ? await SalaryAPI.UpdateSalary(payload)
+      : await SalaryAPI.PostSalary(payload);
+
+    if ([200, 201].includes(response.status)) {
       toast("Successfuly", {
         title: response.message,
       });
       form.reset();
     }
-  };
+  });
 
   return (
     <Form {...form}>

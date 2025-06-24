@@ -7,7 +7,7 @@ const page = async ({ params }) => {
   const { id } = await params;
   const data = await PayRollAPI.GetDetailPayroll({ id: id });
   return (
-    <MainLayout>
+    <MainLayout title={["Payroll", "Detail"]}>
       <PayrollDetailComponent data={data} />
     </MainLayout>
   );

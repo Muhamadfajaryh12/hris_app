@@ -6,7 +6,7 @@ import React from "react";
 const page = async () => {
   const data = await DashboardAPI.getAnalyticDashboard();
   return (
-    <MainLayout>
+    <MainLayout title={["Dashboard", "Analyitic"]}>
       <EmployeeAnalyticComponent data={data} />
     </MainLayout>
   );

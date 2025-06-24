@@ -7,7 +7,7 @@ import React from "react";
 const page = async () => {
   const data = await PayRollAPI.GetPayRoll();
   return (
-    <MainLayout title="Pay Roll">
+    <MainLayout title={["Payroll"]}>
       <PayrollComponent data={data} />
     </MainLayout>
   );

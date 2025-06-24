@@ -8,7 +8,7 @@ const DashboardPage = async () => {
     date: new Date().toISOString().split("T")[0],
   });
   return (
-    <MainLayout>
+    <MainLayout title={["Dashboard"]}>
       <DashboardComponent data={data} />
     </MainLayout>
   );
