@@ -11,7 +11,7 @@ const page = async ({ params }) => {
     ShiftAPI.GetShift(),
   ]);
   return (
-    <MainLayout>
+    <MainLayout title={["Overtime", "Form", "Update"]}>
       <FormOvertime dataShift={dataShift} dataOvertime={dataOvertime} />
     </MainLayout>
   );

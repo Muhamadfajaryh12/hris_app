@@ -5,7 +5,7 @@ import { Form } from "@/components/ui/form";
 import ShiftAPI from "@/data/ShiftAPI";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -16,27 +16,50 @@ const formSchema = z.object({
   work_end: z.string().nonempty("work end cannot be empty"),
 });
 
-const FormShiftComponent = () => {
+const FormShiftComponent = ({ dataShift }) => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      work_start: "",
-      work_end: "",
+      title: dataShift?.title || "",
+      work_start: dataShift?.work_start || "",
+      work_end: dataShift?.work_end || "",
     },
   });
 
+  if (dataShift) {
+    useEffect(() => {
+      const work_time = dataShift.work_time.split("-");
+
+      form.reset({
+        title: dataShift.title,
+        work_start: work_time[0],
+        work_end: work_time[1],
+      });
+    }, [dataShift]);
+  }
   const Submit = async (data) => {
-    const response = await ShiftAPI.PostShift({
+    const payload = {
       title: data.title,
       work_time: `${data.work_start} - ${data.work_end}`,
-    });
+      ...(dataShift && { id: dataShift.id }),
+    };
 
-    if (response?.status == 201) {
-      toast("Successfuly", {
-        title: response.message,
-      });
-      form.reset();
+    if (dataShift) {
+      const response = await ShiftAPI.UpdateShift(payload);
+      if (response?.status == 200) {
+        toast("Successfuly", {
+          title: response.message,
+        });
+        form.reset();
+      }
+    } else {
+      const response = await ShiftAPI.PostShift(payload);
+      if (response?.status == 201) {
+        toast("Successfuly", {
+          title: response.message,
+        });
+        form.reset();
+      }
     }
   };
 

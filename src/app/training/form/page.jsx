@@ -7,7 +7,7 @@ const page = async () => {
   const cookieStore = await cookies();
   const id = cookieStore.get("user_id")?.value;
   return (
-    <MainLayout>
+    <MainLayout title={["Training", "Form"]}>
       <FormTraining userId={id} />
     </MainLayout>
   );

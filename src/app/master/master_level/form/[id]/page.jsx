@@ -7,7 +7,7 @@ const page = async ({ params }) => {
   const { id } = await params;
   const data = await LevelAPI.GetDetailLevel({ id: id });
   return (
-    <MainLayout>
+    <MainLayout title={["Master Level", "Form", "Update"]}>
       <FormMasterLevelComponent dataLevel={data} />
     </MainLayout>
   );

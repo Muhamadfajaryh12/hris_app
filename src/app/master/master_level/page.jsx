@@ -7,7 +7,7 @@ import React from "react";
 const page = async () => {
   const data = await LevelAPI.GetLevel();
   return (
-    <MainLayout>
+    <MainLayout title={["Master Level"]}>
       <MasterLevelComponent data={data} />
     </MainLayout>
   );

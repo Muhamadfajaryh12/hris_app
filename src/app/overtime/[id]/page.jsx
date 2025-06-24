@@ -11,7 +11,7 @@ const page = async ({ params }) => {
   const data = await OvertimeAPI.GetOvertime({ url: `?id=${id}` });
 
   return (
-    <MainLayout>
+    <MainLayout title={["Overtime", "Detail"]}>
       <FormDetailOvertime data={data} leaderId={leaderId} />
     </MainLayout>
   );

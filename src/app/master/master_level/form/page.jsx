@@ -4,7 +4,7 @@ import React from "react";
 
 const MasterLevelFormPage = () => {
   return (
-    <MainLayout title={"Form Master Level"}>
+    <MainLayout title={["Master Level", "Form"]}>
       <FormMasterLevelComponent />
     </MainLayout>
   );

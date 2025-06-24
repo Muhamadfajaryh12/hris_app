@@ -10,6 +10,16 @@ const GetShift = async () => {
     console.log(error);
   }
 };
+
+const GetDetailShift = async ({ id }) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/shift/${id}`);
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const PostShift = async ({ title, work_time }) => {
   try {
     const response = await axios.post(`${BASE_URL}/shift`, {
@@ -26,7 +36,25 @@ const PostShift = async ({ title, work_time }) => {
   }
 };
 
+const UpdateShift = async ({ title, work_time, id }) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/shift/${id}`, {
+      title,
+      work_time,
+    });
+
+    return {
+      message: response.data.message,
+      status: response.data.status,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export default {
   PostShift,
   GetShift,
+  GetDetailShift,
+  UpdateShift,
 };

@@ -4,7 +4,7 @@ import React from "react";
 
 const MasterSectionFormPage = () => {
   return (
-    <MainLayout title={"Form Master Section"}>
+    <MainLayout title={["Master Section", "Form"]}>
       <FormMasterSectionComponent />
     </MainLayout>
   );

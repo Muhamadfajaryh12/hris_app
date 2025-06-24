@@ -6,7 +6,7 @@ import React from "react";
 const page = async ({ params }) => {
   const data = await SectionAPI.GetDetailSection({ id: params.id });
   return (
-    <MainLayout>
+    <MainLayout title={["Master Section", "Form", "Update"]}>
       <FormMasterSectionComponent dataSection={data} />
     </MainLayout>
   );

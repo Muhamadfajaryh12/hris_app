@@ -6,7 +6,7 @@ import React from "react";
 const page = async () => {
   const dataShift = await ShiftAPI.GetShift();
   return (
-    <MainLayout>
+    <MainLayout title={["Overtime", "Form"]}>
       <FormOvertime dataShift={dataShift} />
     </MainLayout>
   );

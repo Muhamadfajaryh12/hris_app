@@ -8,7 +8,7 @@ const page = async ({ params }) => {
   const data = await PositionAPI.GetDetailPosition({ id: id });
 
   return (
-    <MainLayout>
+    <MainLayout title={["Master Position", "Form", "Update"]}>
       <FormMasterPositionComponent dataPosition={data} />
     </MainLayout>
   );

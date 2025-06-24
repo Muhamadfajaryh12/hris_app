@@ -4,7 +4,14 @@ import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 const SiteHeader = ({ title }) => {
   const Logout = async () => {
     "use server";
@@ -22,7 +29,16 @@ const SiteHeader = ({ title }) => {
           orientation="vertical"
           className="mx-2 data-[orientation=vertical]:h-4"
         />
-        {title}
+        <Breadcrumb>
+          <BreadcrumbList>
+            {title?.map((item, index) => (
+              <React.Fragment key={index}>
+                <BreadcrumbItem>{item}</BreadcrumbItem>
+                {index < title.length - 1 ? <BreadcrumbSeparator /> : ""}
+              </React.Fragment>
+            ))}
+          </BreadcrumbList>
+        </Breadcrumb>
         <div className="ml-auto flex items-center gap-2 p-2">
           <Button size="sm" variant="" onClick={Logout}>
             Logout

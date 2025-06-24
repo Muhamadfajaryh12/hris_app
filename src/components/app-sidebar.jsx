@@ -29,6 +29,7 @@ import { FaChartLine } from "react-icons/fa6";
 
 const AppSidebar = () => {
   const path = usePathname();
+  const pathName = path.split("/").filter((segment) => segment != "");
 
   const dataSidebar = {
     dashboard: [
@@ -102,7 +103,7 @@ const AppSidebar = () => {
     training_and_development: [
       {
         link: "/training",
-        name: "Master Training ",
+        name: "Training ",
         icon: <FiBook />,
       },
     ],
@@ -138,7 +139,11 @@ const AppSidebar = () => {
                       <SidebarMenuItem key={index}>
                         <SidebarMenuButton
                           asChild
-                          isActive={path === item.link ? true : false}
+                          isActive={
+                            pathName.includes(item.link.replace("/", ""))
+                              ? true
+                              : false
+                          }
                         >
                           <Link href={item.link}>
                             {item.icon}

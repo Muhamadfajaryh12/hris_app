@@ -6,7 +6,7 @@ import React from "react";
 const page = async () => {
   const data = await PositionAPI.GetPosition();
   return (
-    <MainLayout>
+    <MainLayout title={["Master Position"]}>
       <MasterPositionComponent data={data} />
     </MainLayout>
   );

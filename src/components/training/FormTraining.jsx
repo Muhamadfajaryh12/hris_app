@@ -89,7 +89,6 @@ const FormTraining = ({ trainingData, userId }) => {
             placeholder="training title"
             type="text"
             control={form.control}
-            className="border border-black"
           />
           <CustomInput
             name="training_date"
@@ -97,7 +96,6 @@ const FormTraining = ({ trainingData, userId }) => {
             placeholder="training date"
             type="date"
             control={form.control}
-            className="border border-black"
           />
           <CustomInput
             name="cost"
@@ -105,7 +103,6 @@ const FormTraining = ({ trainingData, userId }) => {
             placeholder="0"
             type="number"
             control={form.control}
-            className="border border-black"
           />
           <CustomSelect
             name="training_type"
@@ -128,7 +125,6 @@ const FormTraining = ({ trainingData, userId }) => {
             type="file"
             accept=".pdf"
             control={form.control}
-            className="border border-black"
           />
         </div>
         <div className="flex justify-end">

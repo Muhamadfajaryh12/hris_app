@@ -10,7 +10,7 @@ const page = async ({ params }) => {
   const userId = cookieStore.get("user_id")?.value;
   const data = await AnnualLeaveAPI.GetDetailAnnualLeave({ id: id });
   return (
-    <MainLayout>
+    <MainLayout title={["Request Leave", "Detail"]}>
       <DetailRequestLeaveComponent data={data} userId={userId} />
     </MainLayout>
   );

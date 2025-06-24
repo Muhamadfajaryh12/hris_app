@@ -7,7 +7,7 @@ const page = async ({ params }) => {
   const { id } = await params;
   const data = await AnnualLeaveAPI.GetDetailAnnualLeave({ id: id });
   return (
-    <MainLayout>
+    <MainLayout title={["Request Leave", "Form", "Update"]}>
       <FormRequestLeave dataRequestLeave={data} />
     </MainLayout>
   );

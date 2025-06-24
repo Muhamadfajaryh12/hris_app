@@ -6,7 +6,7 @@ import React from "react";
 const page = async () => {
   const data = await TrainingAPI.GetTraining();
   return (
-    <MainLayout>
+    <MainLayout title={["Training"]}>
       <TrainingComponent data={data} />
     </MainLayout>
   );

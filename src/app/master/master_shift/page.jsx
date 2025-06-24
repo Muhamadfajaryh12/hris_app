@@ -6,7 +6,7 @@ import React from "react";
 const page = async () => {
   const data = await ShiftAPI.GetShift();
   return (
-    <MainLayout>
+    <MainLayout title={["Master Shift"]}>
       <MasterShiftComponent data={data} />
     </MainLayout>
   );

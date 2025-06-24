@@ -26,10 +26,11 @@ const dataEmotion = [
   },
 ];
 
-const formSchema = z.object({
-  emotion: z.string().nonempty("emotion cannot be empty"),
-});
-const FormAttendenceComponent = ({ setDatas, datas }) => {
+// const formSchema = z.object({
+//   emotion: z.string().nonempty("emotion cannot be empty"),
+// });
+
+const FormAttendenceComponent = ({ setDatas }) => {
   const [time, setTime] = useState(new Date());
   const dates = new Date().toISOString().split("T")[0];
   const { data, setData } = useFetch(
@@ -43,13 +44,14 @@ const FormAttendenceComponent = ({ setDatas, datas }) => {
   }, []);
 
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    // resolver: zodResolver(formSchema),
     defaultValues: {
       emotion: "",
     },
   });
 
   const Submit = async (datas) => {
+    console.log("ss");
     if (data?.length > 0) {
       const response = await AttendenceAPI.UpdateAttendence({
         id: data[0]?.id,

@@ -12,7 +12,7 @@ const page = async () => {
     LevelAPI.GetLevel(),
   ]);
   return (
-    <MainLayout>
+    <MainLayout title={["Schedule"]}>
       <ScheduleComponent
         dataSchedule={dataSchedule}
         dataSection={dataSection}
