@@ -10,7 +10,7 @@ import React from "react";
 const MainLayout = ({ children, title }) => {
   return (
     <SidebarProvider>
-      <AppSidebar variant="inset" />
+      <AppSidebar />
       <SidebarInset>
         <SiteHeader title={title} />
         <main className="w-full p-4">{children}</main>

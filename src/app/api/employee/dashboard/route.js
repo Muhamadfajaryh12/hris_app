@@ -65,12 +65,26 @@ export async function GET(req, res) {
     ) count_total_training on count_total_training."sectionId" = "Section"."id"
         ORDER BY total DESC
     `;
+
+    const countContractTypeBySection = await prisma.$queryRaw`
+    SELECT
+      s.section as section_name,
+      COUNT(c.id) FILTER (WHERE c.contract_type = 'Permanent')::integer as total_permanent,
+      COUNT(c.id) FILTER (WHERE c.contract_type = 'Contract')::integer as total_contract,
+      COUNT(c.id) FILTER (WHERE c.contract_type = 'Internship')::integer as total_internship
+      FROM "Section" s
+      LEFT JOIN "User" u ON u."sectionId" = s.id
+      LEFT JOIN "Contract" c ON c."employeeId" = u.id
+      GROUP BY s.section
+      ORDER BY s.section
+    `;
     return NextResponse.json({
       data: {
         countCostBySection,
         countEmployeeBySection,
         countWorkTimeAndOvertimeBySection,
         countTrainingBySection,
+        countContractTypeBySection,
       },
     });
   } catch (error) {

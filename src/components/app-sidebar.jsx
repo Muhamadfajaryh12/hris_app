@@ -25,7 +25,7 @@ import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import { IoMdTime } from "react-icons/io";
 import { usePathname } from "next/navigation";
-import { FaChartLine } from "react-icons/fa6";
+import { FaChartLine, FaFile, FaFileContract } from "react-icons/fa6";
 
 const AppSidebar = () => {
   const path = usePathname();
@@ -59,6 +59,11 @@ const AppSidebar = () => {
         link: "/payroll",
         name: "Payroll",
         icon: <LuDollarSign />,
+      },
+      {
+        link: "/contract",
+        name: "Contract",
+        icon: <FaFileContract />,
       },
     ],
     master_data: [

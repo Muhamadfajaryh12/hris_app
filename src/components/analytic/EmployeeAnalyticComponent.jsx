@@ -34,6 +34,21 @@ const EmployeeAnalyticComponent = ({ data }) => {
     },
   };
 
+  const CHART_CONFIG_CONTRACT_BY_SECTION = {
+    total_permanent: {
+      label: "Total Permanent",
+      color: "#0087ff",
+    },
+    total_contract: {
+      label: "Total Contract",
+      color: "#65b3f8",
+    },
+    total_internship: {
+      label: "Total Internship",
+      color: "#65b3f8",
+    },
+  };
+
   return (
     <div className="grid grid-cols-2 gap-4">
       <CustomChartBar
@@ -66,6 +81,17 @@ const EmployeeAnalyticComponent = ({ data }) => {
         bars={[
           { dataKey: "total_time_working", fill: "#0087ff" },
           { dataKey: "total_overtime", fill: "#65b3f8" },
+        ]}
+      />{" "}
+      <CustomChartBar
+        chartConfig={CHART_CONFIG_CONTRACT_BY_SECTION}
+        chartData={data?.countContractTypeBySection}
+        title="Total Contract Type by Section"
+        dataKeyX={"section_name"}
+        bars={[
+          { dataKey: "total_permanent", fill: "#0087ff" },
+          { dataKey: "total_contract", fill: "#65b3f8" },
+          { dataKey: "total_internship", fill: "#65b3f8" },
         ]}
       />
     </div>

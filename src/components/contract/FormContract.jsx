@@ -1,10 +1,12 @@
 "use client";
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { Form } from "../ui/form";
 import { useForm } from "react-hook-form";
 import CustomSelect from "../CustomSelect";
 import CustomInput from "../CustomInput";
 import { Button } from "../ui/button";
+import ContractAPI from "@/data/ContractAPI";
+import { toast } from "sonner";
 
 const statusType = [
   {
@@ -43,17 +45,40 @@ const FormContract = ({ dataEmployee }) => {
   );
 
   const form = useForm({
-    employee: "",
-    status: "",
-    contract: "",
-    start_date: "",
-    end_date: "",
-    file_contract: "",
+    defaultValues: {
+      employee: "",
+      status: "",
+      contract: "",
+      start_date: "",
+      end_date: "",
+      file_contract: "",
+    },
+  });
+
+  const Submit = useCallback(async (value) => {
+    const formData = new FormData();
+    formData.append("start_date", value.start_date);
+    formData.append("end_date", value.end_date);
+    formData.append("status", value.status);
+    formData.append("contract_type", value.contract);
+    formData.append("employeeId", value.employee);
+    formData.append("file_contract", value.file_contract);
+
+    const response = await ContractAPI.PostContract({ formData: formData });
+    if (response?.status == 201) {
+      toast("Success", {
+        title: response.message,
+      });
+      form.reset();
+    }
   });
 
   return (
     <Form {...form}>
-      <form className="flex flex-col gap-4">
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={form.handleSubmit(Submit)}
+      >
         <CustomSelect
           control={form.control}
           name="employee"

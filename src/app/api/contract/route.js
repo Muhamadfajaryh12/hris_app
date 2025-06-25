@@ -8,7 +8,12 @@ export async function GET(req, res) {
   try {
     const result = await prisma.contract.findMany({
       include: {
-        employee,
+        employee: {
+          select: {
+            npk: true,
+            name: true,
+          },
+        },
       },
     });
     return NextResponse.json({
