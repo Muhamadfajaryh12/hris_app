@@ -51,6 +51,26 @@ export async function GET(req, res) {
     GROUP BY emotion
     `;
 
+    const get_cost = await prisma.$queryRaw`
+    SELECT 
+    SUM("Payroll".total_salary) as total_cost
+    FROM "Payroll"
+    `;
+
+    const get_request_leave = await prisma.annualLeave.findMany({
+      where: {
+        status: "Waiting",
+      },
+      select: {
+        type: true,
+        user: {
+          select: {
+            name: true,
+          },
+        },
+      },
+      take: 5,
+    });
     const payload = {
       on_time: count_attendence[0].on_time,
       late: count_attendence[0].late,
@@ -58,6 +78,8 @@ export async function GET(req, res) {
       total_employee: count_employee[0].total_employee,
       schedule: get_schedule,
       get_reflection: get_reflection,
+      get_cost: get_cost[0].total_cost,
+      get_request_leave: get_request_leave,
     };
 
     return NextResponse.json({

@@ -20,12 +20,13 @@ import { LuDollarSign, LuLayoutDashboard, LuUsers } from "react-icons/lu";
 import { GoDatabase } from "react-icons/go";
 import { FiBook } from "react-icons/fi";
 import { AiOutlineSchedule } from "react-icons/ai";
+import { TbMoneybag } from "react-icons/tb";
 
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import { IoMdTime } from "react-icons/io";
 import { usePathname } from "next/navigation";
-import { FaChartLine, FaFile, FaFileContract } from "react-icons/fa6";
+import { FaChartLine, FaRegFile } from "react-icons/fa6";
 
 const AppSidebar = () => {
   const path = usePathname();
@@ -58,12 +59,12 @@ const AppSidebar = () => {
       {
         link: "/payroll",
         name: "Payroll",
-        icon: <LuDollarSign />,
+        icon: <TbMoneybag />,
       },
       {
         link: "/contract",
         name: "Contract",
-        icon: <FaFileContract />,
+        icon: <FaRegFile />,
       },
     ],
     master_data: [

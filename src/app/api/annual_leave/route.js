@@ -75,7 +75,7 @@ export async function POST(req) {
         approval_hrd: "Waiting",
         approval_leader: "Waiting",
         data_count: Number(data_count) || 0,
-        userId: userIds,
+        userId: Number(userIds),
       },
     });
 
