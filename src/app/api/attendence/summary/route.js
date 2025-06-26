@@ -5,6 +5,10 @@ import { NextResponse } from "next/server";
 
 export async function GET(req, res) {
   try {
+    const { searchParams } = new URL(req.url);
+    const month = searchParams.get("month");
+    const year = searchParams.get("year");
+
     const result = await prisma.$queryRaw`
     SELECT 
     "User".id,
@@ -12,8 +16,10 @@ export async function GET(req, res) {
     "Attendence".status,
     "Attendence".created_at
     FROM "User"
-    LEFT JOIN "Attendence" ON "Attendence"."userId" = "User".id
-    `;
+    LEFT JOIN "Attendence" ON "Attendence"."userId" = "User".id AND
+    EXTRACT(YEAR FROM "Attendence".created_at) = ${year}::integer
+    AND EXTRACT(MONTH FROM "Attendence".created_at) = ${month}::integer
+        `;
 
     const usersMap = {};
     for (const row of result) {
@@ -23,6 +29,7 @@ export async function GET(req, res) {
           id,
           name,
           attendance: {},
+          total: 0,
         };
       }
       if (status && created_at) {
@@ -32,6 +39,7 @@ export async function GET(req, res) {
         const key = `${day}-${month}`;
 
         usersMap[id].attendance[key] = status;
+        usersMap[id].total += 1;
       }
     }
     return NextResponse.json({

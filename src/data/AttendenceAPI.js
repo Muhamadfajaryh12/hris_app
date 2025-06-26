@@ -44,10 +44,22 @@ const AttendenceAPI = (() => {
       console.log(error);
     }
   };
+
+  const GetSummaryAttendence = async ({ year, month }) => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/attendence/summary?year=${year}&month=${month}`
+      );
+      return response.data.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return {
     InsertAttendence,
     UpdateAttendence,
     GetAttendence,
+    GetSummaryAttendence,
   };
 })();
 

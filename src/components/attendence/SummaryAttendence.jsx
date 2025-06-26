@@ -1,75 +1,73 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { addMonths, getDaysInMonth, subMonths } from "date-fns";
+import { addMonths, getDaysInMonth, getYear, subMonths } from "date-fns";
+import AttendenceAPI from "@/data/AttendenceAPI";
+import { FaCheck } from "react-icons/fa6";
+
+const monthName = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
 const SummaryAttendence = () => {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(new Date());
   const [currentMonthName, setCurrentMonthName] = useState();
   const [dates, setDates] = useState([]);
-  const [employees, setEmployees] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      position: "Developer",
-      attendance: {
-        "1-6": "present", // ✓
-        "2-6": "absent", // x
-        "3-6": "permit", // x
-      },
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      position: "Designer",
-      attendance: {},
-    },
-    {
-      id: 3,
-      name: "Robert Johnson",
-      position: "Manager",
-      attendance: {
-        "5-6": "present",
-        "6-6": "permit",
-      },
-    },
-  ]);
+  const [data, setData] = useState([]);
 
-  const monthName = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentYear = currentDate.getFullYear();
 
   useEffect(() => {
-    setCurrentMonthName(monthName[currentMonth.getMonth()]);
-    const daysInMonth = getDaysInMonth(currentMonth);
+    setCurrentMonthName(monthName[currentDate.getMonth()]);
+    const daysInMonth = getDaysInMonth(currentDate);
     setDates(Array.from({ length: daysInMonth }, (_, i) => i + 1));
-  }, [currentMonth]);
+    getData();
+  }, [currentDate]);
+
+  const getData = async () => {
+    const response = await AttendenceAPI.GetSummaryAttendence({
+      month: currentMonth,
+      year: currentYear,
+    });
+    setData(response);
+  };
 
   const handleNextMonth = () => {
-    setCurrentMonth(addMonths(currentMonth, 1));
+    setCurrentDate(addMonths(currentDate, 1));
   };
 
   const handlePrevMonth = () => {
-    setCurrentMonth(subMonths(currentMonth, 1));
+    setCurrentDate(subMonths(currentDate, 1));
   };
+
   const getAttendanceSymbol = (employee, date) => {
-    const monthDate = `${date}-${currentMonth.getMonth() + 1}`;
+    const monthDate = `${date}-${currentDate.getMonth() + 1}`;
     const status = employee.attendance[monthDate];
 
-    if (status === "present") return "✓";
-    if (status === "permit" || status === "absent") return "x";
-    return "";
+    if (status === "On-Time")
+      return (
+        <div className=" flex justify-center p-2 bg-green-200 text-green-800 border border-green-800 rounded-md">
+          <FaCheck />
+        </div>
+      );
+    if (status === "Late")
+      return (
+        <div className=" flex justify-center p-2 bg-orange-200 text-orange-800 border border-orange-800 rounded-md">
+          <FaCheck />
+        </div>
+      );
   };
   return (
     <div>
@@ -87,10 +85,11 @@ const SummaryAttendence = () => {
                 {date}
               </th>
             ))}
+            <th>Total</th>
           </tr>
         </thead>
         <tbody>
-          {employees.map((employee) => (
+          {data.map((employee) => (
             <tr key={employee.id}>
               <td className="border p-2">{employee.name}</td>
               {dates?.map((date) => (
@@ -98,6 +97,7 @@ const SummaryAttendence = () => {
                   {getAttendanceSymbol(employee, date)}
                 </td>
               ))}
+              <td className="border p-2 text-center">{employee.total}</td>
             </tr>
           ))}
         </tbody>
