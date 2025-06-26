@@ -14,11 +14,6 @@ export async function GET(req, res) {
           select: {
             name: true,
             npk: true,
-            position: {
-              select: {
-                position: true,
-              },
-            },
           },
         },
       },

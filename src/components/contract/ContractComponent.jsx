@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
+import SectionCard from "../SectionCard";
 
 const ContractComponent = ({ dataContract }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,6 +22,7 @@ const ContractComponent = ({ dataContract }) => {
       header: "NPK",
     },
     {
+      id: "name",
       accessorKey: "employee.name",
       header: "Name",
     },
@@ -112,12 +114,32 @@ const ContractComponent = ({ dataContract }) => {
     },
   ];
   return (
-    <CustomDataTable
-      data={dataContract}
-      columns={columns}
-      titleButton={"New Contract"}
-      link={"/contract/form"}
-    />
+    <>
+      <div className="grid grid-cols-3 gap-4">
+        {dataContract.countContract.map((item, index) => (
+          <SectionCard
+            title={item.contract_type}
+            count={item.total}
+            key={index}
+            styleCard={
+              item.contract_type === "Internship"
+                ? "border-violet-800 bg-violet-200 text-violet-800"
+                : item.contract_type === "Contract"
+                ? "border-orange-800 bg-orange-200 text-orange-800"
+                : "border-blue-800 bg-blue-200 text-blue-800"
+            }
+          />
+        ))}
+      </div>
+      <CustomDataTable
+        data={dataContract.result}
+        columns={columns}
+        titleButton={"New Contract"}
+        link={"/contract/form"}
+        filterColumn={"name"}
+        placeholder={"Search by name"}
+      />
+    </>
   );
 };
 

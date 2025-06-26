@@ -36,11 +36,14 @@ const PayrollComponent = ({ data }) => {
       header: "NPK",
     },
     {
+      id: "name",
       accessorKey: "employee.name",
       header: "Name",
     },
     {
-      header: "Periode ",
+      id: "periode",
+      header: "Periode",
+      accessorFn: (row) => `${row.period_month} - ${row.period_year}`,
       cell: ({ row }) => {
         return (
           <p>
@@ -168,8 +171,12 @@ const PayrollComponent = ({ data }) => {
         columns={columns}
         data={data}
         link={"/payroll/form"}
-        titleButton="Payroll"
+        titleButton="Add Payroll"
+        placeholder="Search by name"
+        filterColumn={"name"}
+        filterColumn2={"periode"}
       />
+
       <CustomAlertDialog
         isOpen={isOpen}
         setIsOpen={setIsOpen}

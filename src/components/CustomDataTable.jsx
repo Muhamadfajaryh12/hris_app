@@ -19,10 +19,13 @@ import {
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import Link from "next/link";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "./ui/select";
+import { SelectValue } from "@radix-ui/react-select";
 
 const CustomDataTable = ({
   columns,
   data,
+  searchFilter,
   filterColumn,
   link,
   titleButton,
@@ -53,27 +56,44 @@ const CustomDataTable = ({
 
   return (
     <div className="">
-      {filterColumn ? (
-        <div className="flex items-center py-4 justify-between gap-2">
-          <Input
-            placeholder={placeholder}
-            value={table.getColumn(filterColumn)?.getFilterValue() ?? ""}
-            onChange={(event) =>
-              table.getColumn(filterColumn)?.setFilterValue(event.target.value)
-            }
-            className="w-72"
-          />
-          <Button asChild size="sm">
-            <Link href={link}>{titleButton}</Link>
-          </Button>
+      <div className="flex items-center py-4 justify-between gap-2">
+        <div className="flex gap-4">
+          {searchFilter && (
+            <Input
+              placeholder={placeholder}
+              value={table.getColumn(filterColumn)?.getFilterValue() ?? ""}
+              onChange={(event) =>
+                table
+                  .getColumn(filterColumn)
+                  ?.setFilterValue(event.target.value)
+              }
+              className="w-72"
+            />
+          )}
+          {filterColumn && (
+            <Select
+              value={table.getColumn(filterColumn)?.getFilterValue() ?? ""}
+              onValueChange={(value) => {
+                table.getColumn(filterColumn)?.setFilterValue(value);
+                console.log(value);
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={"s"} />
+                <SelectContent>
+                  <SelectItem value=" ">Select all</SelectItem>
+                  <SelectItem value="5 - 2025">June 2025</SelectItem>{" "}
+                  <SelectItem value="6 - 2025">July 2025</SelectItem>
+                </SelectContent>
+              </SelectTrigger>
+            </Select>
+          )}
         </div>
-      ) : (
-        <div className="flex items-center py-4 justify-end gap-2">
-          <Button asChild size="sm">
-            <Link href={link}>{titleButton}</Link>
-          </Button>
-        </div>
-      )}
+        <Button asChild size="sm">
+          <Link href={link}>{titleButton}</Link>
+        </Button>
+      </div>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>

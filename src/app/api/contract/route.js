@@ -16,8 +16,20 @@ export async function GET(req, res) {
         },
       },
     });
+
+    const countContract = await prisma.$queryRaw`
+    SELECT 
+    contract_type,
+    COALESCE(COUNT(contract_type),0) as total
+    FROM "Contract"
+    GROUP BY contract_type
+    
+    `;
     return NextResponse.json({
-      data: result,
+      data: {
+        result,
+        countContract,
+      },
       status: StatusCodes.OK,
     });
   } catch (error) {
