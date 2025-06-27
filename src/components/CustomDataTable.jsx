@@ -20,13 +20,14 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import Link from "next/link";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "./ui/select";
-import { SelectValue } from "@radix-ui/react-select";
+import { Item, SelectValue } from "@radix-ui/react-select";
 
 const CustomDataTable = ({
   columns,
   data,
-  searchFilter,
-  filterColumn,
+  filterSearch,
+  filterSelect,
+  dataFilterSelect,
   link,
   titleButton,
   placeholder,
@@ -58,32 +59,36 @@ const CustomDataTable = ({
     <div className="">
       <div className="flex items-center py-4 justify-between gap-2">
         <div className="flex gap-4">
-          {searchFilter && (
+          {filterSearch && (
             <Input
               placeholder={placeholder}
-              value={table.getColumn(filterColumn)?.getFilterValue() ?? ""}
+              value={table.getColumn(filterSearch)?.getFilterValue() ?? ""}
               onChange={(event) =>
                 table
-                  .getColumn(filterColumn)
+                  .getColumn(filterSearch)
                   ?.setFilterValue(event.target.value)
               }
               className="w-72"
             />
           )}
-          {filterColumn && (
+          {filterSelect && (
             <Select
-              value={table.getColumn(filterColumn)?.getFilterValue() ?? ""}
+              value={table.getColumn(filterSelect)?.getFilterValue() ?? ""}
               onValueChange={(value) => {
-                table.getColumn(filterColumn)?.setFilterValue(value);
-                console.log(value);
+                table
+                  .getColumn(filterSelect)
+                  ?.setFilterValue(value == "all" ? "" : value);
               }}
             >
               <SelectTrigger>
-                <SelectValue placeholder={"s"} />
+                <SelectValue placeholder={"Select by"} />
                 <SelectContent>
-                  <SelectItem value=" ">Select all</SelectItem>
-                  <SelectItem value="5 - 2025">June 2025</SelectItem>{" "}
-                  <SelectItem value="6 - 2025">July 2025</SelectItem>
+                  <SelectItem value="all">Select All</SelectItem>
+                  {dataFilterSelect?.map((item, index) => (
+                    <SelectItem value={item.value} key={index}>
+                      {item.value}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </SelectTrigger>
             </Select>

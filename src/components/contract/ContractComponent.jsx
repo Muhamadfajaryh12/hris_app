@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import SectionCard from "../SectionCard";
+import { useFormattedDate } from "@/hooks/useFormattedDate";
 
 const ContractComponent = ({ dataContract }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,18 +28,24 @@ const ContractComponent = ({ dataContract }) => {
       header: "Name",
     },
     {
+      accessorKey: "employee.position.position",
+      header: "Position",
+    },
+    {
       header: "Period",
       cell: ({ row }) => {
         return (
           <p>
-            {new Date(row.original.start_date).toLocaleDateString()} -{" "}
-            {new Date(row.original.end_date).toLocaleDateString()}
+            {useFormattedDate(row.original.start_date)} -{" "}
+            {useFormattedDate(row.original.end_date)}
           </p>
         );
       },
     },
     {
+      id: "contract_type",
       header: "Type",
+      accessorFn: (row) => row.contract_type.toString(),
       cell: ({ row }) => {
         return (
           <div
@@ -113,6 +120,18 @@ const ContractComponent = ({ dataContract }) => {
       },
     },
   ];
+
+  const dataFilterSelect = [
+    {
+      value: "Internship",
+    },
+    {
+      value: "Permanent",
+    },
+    {
+      value: "Contract",
+    },
+  ];
   return (
     <>
       <div className="grid grid-cols-3 gap-4">
@@ -136,8 +155,10 @@ const ContractComponent = ({ dataContract }) => {
         columns={columns}
         titleButton={"New Contract"}
         link={"/contract/form"}
-        filterColumn={"name"}
+        filterSearch={"name"}
         placeholder={"Search by name"}
+        filterSelect="contract_type"
+        dataFilterSelect={dataFilterSelect}
       />
     </>
   );

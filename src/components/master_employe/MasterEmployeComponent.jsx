@@ -49,6 +49,7 @@ const MasterEmployee = ({ data }) => {
       header: "Gender",
     },
     {
+      id: "section",
       accessorKey: "section.section",
       header: "Section",
     },
@@ -91,6 +92,11 @@ const MasterEmployee = ({ data }) => {
       },
     },
   ];
+
+  const dataFilterSelect = Array.from(
+    new Set(data.map((item) => item.section.section))
+  ).map((value) => ({ value }));
+
   return (
     <div>
       <CustomDataTable
@@ -98,8 +104,10 @@ const MasterEmployee = ({ data }) => {
         data={data}
         link={"/master/master_employee/form"}
         titleButton="Create employee"
-        filterColumn="name"
+        filterSearch="name"
+        filterSelect="section"
         placeholder="Search by name"
+        dataFilterSelect={dataFilterSelect}
       />
       <CustomAlertDialog setIsOpen={setIsOpen} isOpen={isOpen} />
     </div>

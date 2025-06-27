@@ -7,7 +7,7 @@ import React from "react";
 const page = async () => {
   const data = await EmployeeAPI.GetEmployee({ id: "" });
   return (
-    <MainLayout title="Master Employee">
+    <MainLayout title={["Employee"]}>
       <MasterEmployee data={data} />
     </MainLayout>
   );

@@ -128,8 +128,11 @@ const DashboardComponent = ({ data }) => {
           </div>
           <div className="border rounded-md p-4 my-4">
             <h1 className="font-bold">Leave Request</h1>
-            {data?.get_request_leave?.map((item) => (
-              <div className="flex gap-4 items-center my-2 justify-between">
+            {data?.get_request_leave?.map((item, index) => (
+              <div
+                className="flex gap-4 items-center my-2 justify-between"
+                key={index}
+              >
                 <div className="flex gap-4 items-center">
                   <div className="p-2 bg-violet-200 border border-violet-800 text-violet-800 rounded-sm">
                     <FaUser />

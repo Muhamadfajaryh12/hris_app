@@ -18,6 +18,7 @@ export async function GET(req, res) {
         },
       },
     });
+
     return NextResponse.json({
       data: result,
       status: StatusCodes.OK,

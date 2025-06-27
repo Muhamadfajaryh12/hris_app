@@ -21,6 +21,7 @@ const TrainingComponent = ({ data }) => {
       header: "NPK",
     },
     {
+      id: "name",
       accessorKey: "user.name",
       header: "Name",
     },
@@ -37,6 +38,7 @@ const TrainingComponent = ({ data }) => {
       header: "Type",
     },
     {
+      id: "training_category",
       accessorKey: "training_category",
       header: "Category",
     },
@@ -74,6 +76,15 @@ const TrainingComponent = ({ data }) => {
       },
     },
   ];
+
+  const dataFilterSelect = [
+    {
+      value: "Internal",
+    },
+    {
+      value: "Eksternal",
+    },
+  ];
   return (
     <div>
       <CustomDataTable
@@ -81,6 +92,10 @@ const TrainingComponent = ({ data }) => {
         columns={columns}
         link="/training/form"
         titleButton="Add Training"
+        placeholder="Search by name"
+        filterSearch="name"
+        filterSelect="training_category"
+        dataFilterSelect={dataFilterSelect}
       />
     </div>
   );

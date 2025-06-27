@@ -4,7 +4,7 @@ import React from "react";
 
 const page = () => {
   return (
-    <MainLayout>
+    <MainLayout title={["Attendence", "Summary"]}>
       <SummaryAttendence />
     </MainLayout>
   );

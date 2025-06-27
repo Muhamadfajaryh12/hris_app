@@ -15,6 +15,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import Badge from "../Badge";
 import SectionCard from "../SectionCard";
+import { useFormattedDate } from "@/hooks/useFormattedDate";
 const OvertimeComponent = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -41,7 +42,7 @@ const OvertimeComponent = ({ data }) => {
     {
       header: "Date",
       cell: ({ row }) => {
-        return <p>{new Date(row?.original?.date).toLocaleDateString()}</p>;
+        return <p>{useFormattedDate(row.original.date)}</p>;
       },
     },
     {
@@ -63,7 +64,7 @@ const OvertimeComponent = ({ data }) => {
     {
       header: "Status",
       id: "approval_leader",
-      enableHiding: false,
+      accessorFn: (row) => row.approval_leader?.toString() || "",
       cell: ({ row }) => {
         return <Badge status={row.original.approval_leader} />;
       },
@@ -108,6 +109,17 @@ const OvertimeComponent = ({ data }) => {
     },
   ];
 
+  const dataFilterSelect = [
+    {
+      value: "Approved",
+    },
+    {
+      value: "Waiting",
+    },
+    {
+      value: "Rejected",
+    },
+  ];
   return (
     <div>
       <div className="grid grid-cols-3 gap-4">
@@ -133,7 +145,9 @@ const OvertimeComponent = ({ data }) => {
         data={data.data}
         link={"/overtime/form"}
         titleButton="Request Overtime"
-        filterColumn="name"
+        filterSearch="name"
+        filterSelect="approval_leader"
+        dataFilterSelect={dataFilterSelect}
         placeholder="Search by name"
       />
       <CustomAlertDialog setIsOpen={setIsOpen} isOpen={isOpen} />

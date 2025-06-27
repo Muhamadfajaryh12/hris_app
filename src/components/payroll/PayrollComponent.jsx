@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import CustomDataTable from "../CustomDataTable";
 import { useCurrency } from "@/hooks/useCurrency";
 import Badge from "../Badge";
@@ -165,6 +165,17 @@ const PayrollComponent = ({ data }) => {
       },
     },
   ];
+
+  const dataFilterSelect = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          data.map((item) => `${item.period_month} - ${item.period_year}`)
+        )
+      ).map((value) => ({ value })),
+    []
+  );
+
   return (
     <div>
       <CustomDataTable
@@ -173,8 +184,9 @@ const PayrollComponent = ({ data }) => {
         link={"/payroll/form"}
         titleButton="Add Payroll"
         placeholder="Search by name"
-        filterColumn={"name"}
-        filterColumn2={"periode"}
+        filterSearch={"name"}
+        filterSelect={"periode"}
+        dataFilterSelect={dataFilterSelect}
       />
 
       <CustomAlertDialog

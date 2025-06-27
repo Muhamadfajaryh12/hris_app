@@ -14,6 +14,7 @@ import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import Badge from "../Badge";
 import SectionCard from "../SectionCard";
+import { useFormattedDate } from "@/hooks/useFormattedDate";
 
 const RequestLeaveComponent = ({ data }) => {
   const columns = [
@@ -22,14 +23,16 @@ const RequestLeaveComponent = ({ data }) => {
       header: "NPK",
     },
     {
+      id: "name",
       accessorKey: "user.name",
-      header: "Employer",
+      header: "Employee",
     },
     {
       accessorKey: "user.position.position",
       header: "Position",
     },
     {
+      id: "type",
       accessorKey: "type",
       header: "Type",
     },
@@ -39,8 +42,8 @@ const RequestLeaveComponent = ({ data }) => {
       cell: ({ row }) => {
         return (
           <p>
-            {new Date(row?.original?.date_start).toLocaleDateString()} -{" "}
-            {new Date(row?.original?.date_end).toLocaleDateString()}
+            {useFormattedDate(row.original.date_start)} -{" "}
+            {useFormattedDate(row.original.date_end)}
           </p>
         );
       },
@@ -107,7 +110,6 @@ const RequestLeaveComponent = ({ data }) => {
                 ""
               )}
               <DropdownMenuItem>
-                {" "}
                 <Link href={`/request_leave/${row.original.id}`}>
                   View request
                 </Link>
@@ -116,6 +118,24 @@ const RequestLeaveComponent = ({ data }) => {
           </DropdownMenu>
         );
       },
+    },
+  ];
+
+  const dataFilterSelect = [
+    {
+      value: "Annual Leave",
+    },
+    {
+      value: "Sick Leave",
+    },
+    {
+      value: "Maternity Leave",
+    },
+    {
+      value: "Bereavement Leave",
+    },
+    {
+      value: "Compensation Leave",
     },
   ];
   return (
@@ -143,6 +163,10 @@ const RequestLeaveComponent = ({ data }) => {
         columns={columns}
         link={"/request_leave/form"}
         titleButton="Request leave"
+        filterSearch="name"
+        placeholder="Search by name"
+        filterSelect={"type"}
+        dataFilterSelect={dataFilterSelect}
       />
     </div>
   );
