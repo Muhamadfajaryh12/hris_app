@@ -8,7 +8,7 @@ const page = async ({ params }) => {
   const { id } = await params;
   const cookieStore = await cookies();
   const leaderId = cookieStore.get("user_id")?.value;
-  const data = await OvertimeAPI.GetOvertime({ url: `?id=${id}` });
+  const data = await OvertimeAPI.GetDetailOvertime({ id: id });
 
   return (
     <MainLayout title={["Overtime", "Detail"]}>

@@ -51,15 +51,47 @@ const MasterEmployee = ({ data }) => {
     {
       id: "section",
       accessorKey: "section.section",
-      header: "Section",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+          >
+            Section
+            <ArrowUpDown />
+          </Button>
+        );
+      },
     },
     {
+      id: "postion",
       accessorKey: "position.position",
-      header: "Position",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+          >
+            Position
+            <ArrowUpDown />
+          </Button>
+        );
+      },
     },
     {
+      id: "level",
       accessorKey: "level.level",
-      header: "Level",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+          >
+            Level
+            <ArrowUpDown />
+          </Button>
+        );
+      },
     },
     {
       header: "Action",
@@ -93,10 +125,15 @@ const MasterEmployee = ({ data }) => {
     },
   ];
 
-  const dataFilterSelect = Array.from(
+  const sectionOptions = Array.from(
     new Set(data.map((item) => item.section.section))
   ).map((value) => ({ value }));
 
+  const levelOptions = Array.from(
+    new Set(data.map((item) => item.level.level))
+  ).map((value) => ({ value }));
+
+  const dataFilterSelect = [sectionOptions, levelOptions];
   return (
     <div>
       <CustomDataTable
@@ -105,7 +142,7 @@ const MasterEmployee = ({ data }) => {
         link={"/master/master_employee/form"}
         titleButton="Create employee"
         filterSearch="name"
-        filterSelect="section"
+        filterSelect={["section", "level"]}
         placeholder="Search by name"
         dataFilterSelect={dataFilterSelect}
       />

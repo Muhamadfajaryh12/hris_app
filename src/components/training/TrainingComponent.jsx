@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -17,8 +17,19 @@ const TrainingComponent = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
   const columns = [
     {
+      id: "npk",
       accessorKey: "user.npk",
-      header: "NPK",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant={"ghost"}
+            onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+          >
+            NPK
+            <ArrowUpDown />
+          </Button>
+        );
+      },
     },
     {
       id: "name",
@@ -26,19 +37,31 @@ const TrainingComponent = ({ data }) => {
       header: "Name",
     },
     {
+      id: "position",
       accessorKey: "user.position.position",
-      header: "Position",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant={"ghost"}
+            onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+          >
+            Position
+            <ArrowUpDown />
+          </Button>
+        );
+      },
     },
     {
       accessorKey: "title",
       header: "Training",
     },
     {
+      id: "type",
       accessorKey: "training_type",
       header: "Type",
     },
     {
-      id: "training_category",
+      id: "category",
       accessorKey: "training_category",
       header: "Category",
     },
@@ -77,7 +100,7 @@ const TrainingComponent = ({ data }) => {
     },
   ];
 
-  const dataFilterSelect = [
+  const categoryOptions = [
     {
       value: "Internal",
     },
@@ -85,6 +108,20 @@ const TrainingComponent = ({ data }) => {
       value: "Eksternal",
     },
   ];
+
+  const typeOptions = [
+    {
+      value: "Workshop",
+    },
+    {
+      value: "On Site",
+    },
+    {
+      value: "Online",
+    },
+  ];
+
+  const dataFilterSelect = [categoryOptions, typeOptions];
   return (
     <div>
       <CustomDataTable
@@ -94,7 +131,7 @@ const TrainingComponent = ({ data }) => {
         titleButton="Add Training"
         placeholder="Search by name"
         filterSearch="name"
-        filterSelect="training_category"
+        filterSelect={["category", "type"]}
         dataFilterSelect={dataFilterSelect}
       />
     </div>

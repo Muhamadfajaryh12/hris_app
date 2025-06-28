@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import SectionCard from "../SectionCard";
 import { useFormattedDate } from "@/hooks/useFormattedDate";
@@ -19,8 +19,19 @@ const ContractComponent = ({ dataContract }) => {
   const [isOpen, setIsOpen] = useState(false);
   const columns = [
     {
+      id: "npk",
       accessorKey: "employee.npk",
-      header: "NPK",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+          >
+            NPK
+            <ArrowUpDown />
+          </Button>
+        );
+      },
     },
     {
       id: "name",
@@ -28,11 +39,37 @@ const ContractComponent = ({ dataContract }) => {
       header: "Name",
     },
     {
+      id: "position",
       accessorKey: "employee.position.position",
-      header: "Position",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+          >
+            Position
+            <ArrowUpDown />
+          </Button>
+        );
+      },
     },
     {
-      header: "Period",
+      id: "Period",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+          >
+            Periode
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      accessorFn: (row) =>
+        `${useFormattedDate(row.start_date)} - ${useFormattedDate(
+          row.end_date
+        )}`,
       cell: ({ row }) => {
         return (
           <p>
@@ -64,7 +101,9 @@ const ContractComponent = ({ dataContract }) => {
     },
 
     {
+      id: "status",
       header: "Status",
+      accessorFn: (row) => row.status,
       cell: ({ row }) => {
         return (
           <div
@@ -121,7 +160,7 @@ const ContractComponent = ({ dataContract }) => {
     },
   ];
 
-  const dataFilterSelect = [
+  const typeOptions = [
     {
       value: "Internship",
     },
@@ -132,6 +171,17 @@ const ContractComponent = ({ dataContract }) => {
       value: "Contract",
     },
   ];
+
+  const statusOptions = [
+    {
+      value: "Active",
+    },
+    {
+      value: "Expired",
+    },
+  ];
+
+  const dataFilterSelect = [typeOptions, statusOptions];
   return (
     <>
       <div className="grid grid-cols-3 gap-4">
@@ -157,7 +207,7 @@ const ContractComponent = ({ dataContract }) => {
         link={"/contract/form"}
         filterSearch={"name"}
         placeholder={"Search by name"}
-        filterSelect="contract_type"
+        filterSelect={["contract_type", "status"]}
         dataFilterSelect={dataFilterSelect}
       />
     </>

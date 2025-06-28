@@ -2,7 +2,7 @@
 import CustomInput from "@/components/CustomInput";
 import CustomSelect from "@/components/CustomSelect";
 import { Form } from "@/components/ui/form";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import dataCompensation from "@/utils/data/dataCompensation";
 import OvertimeAPI from "@/data/OvertimeAPI";
@@ -11,20 +11,22 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MntToTime } from "@/lib/TimeToMnt";
+import CardFile from "../ui/CardFile";
 
 const formSchema = z.object({
   date: z.string().nonempty("date cannot be empty"),
   shift: z.string().nonempty("shift cannot be empty"),
   work_note: z.string().nonempty("work note cannot be empty"),
-  upload: z.string().nonempty("file cannot be empty"),
+  upload: z.any(),
   shiftId: z.string().nonempty("shift cannot be empty"),
   overtime_duration: z.string().nonempty("overtime duration cannot be empty"),
   compensation: z.string().nonempty("compensation cannot be empty"),
 });
 
 const FormOvertime = ({ dataShift, dataOvertime }) => {
+  const [uploadMode, setUploadMode] = useState(false);
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    // resolver: zodResolver(formSchema),
     defaultValues: {
       date: dataOvertime?.date || "",
       shiftId: dataOvertime?.shiftId.toString() || "",
@@ -59,6 +61,7 @@ const FormOvertime = ({ dataShift, dataOvertime }) => {
   }
 
   const Submit = async (data) => {
+    console.log("test");
     const formData = new FormData();
     formData.append("date", data.date);
     formData.append("shiftId", data.shiftId);
@@ -67,15 +70,26 @@ const FormOvertime = ({ dataShift, dataOvertime }) => {
     formData.append("break_duration", data.break_duration);
     formData.append("compensation", data.compensation);
     formData.append("file", data.upload);
-    const response = await OvertimeAPI.PostOvertime({ formData: formData });
+    let response;
+    if (dataOvertime) {
+      response = await OvertimeAPI.UpdateOvertime({
+        formData: formData,
+        id: dataOvertime.id,
+      });
+    } else {
+      response = await OvertimeAPI.PostOvertime({ formData: formData });
+    }
 
-    if (response?.status == 201) {
+    if (response?.status == 201 || 200) {
       toast("Successfuly", {
         title: response.message,
       });
-      form.reset();
+      if (response?.status === 201) {
+        form.reset();
+      }
     }
   };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(Submit)}>
@@ -101,13 +115,27 @@ const FormOvertime = ({ dataShift, dataOvertime }) => {
             label="Work Note"
             type="text"
           />{" "}
-          <CustomInput
-            control={form.control}
-            field={form.field}
-            name="upload"
-            label="Upload file"
-            type="file"
-          />
+          {dataOvertime?.file && !uploadMode ? (
+            <div>
+              <label htmlFor="" className="font-semibold">
+                File
+              </label>
+              <div className="flex items-center gap-4">
+                <CardFile title={dataOvertime?.file} />
+                <Button type="button" onClick={() => setUploadMode(true)}>
+                  Edit
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <CustomInput
+              control={form.control}
+              field={form.field}
+              name="upload"
+              label="Upload file"
+              type="file"
+            />
+          )}
           <div className="grid grid-cols-3 gap-4">
             <CustomInput
               control={form.control}

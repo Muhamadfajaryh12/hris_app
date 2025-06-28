@@ -113,7 +113,9 @@ const PayrollComponent = ({ data }) => {
       },
     },
     {
+      id: "status",
       header: "Status",
+      accessorFn: (row) => row.status,
       cell: ({ row }) => {
         return <Badge status={row?.original?.status} />;
       },
@@ -166,7 +168,7 @@ const PayrollComponent = ({ data }) => {
     },
   ];
 
-  const dataFilterSelect = useMemo(
+  const periodOptions = useMemo(
     () =>
       Array.from(
         new Set(
@@ -176,6 +178,12 @@ const PayrollComponent = ({ data }) => {
     []
   );
 
+  const statusOptions = useMemo(() => [
+    { value: "Paid" },
+    { value: "Waiting" },
+  ]);
+
+  const dataFilterSelect = [periodOptions, statusOptions];
   return (
     <div>
       <CustomDataTable
@@ -185,7 +193,7 @@ const PayrollComponent = ({ data }) => {
         titleButton="Add Payroll"
         placeholder="Search by name"
         filterSearch={"name"}
-        filterSelect={"periode"}
+        filterSelect={["periode", "status"]}
         dataFilterSelect={dataFilterSelect}
       />
 

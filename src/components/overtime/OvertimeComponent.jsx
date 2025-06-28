@@ -108,7 +108,7 @@ const OvertimeComponent = ({ data }) => {
     },
     {
       header: "Status",
-      id: "approval_leader",
+      id: "status",
       accessorFn: (row) => row.approval_leader?.toString() || "",
       cell: ({ row }) => {
         return <Badge status={row.original.approval_leader} />;
@@ -191,8 +191,8 @@ const OvertimeComponent = ({ data }) => {
         link={"/overtime/form"}
         titleButton="Request Overtime"
         filterSearch="name"
-        filterSelect="approval_leader"
-        dataFilterSelect={dataFilterSelect}
+        filterSelect={["status"]}
+        dataFilterSelect={[dataFilterSelect]}
         placeholder="Search by name"
       />
       <CustomAlertDialog setIsOpen={setIsOpen} isOpen={isOpen} />

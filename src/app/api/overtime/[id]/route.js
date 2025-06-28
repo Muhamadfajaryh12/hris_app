@@ -1,5 +1,7 @@
 import prisma from "@/lib/prisma";
 import { ErrorResponse } from "@/lib/response/ErrorResponse";
+import { TimeToMnt } from "@/lib/TimeToMnt";
+import { UploadFile } from "@/lib/UploadFile";
 import { StatusCodes } from "http-status-codes";
 import { NextResponse } from "next/server";
 
@@ -11,8 +13,46 @@ export async function GET(req, { params }) {
       where: {
         id: Number(id),
       },
+      select: {
+        id: true,
+        date: true,
+        approval_leader: true,
+        compensation: true,
+        overtime_duration: true,
+        break_duration: true,
+        work_note: true,
+        file: true,
+        approval_leader: true,
+        leaderId: true,
+        leader: {
+          select: {
+            name: true,
+          },
+        },
+        shift: {
+          select: {
+            title: true,
+            work_time: true,
+          },
+        },
+        user: {
+          select: {
+            name: true,
+            npk: true,
+            level: {
+              select: {
+                level: true,
+              },
+            },
+            section: {
+              select: {
+                section: true,
+              },
+            },
+          },
+        },
+      },
     });
-
     return NextResponse.json({
       status: StatusCodes.OK,
       data: result,
@@ -25,17 +65,45 @@ export async function GET(req, { params }) {
 export async function PUT(req, { params }) {
   try {
     const { id } = await params;
-    const body = await req.json();
-    const { approval_leader, leaderId } = body;
+    const formData = await req.formData();
+    const allowFields = [
+      "date",
+      "shiftId",
+      "compensation",
+      "ovetime_duration",
+      "break_duration",
+      "work_note",
+      "approval_leader",
+      "leaderId",
+    ];
+    const updateData = {};
+    const file = formData.get("file");
+
+    allowFields.forEach((key) => {
+      const value = formData.get(key);
+      if (value !== null && value !== undefined) {
+        if (key.endsWith("Id") && value !== null) {
+          updateData[key] = Number(value);
+        } else if (key.endsWith("duration") && value !== null) {
+          updateData[key] = TimeToMnt(value);
+        } else if (key == "date" && value !== null) {
+          updateData[key] = new Date(value);
+        } else {
+          updateData[key] = value;
+        }
+      }
+    });
+
+    if (file) {
+      const fileName = await UploadFile(file);
+      updateData.file = fileName;
+    }
 
     const result = await prisma.overtime.update({
       where: {
         id: Number(id),
       },
-      data: {
-        approval_leader: approval_leader,
-        leaderId: Number(leaderId),
-      },
+      data: updateData,
       select: {
         approval_leader: true,
         leaderId: true,

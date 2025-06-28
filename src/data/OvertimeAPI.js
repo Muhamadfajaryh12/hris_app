@@ -36,11 +36,12 @@ const GetDetailOvertime = async ({ id }) => {
   }
 };
 
-const ApprovalOvertime = async ({ approval_leader, leaderId, id }) => {
+const UpdateOvertime = async ({ formData, id }) => {
   try {
-    const response = await axios.put(`${BASE_URL}/overtime/${id}`, {
-      approval_leader,
-      leaderId,
+    const response = await axios.put(`${BASE_URL}/overtime/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
     return {
       status: response.data.status,
@@ -56,5 +57,5 @@ export default {
   PostOvertime,
   GetOvertime,
   GetDetailOvertime,
-  ApprovalOvertime,
+  UpdateOvertime,
 };

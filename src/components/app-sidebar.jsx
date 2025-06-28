@@ -47,7 +47,7 @@ const AppSidebar = () => {
     ],
     employeer: [
       {
-        link: "/employee",
+        link: "/master_employee",
         name: "Employee",
         icon: <LuUsers />,
       },
@@ -69,22 +69,22 @@ const AppSidebar = () => {
     ],
     master_data: [
       {
-        link: "/master/master_section",
+        link: "/master_section",
         name: "Master Section",
         icon: <GoDatabase />,
       },
       {
-        link: "/master/master_level",
+        link: "/master_level",
         name: "Master Level",
         icon: <GoDatabase />,
       },
       {
-        link: "/master/master_position",
+        link: "/master_position",
         name: "Master Position",
         icon: <GoDatabase />,
       },
       {
-        link: "/master/master_shift",
+        link: "/master_shift",
         name: "Master Shift",
         icon: <GoDatabase />,
       },

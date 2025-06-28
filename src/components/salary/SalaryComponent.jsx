@@ -136,8 +136,8 @@ const SalaryComponent = ({ data, dataPosition }) => {
       titleButton="Create salary"
       filterSearch="employee"
       placeholder="Search by name"
-      filterSelect="position"
-      dataFilterSelect={dataFilterSelect}
+      filterSelect={["position"]}
+      dataFilterSelect={[dataFilterSelect]}
     />
   );
 };

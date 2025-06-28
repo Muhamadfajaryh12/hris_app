@@ -5,6 +5,7 @@ import { Calendar } from "@/components/ui/calendar";
 import CustomPieChart from "../CustomPieChart";
 import { useCurrency } from "@/hooks/useCurrency";
 import { LuCalendar, LuUser } from "react-icons/lu";
+import { useFormattedDate } from "@/hooks/useFormattedDate";
 
 const DashboardComponent = ({ data }) => {
   const listScheduleCategory = (value) => {
@@ -100,7 +101,7 @@ const DashboardComponent = ({ data }) => {
                         </label>
                       </div>
                       <h1 className="text-sm text-gray-400">
-                        {new Date(item.date).toLocaleDateString()}
+                        {useFormattedDate(item.date)}
                       </h1>
                     </div>
                   </div>

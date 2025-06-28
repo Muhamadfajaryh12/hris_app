@@ -71,28 +71,29 @@ const CustomDataTable = ({
               className="w-72"
             />
           )}
-          {filterSelect && (
+          {filterSelect?.map((item, index) => (
             <Select
-              value={table.getColumn(filterSelect)?.getFilterValue() ?? ""}
+              value={table.getColumn(item)?.getFilterValue() ?? ""}
               onValueChange={(value) => {
                 table
-                  .getColumn(filterSelect)
+                  .getColumn(item)
                   ?.setFilterValue(value == "all" ? "" : value);
               }}
+              key={index}
             >
               <SelectTrigger>
-                <SelectValue placeholder={"Select by"} />
+                <SelectValue placeholder={`Select by ${item} `} />
                 <SelectContent>
                   <SelectItem value="all">Select All</SelectItem>
-                  {dataFilterSelect?.map((item, index) => (
-                    <SelectItem value={item.value} key={index}>
-                      {item.value}
+                  {dataFilterSelect[index]?.map((items, index) => (
+                    <SelectItem value={items.value} key={index}>
+                      {items.value}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </SelectTrigger>
             </Select>
-          )}
+          ))}
         </div>
         <Button asChild size="sm">
           <Link href={link}>{titleButton}</Link>

@@ -11,78 +11,29 @@ BigInt.prototype.toJSON = function () {
 
 export async function GET(req, res) {
   try {
-    const { searchParams } = await new URL(req.url);
-    const id = searchParams.get("id");
-
     let query;
-    if (id) {
-      query = prisma.overtime.findUnique({
-        where: {
-          id: Number(id),
-        },
-        select: {
-          id: true,
-          date: true,
-          approval_leader: true,
-          compensation: true,
-          overtime_duration: true,
-          break_duration: true,
-          work_note: true,
-          file: true,
-          approval_leader: true,
-          leaderId: true,
-          leader: {
-            select: {
-              name: true,
-            },
-          },
-          shift: {
-            select: {
-              title: true,
-              work_time: true,
-            },
-          },
-          user: {
-            select: {
-              name: true,
-              npk: true,
-              level: {
-                select: {
-                  level: true,
-                },
-              },
-              section: {
-                select: {
-                  section: true,
-                },
+
+    query = prisma.overtime.findMany({
+      omit: {
+        work_note: true,
+        file: true,
+        compensation: true,
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            npk: true,
+            position: {
+              select: {
+                position: true,
               },
             },
           },
         },
-      });
-    } else {
-      query = prisma.overtime.findMany({
-        omit: {
-          work_note: true,
-          file: true,
-          compensation: true,
-        },
-        include: {
-          user: {
-            select: {
-              name: true,
-              npk: true,
-              position: {
-                select: {
-                  position: true,
-                },
-              },
-            },
-          },
-          shift: true,
-        },
-      });
-    }
+        shift: true,
+      },
+    });
 
     const result = await query;
     const countByStatus = await prisma.overtime.groupBy({

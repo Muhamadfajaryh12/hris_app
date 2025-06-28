@@ -6,6 +6,7 @@ import { IoMdClose } from "react-icons/io";
 import OvertimeAPI from "@/data/OvertimeAPI";
 import { toast } from "sonner";
 import Badge from "../Badge";
+import { useFormattedDate } from "@/hooks/useFormattedDate";
 
 const FormDetailOvertime = ({ data, leaderId }) => {
   const [status, setStatus] = useState();
@@ -17,36 +18,22 @@ const FormDetailOvertime = ({ data, leaderId }) => {
     });
   }, []);
 
-  const approveHandle = async () => {
-    const response = await OvertimeAPI.ApprovalOvertime({
-      approval_leader: "Approved",
-      leaderId: leaderId,
+  const approvalHandle = async (value) => {
+    const formData = new FormData();
+    formData.append("approval_leader", value);
+    formData.append("leaderId", leaderId);
+    const response = await OvertimeAPI.UpdateOvertime({
+      formData: formData,
       id: data.id,
     });
+    console.log(response);
     if (response?.status == 200) {
       toast("Successfuly", {
         title: response.message,
       });
       setStatus({
-        leader: data?.leader.name,
-        status: data?.approval_leader,
-      });
-    }
-  };
-
-  const rejectHandle = async () => {
-    const response = await OvertimeAPI.ApprovalOvertime({
-      approval_leader: "Rejected",
-      leaderId: leaderId,
-      id: data.id,
-    });
-    if (response?.status == 200) {
-      toast("Successfuly", {
-        title: response.message,
-      });
-      setStatus({
-        leader: data?.leader.name,
-        status: data?.approval_leader,
+        leader: response?.data?.leader?.name,
+        status: response?.data?.approval_leader,
       });
     }
   };
@@ -70,7 +57,7 @@ const FormDetailOvertime = ({ data, leaderId }) => {
           <td className="border border-black p-2">NPK : {data?.user?.npk}</td>
           <td className="border border-black p-2">Name : {data?.user?.name}</td>
           <td className="border border-black p-2">
-            Date : {new Date(data?.date).toLocaleDateString()}
+            Date : {useFormattedDate(data?.date)}
           </td>
         </tr>
         <tr className="border border-black">
@@ -143,7 +130,7 @@ const FormDetailOvertime = ({ data, leaderId }) => {
                   size="sm"
                   variant=""
                   type="button"
-                  onClick={() => approveHandle()}
+                  onClick={() => approvalHandle("Approved")}
                 >
                   <FaCheck />
                 </Button>
@@ -151,7 +138,7 @@ const FormDetailOvertime = ({ data, leaderId }) => {
                   size="sm"
                   variant="destructive"
                   type="button"
-                  onClick={() => rejectHandle()}
+                  onClick={() => approvalHandle("Rejected")}
                 >
                   <IoMdClose />
                 </Button>

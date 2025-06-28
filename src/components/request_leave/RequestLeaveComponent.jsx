@@ -142,7 +142,7 @@ const RequestLeaveComponent = ({ data }) => {
     },
   ];
 
-  const dataFilterSelect = [
+  const typeOptions = [
     {
       value: "Annual Leave",
     },
@@ -159,6 +159,19 @@ const RequestLeaveComponent = ({ data }) => {
       value: "Compensation Leave",
     },
   ];
+
+  const statusOptions = [
+    {
+      value: "Approved",
+    },
+    {
+      value: "Waiting",
+    },
+    {
+      value: "Rejected",
+    },
+  ];
+  const dataFilterSelect = [typeOptions, statusOptions];
   return (
     <div>
       <div className="grid grid-cols-3 gap-4">
@@ -186,7 +199,7 @@ const RequestLeaveComponent = ({ data }) => {
         titleButton="Request leave"
         filterSearch="name"
         placeholder="Search by name"
-        filterSelect={"type"}
+        filterSelect={["type", "status"]}
         dataFilterSelect={dataFilterSelect}
       />
     </div>
