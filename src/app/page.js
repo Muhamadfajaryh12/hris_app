@@ -34,7 +34,6 @@ export default function Home() {
       npk: data.npk,
       password: data.password,
     });
-    console.log(response);
     if (response.status == 200) {
       route.push("/dashboard");
     } else {
@@ -45,10 +44,15 @@ export default function Home() {
   };
   return (
     <div>
-      <main className="w-screen h-screen flex justify-center items-center">
+      <main className="w-screen h-screen flex justify-center items-center bg-gray-100">
         <Card className="w-full max-w-sm">
           <CardHeader>
-            <CardTitle>Login to your account</CardTitle>
+            <CardTitle>
+              <h1 className="font-bold text-6xl  text-center">HRIS</h1>
+              <p className="text-sm  text-center my-4">
+                Login with your account.
+              </p>
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -58,17 +62,15 @@ export default function Home() {
                     control={form.control}
                     name="npk"
                     label="NPK"
-                    placeholder="0000"
-                    type="number"
+                    type="text"
                   />
                   <CustomInput
                     control={form.control}
                     name="password"
                     label="Password"
-                    placeholder="***"
                     type="password"
                   />
-                  <Button type="submit">Login</Button>
+                  <Button type="submit">Sign in</Button>
                 </div>
               </form>
             </Form>

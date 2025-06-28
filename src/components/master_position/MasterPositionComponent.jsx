@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import CustomAlertDialog from "../CustomAlertDialog";
@@ -23,7 +23,20 @@ const MasterPositionComponent = ({ data }) => {
       header: "Position",
     },
     {
-      header: "Base Salary",
+      id: "base_salary",
+      accessorKey: "base_salary",
+      enableSorting: true,
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+          >
+            Base Salary
+            <ArrowUpDown />
+          </Button>
+        );
+      },
       cell: ({ row }) => {
         return <p>{useCurrency(row?.original?.base_salary)}</p>;
       },
@@ -64,7 +77,7 @@ const MasterPositionComponent = ({ data }) => {
       <CustomDataTable
         columns={columns}
         link={"/master/master_position/form"}
-        titleButton="Create position"
+        titleButton="Create Position"
         data={data}
       />
       <CustomAlertDialog setIsOpen={setIsOpen} isOpen={isOpen} />

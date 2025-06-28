@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import CustomDataTable from "../CustomDataTable";
 import { useCurrency } from "@/hooks/useCurrency";
 import {
@@ -13,41 +13,80 @@ import {
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
-const SalaryComponent = ({ data }) => {
+import { useFormattedDate } from "@/hooks/useFormattedDate";
+const SalaryComponent = ({ data, dataPosition }) => {
   const columns = [
     {
+      id: "employee",
       accessorKey: "employee.name",
       header: "Name Employee",
     },
     {
+      id: "position",
       accessorKey: "employee.position.position",
       header: "Position",
     },
     {
-      header: "Basic Salary",
+      id: "base_salary",
+      accessorKey: "basic_salary",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant={"ghost"}
+            onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+          >
+            Base Salary
+            <ArrowUpDown />
+          </Button>
+        );
+      },
       cell: ({ row }) => {
         return <p>{useCurrency(row?.original?.basic_salary)}</p>;
       },
     },
     {
-      header: "Increase Salary",
+      id: "increase_salary",
+      accessorKey: "increase_salary",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant={"ghost"}
+            onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+          >
+            Increase Salary
+            <ArrowUpDown />
+          </Button>
+        );
+      },
       cell: ({ row }) => {
         return <p>{useCurrency(row?.original?.increase_salary)}</p>;
       },
     },
     {
-      header: "Total Salary",
+      id: "total_salary",
+      accessorKey: "total_salary",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant={"ghost"}
+            onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+          >
+            Total Salary
+            <ArrowUpDown />
+          </Button>
+        );
+      },
       cell: ({ row }) => {
         return <p>{useCurrency(row?.original?.total_salary)}</p>;
       },
     },
     {
-      header: "Date",
+      header: "Periode",
       cell: ({ row }) => {
         return (
           <p>
-            {new Date(row?.original?.start_date).toLocaleDateString()} -{" "}
-            {new Date(row?.original?.end_date).toLocaleDateString()}
+            {useFormattedDate(row?.original?.start_date)} -{" "}
+            {useFormattedDate(row?.original?.end_date)}
           </p>
         );
       },
@@ -81,12 +120,24 @@ const SalaryComponent = ({ data }) => {
       },
     },
   ];
+
+  const dataFilterSelect = useMemo(
+    () =>
+      dataPosition.map((item) => ({
+        value: item.position,
+      })),
+    []
+  );
   return (
     <CustomDataTable
       data={data}
       columns={columns}
       link={"/salary/form"}
       titleButton="Create salary"
+      filterSearch="employee"
+      placeholder="Search by name"
+      filterSelect="position"
+      dataFilterSelect={dataFilterSelect}
     />
   );
 };

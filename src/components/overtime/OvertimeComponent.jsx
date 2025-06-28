@@ -40,22 +40,67 @@ const OvertimeComponent = ({ data }) => {
       header: "Name Employee",
     },
     {
-      header: "Date",
+      id: "date",
+      accessorKey: "date",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant={"ghost"}
+            onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+          >
+            Date
+            <ArrowUpDown />
+          </Button>
+        );
+      },
       cell: ({ row }) => {
         return <p>{useFormattedDate(row.original.date)}</p>;
       },
     },
     {
+      id: "overtime_duration",
       accessorKey: "overtime_duration",
-      header: "Overtime Duration",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant={"ghost"}
+            onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+          >
+            Overtime Duration
+            <ArrowUpDown />
+          </Button>
+        );
+      },
     },
     {
+      id: "break_duration",
       accessorKey: "break_duration",
-      header: "Break Duration",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant={"ghost"}
+            onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+          >
+            Break Duration
+            <ArrowUpDown />
+          </Button>
+        );
+      },
     },
     {
+      id: "shift",
       accessorKey: "shift.title",
-      header: "Shift",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant={"ghost"}
+            onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+          >
+            Shift
+            <ArrowUpDown />
+          </Button>
+        );
+      },
     },
     {
       accessorKey: "user.position.position",

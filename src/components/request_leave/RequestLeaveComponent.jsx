@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import Badge from "../Badge";
 import SectionCard from "../SectionCard";
@@ -19,8 +19,19 @@ import { useFormattedDate } from "@/hooks/useFormattedDate";
 const RequestLeaveComponent = ({ data }) => {
   const columns = [
     {
+      id: "npk",
       accessorKey: "user.npk",
-      header: "NPK",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant={"ghost"}
+            onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+          >
+            NPK
+            <ArrowUpDown />
+          </Button>
+        );
+      },
     },
     {
       id: "name",
@@ -67,9 +78,19 @@ const RequestLeaveComponent = ({ data }) => {
     },
 
     {
-      header: "Status",
       id: "status",
-      enableHiding: false,
+      accessorKey: "status",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant={"ghost"}
+            onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+          >
+            Status
+            <ArrowUpDown />
+          </Button>
+        );
+      },
       cell: ({ row }) => {
         return <Badge status={row?.original?.status} />;
       },

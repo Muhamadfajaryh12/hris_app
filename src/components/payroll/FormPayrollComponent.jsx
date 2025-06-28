@@ -185,7 +185,6 @@ const FormPayrollComponent = ({ dataEmploye, dataPayroll, datas }) => {
             control={form.control}
             name="date"
             label="Periode Date"
-            className="border-black"
             type="month"
           />
         </div>
@@ -209,20 +208,13 @@ const FormPayrollComponent = ({ dataEmploye, dataPayroll, datas }) => {
               disabled
             />
           )}
-          <CustomInput
-            control={form.control}
-            name="npk"
-            label="NPK"
-            className="border-black"
-            disabled
-          />
+          <CustomInput control={form.control} name="npk" label="NPK" disabled />
         </div>
         <div className="grid grid-cols-3 gap-4">
           <CustomInput
             control={form.control}
             name="level"
             label="Level"
-            className="border-black"
             disabled
           />
           <CustomInput
@@ -230,14 +222,12 @@ const FormPayrollComponent = ({ dataEmploye, dataPayroll, datas }) => {
             name="position"
             label="Position"
             disabled
-            className="border-black"
           />
           <CustomInput
             control={form.control}
             name="section"
             label="Section"
             disabled
-            className="border-black"
           />
         </div>
         <div className="grid grid-cols-3 gap-4">
@@ -246,21 +236,18 @@ const FormPayrollComponent = ({ dataEmploye, dataPayroll, datas }) => {
             name="salary"
             label="Salary"
             disabled
-            className="border-black"
           />
           <CustomInput
             control={form.control}
             name="overtime_duration"
             label="Overtime Duration"
             disabled
-            className="border-black"
           />
           <CustomInput
             control={form.control}
             name="leave_attendence"
             label="Leave Attendence"
             disabled
-            className="border-black"
           />
         </div>
         <h1 className="font-bold">Deduction</h1>
@@ -286,7 +273,7 @@ const FormPayrollComponent = ({ dataEmploye, dataPayroll, datas }) => {
             name="deduction_attendence"
             label="Deduction Attendence"
             className="border-red-600 text-red-600"
-            description="Pinalty leave"
+            description="Penalty leave"
             disabled
           />
         </div>
