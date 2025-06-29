@@ -1,12 +1,15 @@
 "use client";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Form } from "../ui/form";
 import { useForm } from "react-hook-form";
 import CustomSelect from "../CustomSelect";
 import CustomInput from "../CustomInput";
 import { Button } from "../ui/button";
-import ContractAPI from "@/data/ContractAPI";
 import { toast } from "sonner";
+import ContractAPI from "@/data/ContractAPI";
+import CardFile from "../ui/CardFile";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const statusType = [
   {
@@ -34,10 +37,31 @@ const contractType = [
   },
 ];
 
-const FormContract = ({ dataEmployee }) => {
+const formSchema = z.object({
+  status: z.string().nonempty("status cannot be empty"),
+  contract: z.string().nonempty("contract cannot be empty"),
+  start_date: z.string().nonempty("start date cannot be empty"),
+  end_date: z.string().nonempty("end date cannot be empty"),
+  employee: z.string().nonempty("employee cannot be empty"),
+  file_contract: z.any(),
+});
+
+const FormContract = ({ dataEmployee, dataContract }) => {
+  const {
+    id,
+    start_date,
+    end_date,
+    contract_type,
+    status,
+    employeeId,
+    file_contract,
+  } = dataContract;
+
+  const [editMode, setEditMode] = useState(false);
+
   const dataEmployeeMaster = useMemo(
     () =>
-      dataEmployee.map((item) => ({
+      dataEmployee?.map((item) => ({
         id: item.id.toString(),
         value: item.name,
       })) || [],
@@ -45,15 +69,28 @@ const FormContract = ({ dataEmployee }) => {
   );
 
   const form = useForm({
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      employee: "",
-      status: "",
-      contract: "",
-      start_date: "",
-      end_date: "",
+      employee: employeeId.toString() || "",
+      status: status || "",
+      contract: contract_type || "",
+      start_date: new Date(start_date).toISOString().split("T")[0] || "",
+      end_date: new Date(end_date).toISOString().split("T")[0] || "",
       file_contract: "",
     },
   });
+
+  useEffect(() => {
+    if (dataContract) {
+      form.reset({
+        status: status,
+        contract: contract_type,
+        employee: employeeId.toString(),
+        start_date: new Date(start_date).toISOString().split("T")[0] || "",
+        end_date: new Date(end_date).toISOString().split("T")[0] || "",
+      });
+    }
+  }, [dataContract]);
 
   const Submit = useCallback(async (value) => {
     const formData = new FormData();
@@ -64,12 +101,19 @@ const FormContract = ({ dataEmployee }) => {
     formData.append("employeeId", value.employee);
     formData.append("file_contract", value.file_contract);
 
-    const response = await ContractAPI.PostContract({ formData: formData });
-    if (response?.status == 201) {
+    let response;
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
+    response = dataContract
+      ? await ContractAPI.UpdateContract({ id: id, formData: formData })
+      : await ContractAPI.PostContract({ formData: formData });
+
+    if ([200, 201].includes(response?.status)) {
       toast("Success", {
         title: response.message,
       });
-      form.reset();
+      if (!dataContract) form.reset();
     }
   });
 
@@ -114,12 +158,24 @@ const FormContract = ({ dataEmployee }) => {
             type="date"
           />
         </div>
-        <CustomInput
-          control={form.control}
-          name="file_contract"
-          label="Upload"
-          type="file"
-        />
+        {file_contract && !editMode ? (
+          <React.Fragment>
+            <label className="font-semibold">File Contract</label>
+            <div className="flex gap-4 items-center">
+              <CardFile title={file_contract} />
+              <Button type="button" onClick={() => setEditMode(true)}>
+                Edit
+              </Button>
+            </div>
+          </React.Fragment>
+        ) : (
+          <CustomInput
+            control={form.control}
+            name="file_contract"
+            label="Upload"
+            type="file"
+          />
+        )}
         <div className="flex justify-end">
           <Button type="submit">SUBMIT</Button>
         </div>
