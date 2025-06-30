@@ -10,13 +10,13 @@ import PayRollAPI from "@/data/PayRollAPI";
 import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-const formSchema = z.object({
-  employee: z.string().nonempty("employee cannot be empty"),
-  date: z.string().nonempty("period cannot be empty"),
-});
+// const formSchema = z.object({
+//   employee: z.string().nonempty("employee cannot be empty"),
+//   date: z.string().nonempty("period cannot be empty"),
+// });
 const FormPayrollComponent = ({ dataEmploye, dataPayroll, datas }) => {
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    // resolver: zodResolver(formSchema),
     defaultValues: {
       employee: datas?.id?.toString() || "",
       npk: datas?.npk || "",

@@ -31,10 +31,13 @@ const CustomPieChart = ({
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{periode}</CardDescription>
+        <CardTitle>
+          <label htmlFor="" className="text-gray-400 text-sm">
+            {title}
+          </label>
+        </CardTitle>
       </CardHeader>
-      <CardContent className="flex-1 pb-0">
+      <CardContent className=" pb-0">
         <ChartContainer
           config={chartConfig}
           className="mx-auto aspect-square max-h-[250px] px-0"
@@ -47,30 +50,12 @@ const CustomPieChart = ({
               data={chartData}
               dataKey={dataKey}
               labelLine={false}
-              label={({ payload, ...props }) => {
-                return (
-                  <text
-                    cx={props.cx}
-                    cy={props.cy}
-                    x={props.x}
-                    y={props.y}
-                    textAnchor={props.textAnchor}
-                    dominantBaseline={props.dominantBaseline}
-                    fill="hsla(var(--foreground))"
-                  >
-                    {payload.count_emotion}
-                  </text>
-                );
-              }}
+              innerRadius={60}
               nameKey={nameKey}
             />
           </PieChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 leading-none font-medium"></div>
-        <div className="text-muted-foreground leading-none"></div>
-      </CardFooter>
     </Card>
   );
 };

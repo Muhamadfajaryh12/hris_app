@@ -24,6 +24,7 @@ const PayrollComponent = ({ data }) => {
   const handleClick = async (value) => {
     const response = await PayRollAPI.UpdatePayRoll({
       id: value,
+      //paydate
       status: "Paid",
     });
     if (response.status == 200) {

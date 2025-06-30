@@ -40,7 +40,7 @@ const SiteHeader = ({ title }) => {
           </BreadcrumbList>
         </Breadcrumb>
         <div className="ml-auto flex items-center gap-2 p-2">
-          <Button size="sm" variant="" onClick={Logout}>
+          <Button size="sm" variant="ghost" onClick={Logout}>
             Logout
           </Button>
         </div>

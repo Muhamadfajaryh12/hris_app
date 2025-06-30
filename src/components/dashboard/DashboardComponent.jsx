@@ -1,11 +1,12 @@
 import React from "react";
-import { FaCalendar, FaUser, FaUserGroup } from "react-icons/fa6";
+import { FaUser, FaUserGroup } from "react-icons/fa6";
 import CardDashboard from "../CardDashboard";
 import { Calendar } from "@/components/ui/calendar";
 import CustomPieChart from "../CustomPieChart";
 import { useCurrency } from "@/hooks/useCurrency";
-import { LuCalendar, LuUser } from "react-icons/lu";
+import { LuCalendar } from "react-icons/lu";
 import { useFormattedDate } from "@/hooks/useFormattedDate";
+import { CustomLineChart } from "../CustomLineChart";
 
 const DashboardComponent = ({ data }) => {
   const listScheduleCategory = (value) => {
@@ -42,6 +43,12 @@ const DashboardComponent = ({ data }) => {
     },
   };
 
+  const CHART_LINEAR_CONFIG = {
+    total_cost: {
+      label: "Total Cost",
+      color: "#ff0000",
+    },
+  };
   const processReflectionData = () => {
     return data?.get_reflection?.map(
       (item) =>
@@ -52,7 +59,7 @@ const DashboardComponent = ({ data }) => {
         } || [])
     );
   };
-
+  console.log(data);
   return (
     <div className="">
       <div className="grid grid-cols-4 gap-4">
@@ -80,10 +87,14 @@ const DashboardComponent = ({ data }) => {
           style={"bg-violet-200"}
           title={"Annual Leave"}
         />
-        <div className=" border rounded-sm">
-          <Calendar mode="single" className="mx-auto" />
-          <div className=" p-2">
-            <h1 className="font-bold mb-2">Schedules</h1>
+        <div className="flex flex-col gap-4">
+          <div className=" border rounded-sm">
+            <Calendar mode="single" className="mx-auto" />
+          </div>
+          <div className="border rounded-sm p-2">
+            <label htmlFor="" className="text-gray-400 text-sm">
+              Schedules
+            </label>
             {data?.schedule?.map((item) => (
               <div className="flex gap-2 my-3 " key={item.id}>
                 {listScheduleCategory(item.category)}
@@ -110,6 +121,7 @@ const DashboardComponent = ({ data }) => {
             ))}
           </div>
         </div>
+
         <div className="">
           <CustomPieChart
             chartData={processReflectionData()}
@@ -121,14 +133,24 @@ const DashboardComponent = ({ data }) => {
           />
         </div>
         <div className=" col-span-2">
-          <div className="border rounded-md p-4 h-32 text-center ">
-            <h1 className="font-bold text-xl">Cost Value Estimate</h1>
-            <h2 className="font-bold  text-4xl my-4">
+          <div className="border rounded-md p-4 h-48">
+            <label htmlFor="" className="text-gray-400 text-sm">
+              Cost Value Estimate
+            </label>
+            <h2 className="font-bold  text-2xl">
               {useCurrency(data?.get_cost)}
             </h2>
+            <CustomLineChart
+              dataKey="total_cost"
+              dataKeyX="period_month"
+              data={data?.get_cost_month}
+              chartConfig={CHART_LINEAR_CONFIG}
+            />
           </div>
           <div className="border rounded-md p-4 my-4">
-            <h1 className="font-bold">Leave Request</h1>
+            <label htmlFor="" className="text-gray-400 text-sm">
+              Request Leave
+            </label>
             {data?.get_request_leave?.map((item, index) => (
               <div
                 className="flex gap-4 items-center my-2 justify-between"
