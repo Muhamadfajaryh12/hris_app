@@ -124,3 +124,22 @@ export async function PUT(req, { params }) {
     return ErrorResponse(error);
   }
 }
+
+export async function DELETE(req, { params }) {
+  try {
+    const { id } = await params;
+    const result = await prisma.overtime.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    return NextResponse.json({
+      data: result,
+      status: StatusCodes.OK,
+      message: "Deleted successfully",
+    });
+  } catch (error) {
+    return ErrorResponse(error);
+  }
+}

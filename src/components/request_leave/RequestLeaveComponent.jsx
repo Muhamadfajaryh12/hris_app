@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import CustomDataTable from "../CustomDataTable";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,8 +15,16 @@ import Link from "next/link";
 import Badge from "../Badge";
 import SectionCard from "../SectionCard";
 import { useFormattedDate } from "@/hooks/useFormattedDate";
+import AnnualLeaveAPI from "@/data/AnnualLeaveAPI";
+import { toast } from "sonner";
+import CustomAlertDialog from "../CustomAlertDialog";
 
-const RequestLeaveComponent = ({ data }) => {
+const RequestLeaveComponent = ({ dataLeave }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+  const [data, setData] = useState(dataLeave.data);
+  const [count, setCount] = useState(dataLeave.status_count);
+  console.log(count);
   const columns = [
     {
       id: "npk",
@@ -110,7 +118,7 @@ const RequestLeaveComponent = ({ data }) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              {row.origin?.status == "Waiting" ? (
+              {row.original?.status == "Waiting" ? (
                 <>
                   <DropdownMenuItem>
                     <Link href={`/request_leave/form/${row.original.id}`}>
@@ -122,19 +130,23 @@ const RequestLeaveComponent = ({ data }) => {
                       Approval
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setIsOpen(true)}>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setIsOpen(true);
+                      setSelectedId(row.original.id);
+                    }}
+                  >
                     Delete
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                 </>
               ) : (
-                ""
+                <DropdownMenuItem>
+                  <Link href={`/request_leave/${row.original.id}`}>
+                    View request
+                  </Link>
+                </DropdownMenuItem>
               )}
-              <DropdownMenuItem>
-                <Link href={`/request_leave/${row.original.id}`}>
-                  View request
-                </Link>
-              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -172,10 +184,29 @@ const RequestLeaveComponent = ({ data }) => {
     },
   ];
   const dataFilterSelect = [typeOptions, statusOptions];
+
+  const handleDelete = useCallback(async (id) => {
+    const response = await AnnualLeaveAPI.DeleteAnnualLeave({ id: id });
+    if (response.status == 200) {
+      toast(response.message);
+      setData((prev) => prev.filter((item) => item.id != response.data.id));
+      setCount((prev) =>
+        prev.map((item) =>
+          item.status == "Waiting"
+            ? {
+                ...item,
+                count: item.count - 1,
+              }
+            : item
+        )
+      );
+    }
+  });
+
   return (
     <div>
       <div className="grid grid-cols-3 gap-4">
-        {data.status_count?.map((item, index) => (
+        {count?.map((item, index) => (
           <SectionCard
             title={item.status}
             count={item.count}
@@ -193,7 +224,7 @@ const RequestLeaveComponent = ({ data }) => {
         ))}
       </div>
       <CustomDataTable
-        data={data.data}
+        data={data}
         columns={columns}
         link={"/request_leave/form"}
         titleButton="Request leave"
@@ -201,6 +232,12 @@ const RequestLeaveComponent = ({ data }) => {
         placeholder="Search by name"
         filterSelect={["type", "status"]}
         dataFilterSelect={dataFilterSelect}
+      />
+      <CustomAlertDialog
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        id={selectedId}
+        handleClick={handleDelete}
       />
     </div>
   );

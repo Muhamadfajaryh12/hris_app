@@ -53,9 +53,22 @@ const UpdateOvertime = async ({ formData, id }) => {
   }
 };
 
+const DeleteOvertime = async ({ id }) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/overtime/${id}`);
+    return {
+      data: response.data.data,
+      message: response.data.message,
+      status: response.data.status,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
 export default {
   PostOvertime,
   GetOvertime,
   GetDetailOvertime,
   UpdateOvertime,
+  DeleteOvertime,
 };

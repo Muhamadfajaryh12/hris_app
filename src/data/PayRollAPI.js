@@ -70,9 +70,24 @@ const UpdatePayRoll = async ({ id, bonus, status, total_salary }) => {
     console.log(error);
   }
 };
+
+const DeletePayroll = async ({ id }) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/payroll/${id}`);
+    return {
+      data: response.data.data,
+      message: response.data.message,
+      status: response.data.status,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export default {
   PostPayRoll,
   GetPayRoll,
   GetDetailPayroll,
   UpdatePayRoll,
+  DeletePayroll,
 };

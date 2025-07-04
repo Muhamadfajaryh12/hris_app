@@ -88,12 +88,26 @@ const EmployeeAPI = (() => {
       return console.log(error);
     }
   };
+
+  const DeleteEmployee = async ({ id }) => {
+    try {
+      const response = await axios.delete(`${BASE_URL}/employee/${id}`);
+      return {
+        data: response.data.data,
+        message: response.data.message,
+        status: response.data.status,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return {
     PostEmployee,
     PutEmployee,
     GetEmployee,
     GetDetailEmployee,
     GetDetailMasterEmployee,
+    DeleteEmployee,
   };
 })();
 

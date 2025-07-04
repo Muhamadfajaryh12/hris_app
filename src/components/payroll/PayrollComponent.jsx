@@ -17,9 +17,11 @@ import Link from "next/link";
 import CustomAlertDialog from "../CustomAlertDialog";
 import PayRollAPI from "@/data/PayRollAPI";
 import { toast } from "sonner";
-const PayrollComponent = ({ data }) => {
+const PayrollComponent = ({ dataPayroll }) => {
   const [isOpen, setIsOpen] = useState();
   const [id, setId] = useState();
+  const [data, setData] = useState(dataPayroll);
+  const [type, setType] = useState(null);
 
   const handleClick = async (value) => {
     const response = await PayRollAPI.UpdatePayRoll({
@@ -29,8 +31,16 @@ const PayrollComponent = ({ data }) => {
     });
     if (response.status == 200) {
       toast("Success");
+      if (type == "delete") {
+        setData((prev) => prev.filter((item) => item.id !== response.id));
+      } else {
+        setData((prev) =>
+          prev.map((item) => (item.id === id ? response.data : item))
+        );
+      }
     }
   };
+
   const columns = [
     {
       accessorKey: "employee.npk",
@@ -152,10 +162,19 @@ const PayrollComponent = ({ data }) => {
                     <Link href={`/payroll/form/${row.original.id}`}>
                       Update
                     </Link>
+                  </DropdownMenuItem>{" "}
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setIsOpen(true), setId(row.original.id);
+                      setType("delete");
+                    }}
+                  >
+                    Delete
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => {
                       setIsOpen(true), setId(row.original.id);
+                      setType("update");
                     }}
                   >
                     Payment

@@ -12,13 +12,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import Badge from "../Badge";
 import SectionCard from "../SectionCard";
 import { useFormattedDate } from "@/hooks/useFormattedDate";
-const OvertimeComponent = ({ data }) => {
+import OvertimeAPI from "@/data/OvertimeAPI";
+import { toast } from "sonner";
+const OvertimeComponent = ({ dataOvertime }) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [selectedId, setSelectedId] = useState(null);
+  const [data, setData] = useState(dataOvertime.data);
+  const [count, setCount] = useState(dataOvertime.status_count);
   const columns = [
     {
       accessorKey: "user.npk",
@@ -136,7 +140,12 @@ const OvertimeComponent = ({ data }) => {
                       Update
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setIsOpen(true)}>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setIsOpen(true);
+                      setSelectedId(row.original.id);
+                    }}
+                  >
                     Delete
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -165,10 +174,29 @@ const OvertimeComponent = ({ data }) => {
       value: "Rejected",
     },
   ];
+
+  const handleDelete = useCallback(async (id) => {
+    const response = await OvertimeAPI.DeleteOvertime({ id: id });
+    if (response.status == 200) {
+      toast(response.message);
+      setData((prev) => prev.filter((item) => item.id !== response.data.id));
+      setCount((prev) =>
+        prev.map((item) =>
+          item.approval_leader == "Waiting"
+            ? {
+                ...item,
+                count: item.count - 1,
+              }
+            : item
+        )
+      );
+    }
+  });
+
   return (
     <div>
       <div className="grid grid-cols-3 gap-4">
-        {data.status_count.map((item, index) => (
+        {count.map((item, index) => (
           <SectionCard
             title={item.approval_leader}
             count={item.count}
@@ -187,7 +215,7 @@ const OvertimeComponent = ({ data }) => {
       </div>
       <CustomDataTable
         columns={columns}
-        data={data.data}
+        data={data}
         link={"/overtime/form"}
         titleButton="Request Overtime"
         filterSearch="name"
@@ -195,7 +223,12 @@ const OvertimeComponent = ({ data }) => {
         dataFilterSelect={[dataFilterSelect]}
         placeholder="Search by name"
       />
-      <CustomAlertDialog setIsOpen={setIsOpen} isOpen={isOpen} />
+      <CustomAlertDialog
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
+        id={selectedId}
+        handleClick={handleDelete}
+      />
     </div>
   );
 };

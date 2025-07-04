@@ -55,9 +55,24 @@ const UpdateContract = async ({ formData, id }) => {
     console.log(error);
   }
 };
+
+const DeleteContract = async ({ id }) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/contract/${id}`);
+    return {
+      data: response.data.data,
+      message: response.data.message,
+      status: response.data.status,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export default {
   GetContract,
   GetDetailContract,
   UpdateContract,
   PostContract,
+  DeleteContract,
 };

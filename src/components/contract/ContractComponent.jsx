@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import CustomDataTable from "../CustomDataTable";
 import {
   DropdownMenu,
@@ -14,9 +14,15 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import SectionCard from "../SectionCard";
 import { useFormattedDate } from "@/hooks/useFormattedDate";
+import CustomAlertDialog from "../CustomAlertDialog";
+import ContractAPI from "@/data/ContractAPI";
+import { toast } from "sonner";
 
 const ContractComponent = ({ dataContract }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+  const [data, setData] = useState(dataContract.result);
+  const [count, setCount] = useState(dataContract.countContract);
   const columns = [
     {
       id: "npk",
@@ -147,7 +153,8 @@ const ContractComponent = ({ dataContract }) => {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
-                    setIsOpen(true), setId(row.original.id);
+                    setIsOpen(true);
+                    setSelectedId(row.original.id);
                   }}
                 >
                   Delete
@@ -182,10 +189,29 @@ const ContractComponent = ({ dataContract }) => {
   ];
 
   const dataFilterSelect = [typeOptions, statusOptions];
+
+  const handleDelete = useCallback(async (id) => {
+    const response = await ContractAPI.DeleteContract({ id: id });
+    if (response.status == 200) {
+      toast(response.message);
+      setData((prev) => prev.filter((item) => item.id !== response.data.id));
+      setCount((prev) =>
+        prev.map((item) =>
+          item.contract_type == response.data.contract_type
+            ? {
+                ...item,
+                total: item.total - 1,
+              }
+            : item
+        )
+      );
+    }
+  });
+
   return (
     <>
       <div className="grid grid-cols-3 gap-4">
-        {dataContract.countContract.map((item, index) => (
+        {count.map((item, index) => (
           <SectionCard
             title={item.contract_type}
             count={item.total}
@@ -201,7 +227,7 @@ const ContractComponent = ({ dataContract }) => {
         ))}
       </div>
       <CustomDataTable
-        data={dataContract.result}
+        data={data}
         columns={columns}
         titleButton={"New Contract"}
         link={"/contract/form"}
@@ -209,6 +235,12 @@ const ContractComponent = ({ dataContract }) => {
         placeholder={"Search by name"}
         filterSelect={["contract_type", "status"]}
         dataFilterSelect={dataFilterSelect}
+      />
+      <CustomAlertDialog
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
+        id={selectedId}
+        handleClick={handleDelete}
       />
     </>
   );

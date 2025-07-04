@@ -10,13 +10,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import EmployeeAPI from "@/data/EmployeeAPI";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
+import { toast } from "sonner";
 
 const MasterEmployee = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [selectedId, setSelectedId] = useState(null);
   const columns = [
     {
       accessorKey: "npk",
@@ -113,7 +115,12 @@ const MasterEmployee = ({ data }) => {
                   Update
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setIsOpen(true)}>
+              <DropdownMenuItem
+                onClick={() => {
+                  setIsOpen(true);
+                  setSelectedId(row.original.id);
+                }}
+              >
                 Delete
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -134,6 +141,14 @@ const MasterEmployee = ({ data }) => {
   ).map((value) => ({ value }));
 
   const dataFilterSelect = [sectionOptions, levelOptions];
+
+  const handleDelete = useCallback(async (id) => {
+    const response = await EmployeeAPI.DeleteEmployee({ id: id });
+    if (response?.status == 200) {
+      toast("Successfully");
+    }
+  });
+
   return (
     <div>
       <CustomDataTable
@@ -146,7 +161,12 @@ const MasterEmployee = ({ data }) => {
         placeholder="Search by name"
         dataFilterSelect={dataFilterSelect}
       />
-      <CustomAlertDialog setIsOpen={setIsOpen} isOpen={isOpen} />
+      <CustomAlertDialog
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
+        handleClick={handleDelete}
+        id={selectedId}
+      />
     </div>
   );
 };

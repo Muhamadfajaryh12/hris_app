@@ -55,7 +55,7 @@ const FormContract = ({ dataEmployee, dataContract }) => {
     status,
     employeeId,
     file_contract,
-  } = dataContract;
+  } = dataContract || {};
 
   const [editMode, setEditMode] = useState(false);
 
@@ -71,11 +71,11 @@ const FormContract = ({ dataEmployee, dataContract }) => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      employee: employeeId.toString() || "",
+      employee: employeeId?.toString() || "",
       status: status || "",
       contract: contract_type || "",
-      start_date: new Date(start_date).toISOString().split("T")[0] || "",
-      end_date: new Date(end_date).toISOString().split("T")[0] || "",
+      start_date: start_date || "",
+      end_date: end_date || "",
       file_contract: "",
     },
   });
@@ -102,17 +102,12 @@ const FormContract = ({ dataEmployee, dataContract }) => {
     formData.append("file_contract", value.file_contract);
 
     let response;
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);
-    }
     response = dataContract
       ? await ContractAPI.UpdateContract({ id: id, formData: formData })
       : await ContractAPI.PostContract({ formData: formData });
 
     if ([200, 201].includes(response?.status)) {
-      toast("Success", {
-        title: response.message,
-      });
+      toast(response.message);
       if (!dataContract) form.reset();
     }
   });

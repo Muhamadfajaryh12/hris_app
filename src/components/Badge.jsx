@@ -1,7 +1,6 @@
 import React from "react";
 
 const Badge = ({ status }) => {
-  console.log(status);
   switch (status) {
     case "Waiting":
       return (

@@ -81,7 +81,26 @@ export async function PUT(req, { params }) {
 
     return NextResponse.json({
       data: result,
-      message: "Berhasil mengubah data",
+      message: "Successfully update data",
+      status: StatusCodes.OK,
+    });
+  } catch (error) {
+    return ErrorResponse(error);
+  }
+}
+
+export async function DELETE(req, { params }) {
+  try {
+    const { id } = await params;
+    const result = await prisma.user.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    return NextResponse.json({
+      data: result,
+      message: "Successfully delete data",
       status: StatusCodes.OK,
     });
   } catch (error) {

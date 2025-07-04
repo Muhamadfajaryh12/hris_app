@@ -11,6 +11,9 @@ export async function GET(req, { params }) {
       where: {
         id: Number(id),
       },
+      omit: {
+        password: true,
+      },
     });
 
     return NextResponse.json({
@@ -57,6 +60,25 @@ export async function PUT(req, { params }) {
       data: result,
       message: "Successfully",
       status: StatusCodes.OK,
+    });
+  } catch (error) {
+    return ErrorResponse(error);
+  }
+}
+
+export async function DELETE(req, { params }) {
+  try {
+    const { id } = await params;
+    const result = await prisma.contract.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    return NextResponse.json({
+      data: result,
+      status: StatusCodes.OK,
+      message: "Successfully",
     });
   } catch (error) {
     return ErrorResponse(error);

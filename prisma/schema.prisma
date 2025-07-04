@@ -55,7 +55,7 @@ model User {
   annualLeavesAsUser   AnnualLeave[] @relation("AnnualLeaveToUser")
   overtimeUser Overtime[] @relation("OvertimeUser")
   overtimeLeader Overtime[] @relation("OvertimeLeader")
-  salary Salary []
+  salary Salary [] 
   contract Contract []
   payroll Payroll[]
   training Training[]
@@ -70,7 +70,7 @@ model Attendence {
   emotion String?
   created_at DateTime @default(now())
   userId Int
-  user User @relation(fields:[userId],references:[id])
+  user User @relation(fields:[userId],references:[id],onDelete : Cascade)
 }
 
 model AnnualLeave {
@@ -86,9 +86,9 @@ model AnnualLeave {
   userId Int
   hrdId Int?
   leaderId Int?
-  hrd    User? @relation("AnnualLeaveToHrd", fields: [hrdId], references: [id])
-  leader User? @relation("AnnualLeaveToLeader", fields: [leaderId], references: [id])
-  user   User @relation("AnnualLeaveToUser", fields: [userId], references: [id])
+  hrd    User? @relation("AnnualLeaveToHrd", fields: [hrdId], references: [id],onDelete : Cascade)
+  leader User? @relation("AnnualLeaveToLeader", fields: [leaderId], references: [id],onDelete : Cascade)
+  user   User @relation("AnnualLeaveToUser", fields: [userId], references: [id],onDelete : Cascade)
 }
 
 model Overtime {
@@ -104,9 +104,9 @@ model Overtime {
   shiftId Int
   userId Int
   leaderId Int?
-  user User @relation("OvertimeUser",fields:[userId],references:[id])
-  leader User? @relation("OvertimeLeader",fields:[leaderId],references:[id])
-  shift Shift @relation(fields:[shiftId],references:[id])
+  user User @relation("OvertimeUser",fields:[userId],references:[id], onDelete : Cascade)
+  leader User? @relation("OvertimeLeader",fields:[leaderId],references:[id], onDelete : Cascade)
+  shift Shift @relation(fields:[shiftId],references:[id],onDelete : Cascade)
 }
 
 model Schedule_Event {
@@ -139,7 +139,7 @@ model Salary{
   start_date DateTime?  
   end_date DateTime ?
   employeeId Int
-  employee User @relation(fields:[employeeId],references:[id])
+  employee User @relation(fields:[employeeId],references:[id],onDelete : Cascade)
 }
 
 model Contract {
@@ -150,7 +150,7 @@ model Contract {
   status String
   file_contract String?
   employeeId Int
-  employee User @relation(fields:[employeeId],references:[id])
+  employee User @relation(fields:[employeeId],references:[id],onDelete : Cascade)
 }
 
 model Payroll {
@@ -166,11 +166,11 @@ model Payroll {
   total_salary Int
   status String
   employeeId Int
-  employee User @relation(fields:[employeeId],references:[id])
+  employee User @relation(fields:[employeeId],references:[id],onDelete : Cascade)
 }
 
 model Training {
-  id Int @id @defaul  t(autoincrement())
+  id Int @id @default(autoincrement())
   title String
   training_type String
   training_category String
@@ -178,6 +178,6 @@ model Training {
   training_date DateTime
   file String?
   userId Int
-  user User @relation(fields:[userId],references:[id])
+  user User @relation(fields:[userId],references:[id],onDelete : Cascade)
 }
 

@@ -8,7 +8,7 @@ const page = async () => {
   const data = await OvertimeAPI.GetOvertime({ url: "" });
   return (
     <MainLayout title={["Overtime"]}>
-      <OvertimeComponent data={data} />
+      <OvertimeComponent dataOvertime={data} />
     </MainLayout>
   );
 };

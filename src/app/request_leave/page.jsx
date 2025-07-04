@@ -10,7 +10,7 @@ const page = async () => {
   const data = await AnnualLeaveAPI.GetAnnualLeave({ id: userId });
   return (
     <MainLayout title={["Request Leave"]}>
-      <RequestLeaveComponent data={data} />
+      <RequestLeaveComponent dataLeave={data} />
     </MainLayout>
   );
 };

@@ -48,6 +48,7 @@ export async function GET(req, { params }) {
     return ErrorResponse(error);
   }
 }
+
 export async function PUT(req, { params }) {
   try {
     const { id } = await params;
@@ -60,6 +61,14 @@ export async function PUT(req, { params }) {
         where: {
           id: Number(id),
         },
+        include: {
+          employee: {
+            select: {
+              name: true,
+              npk: true,
+            },
+          },
+        },
         data: {
           status: status,
         },
@@ -70,6 +79,14 @@ export async function PUT(req, { params }) {
       query = prisma.payroll.update({
         where: {
           id: Number(id),
+        },
+        include: {
+          employee: {
+            select: {
+              name: true,
+              npk: true,
+            },
+          },
         },
         data: {
           bonus: Number(bonus),
@@ -84,6 +101,24 @@ export async function PUT(req, { params }) {
       data: result,
       message: "successfully",
       status: StatusCodes.OK,
+    });
+  } catch (error) {
+    return ErrorResponse(error);
+  }
+}
+
+export async function DELETE(req, { params }) {
+  try {
+    const { id } = await params;
+    const result = await prisma.payroll.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+    return NextResponse.json({
+      data: result,
+      status: StatusCodes.OK,
+      message: "Successfully delete payroll",
     });
   } catch (error) {
     return ErrorResponse(error);

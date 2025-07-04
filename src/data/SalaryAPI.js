@@ -75,9 +75,23 @@ const UpdateSalary = async ({
   }
 };
 
+const DeleteSalary = async ({ id }) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/salary/${id}`);
+
+    return {
+      data: response.data.data,
+      message: response.data.message,
+      status: response.data.status,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
 export default {
   GetSalary,
   GetDetailSalary,
   PostSalary,
   UpdateSalary,
+  DeleteSalary,
 };

@@ -82,9 +82,23 @@ const UpdateAnnualLeave = async ({
     console.log(error);
   }
 };
+
+const DeleteAnnualLeave = async ({ id }) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/annual_leave/${id}`);
+    return {
+      data: response.data.data,
+      message: response.data.message,
+      status: response.data.status,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
 export default {
   PostAnnualLeave,
   GetAnnualLeave,
   GetDetailAnnualLeave,
   UpdateAnnualLeave,
+  DeleteAnnualLeave,
 };

@@ -8,7 +8,7 @@ const page = async () => {
   const data = await PayRollAPI.GetPayRoll();
   return (
     <MainLayout title={["Payroll"]}>
-      <PayrollComponent data={data} />
+      <PayrollComponent dataPayroll={data} />
     </MainLayout>
   );
 };

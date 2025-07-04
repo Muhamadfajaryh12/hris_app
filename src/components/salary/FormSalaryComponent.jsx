@@ -26,10 +26,8 @@ const FormSalaryComponent = ({ dataEmployee, dataSalary }) => {
       base_salary: dataSalary?.basic_salary || 0,
       increase_salary: dataSalary?.increase_salary || 0,
       total_salary: dataSalary?.total_salary || 0,
-      start_date:
-        new Date(dataSalary?.start_date).toISOString().split("T")[0] || "",
-      end_date:
-        new Date(dataSalary?.end_date).toISOString().split("T")[0] || "",
+      start_date: dataSalary?.start_date || "",
+      end_date: dataSalary?.end_date || "",
     },
   });
 
@@ -68,7 +66,6 @@ const FormSalaryComponent = ({ dataEmployee, dataSalary }) => {
   const onChange = useCallback((value) => {
     const selectedEmployee = dataEmployee.find((item) => item.id == value);
     if (selectedEmployee) {
-      console.log("ini jalan");
       form.setValue("base_salary", selectedEmployee.position.base_salary);
       form.setValue("increase_salary", "");
     }
@@ -90,8 +87,9 @@ const FormSalaryComponent = ({ dataEmployee, dataSalary }) => {
       : await SalaryAPI.PostSalary(payload);
 
     if ([200, 201].includes(response.status)) {
-      toast("Successfuly", {
-        title: response.message,
+      toast({
+        title: "Successfully",
+        description: response.message,
       });
       form.reset();
     }

@@ -63,3 +63,22 @@ export async function PUT(req, { params }) {
     return ErrorResponse(error);
   }
 }
+
+export async function DELETE(req, { params }) {
+  try {
+    const { id } = await params;
+    const result = await prisma.salary.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    return NextResponse.json({
+      data: result,
+      message: "Successfully delete salary",
+      status: StatusCodes.OK,
+    });
+  } catch (error) {
+    return ErrorResponse(error);
+  }
+}

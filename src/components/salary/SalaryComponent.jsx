@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import CustomDataTable from "../CustomDataTable";
 import { useCurrency } from "@/hooks/useCurrency";
 import {
@@ -14,7 +14,12 @@ import { Button } from "@/components/ui/button";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { useFormattedDate } from "@/hooks/useFormattedDate";
+import SalaryAPI from "@/data/SalaryAPI";
+import { toast } from "sonner";
+import CustomAlertDialog from "../CustomAlertDialog";
 const SalaryComponent = ({ data, dataPosition }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
   const columns = [
     {
       id: "employee",
@@ -110,7 +115,12 @@ const SalaryComponent = ({ data, dataPosition }) => {
               <DropdownMenuItem>
                 <Link href={`/salary/form/${row.original.id}`}>Update</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setIsOpen(true)}>
+              <DropdownMenuItem
+                onClick={() => {
+                  setIsOpen(true);
+                  setSelectedId(row.original.id);
+                }}
+              >
                 Delete
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -128,17 +138,33 @@ const SalaryComponent = ({ data, dataPosition }) => {
       })),
     []
   );
+
+  const handleDelete = useCallback(async (id) => {
+    const response = await SalaryAPI.DeleteSalary({ id: id });
+    if (response?.status == 200) {
+      toast("Successfullly");
+    }
+  });
+
   return (
-    <CustomDataTable
-      data={data}
-      columns={columns}
-      link={"/salary/form"}
-      titleButton="Create salary"
-      filterSearch="employee"
-      placeholder="Search by name"
-      filterSelect={["position"]}
-      dataFilterSelect={[dataFilterSelect]}
-    />
+    <>
+      <CustomDataTable
+        data={data}
+        columns={columns}
+        link={"/salary/form"}
+        titleButton="Create salary"
+        filterSearch="employee"
+        placeholder="Search by name"
+        filterSelect={["position"]}
+        dataFilterSelect={[dataFilterSelect]}
+      />
+      <CustomAlertDialog
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        id={selectedId}
+        handleClick={handleDelete}
+      />
+    </>
   );
 };
 
