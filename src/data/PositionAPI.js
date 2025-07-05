@@ -50,4 +50,23 @@ const UpdatePosition = async ({ position, base_salary, id }) => {
     console.log(error);
   }
 };
-export default { PostPosition, GetPosition, GetDetailPosition, UpdatePosition };
+
+const DeletePosition = async ({ id }) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/position/${id}`);
+    return {
+      message: response.data.message,
+      data: response.data.data,
+      status: response.data.status,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+export default {
+  PostPosition,
+  GetPosition,
+  GetDetailPosition,
+  UpdatePosition,
+  DeletePosition,
+};

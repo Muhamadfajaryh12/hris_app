@@ -27,7 +27,7 @@ export async function PUT(req, { params }) {
     return NextResponse.json({
       data: result,
       status: StatusCodes.OK,
-      message: "Berhasil",
+      message: "Successfully updated",
     });
   } catch (error) {
     return ErrorResponse(error);
@@ -41,7 +41,7 @@ export async function DELETE(req, { params }) {
     return NextResponse.json({
       data: result,
       status: StatusCodes.OK,
-      message: "Berhasil",
+      message: "Successfully deleted",
     });
   } catch (error) {
     return ErrorResponse(error);

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import CustomDataTable from "../CustomDataTable";
 import CustomAlertDialog from "../CustomAlertDialog";
 import {
@@ -13,9 +13,13 @@ import {
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import LevelAPI from "@/data/LevelAPI";
+import { toast } from "sonner";
 
-const MasterLevelComponent = ({ data }) => {
+const MasterLevelComponent = ({ dataLevel }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+  const [data, setData] = useState(dataLevel);
   const columns = [
     {
       accessorKey: "level",
@@ -37,11 +41,16 @@ const MasterLevelComponent = ({ data }) => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem>
-                <Link href={`/master/master_level/form/${row.original.id}`}>
+                <Link href={`/master_level/form/${row.original.id}`}>
                   Update
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setIsOpen(true)}>
+              <DropdownMenuItem
+                onClick={() => {
+                  setIsOpen(true);
+                  setSelectedId(row.original.id);
+                }}
+              >
                 Delete
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -51,16 +60,30 @@ const MasterLevelComponent = ({ data }) => {
       },
     },
   ];
+
+  const handleDelete = useCallback(async (id) => {
+    const response = await LevelAPI.DeleteLevel({ id: id });
+    if (response.status == 200) {
+      toast(response.message);
+      setData((prev) => prev.filter((item) => item.id != response.data.id));
+    }
+  });
+
   return (
-    <div>
+    <>
       <CustomDataTable
         columns={columns}
         data={data}
-        link={"/master/master_level/form"}
+        link={"/master_level/form"}
         titleButton="Create level"
       />
-      <CustomAlertDialog isOpen={isOpen} setIsOpen={setIsOpen} />
-    </div>
+      <CustomAlertDialog
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        handleClick={handleDelete}
+        id={selectedId}
+      />
+    </>
   );
 };
 

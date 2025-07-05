@@ -29,7 +29,7 @@ export async function POST(req, res) {
 
     return NextResponse.json({
       data: result,
-      message: "Successfuly",
+      message: "Successfully created",
       status: StatusCodes.CREATED,
     });
   } catch (error) {

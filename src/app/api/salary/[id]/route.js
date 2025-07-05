@@ -56,7 +56,7 @@ export async function PUT(req, { params }) {
 
     return NextResponse.json({
       data: result,
-      message: "Successfully",
+      message: "Successfully updated",
       status: StatusCodes.OK,
     });
   } catch (error) {
@@ -75,7 +75,7 @@ export async function DELETE(req, { params }) {
 
     return NextResponse.json({
       data: result,
-      message: "Successfully delete salary",
+      message: "Successfully deleted",
       status: StatusCodes.OK,
     });
   } catch (error) {

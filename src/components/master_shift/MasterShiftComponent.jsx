@@ -10,13 +10,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import ShiftAPI from "@/data/ShiftAPI";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
+import { toast } from "sonner";
 
-const MasterShiftComponent = ({ data }) => {
+const MasterShiftComponent = ({ dataShift }) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [selectedId, setSelectedId] = useState(null);
+  const [data, setData] = useState(dataShift);
   const columns = [
     {
       accessorKey: "title",
@@ -42,11 +45,16 @@ const MasterShiftComponent = ({ data }) => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem>
-                <Link href={`/master/master_employee/form/${row.original.id}`}>
+                <Link href={`/master_employee/form/${row.original.id}`}>
                   Update
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setIsOpen(true)}>
+              <DropdownMenuItem
+                onClick={() => {
+                  setIsOpen(true);
+                  setSelectedId(row.original.id);
+                }}
+              >
                 Delete
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -56,15 +64,28 @@ const MasterShiftComponent = ({ data }) => {
       },
     },
   ];
+
+  const handleDelete = useCallback(async (id) => {
+    const response = await ShiftAPI.DeletedShift({ id: id });
+    if (response.status) {
+      toast(response.message);
+      setData((prev) => prev.filter((item) => item.id != response.data.id));
+    }
+  });
   return (
     <div>
       <CustomDataTable
         columns={columns}
         data={data}
-        link={"/master/master_shift/form"}
+        link={"/master_shift/form"}
         titleButton="Create shift"
       />
-      <CustomAlertDialog setIsOpen={setIsOpen} isOpen={isOpen} />
+      <CustomAlertDialog
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
+        id={selectedId}
+        handleClick={handleDelete}
+      />
     </div>
   );
 };

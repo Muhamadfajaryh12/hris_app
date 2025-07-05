@@ -21,7 +21,7 @@ export async function POST(req, res) {
     });
     return NextResponse.json({
       data: result,
-      message: "Berhasil data dibuat",
+      message: "Successfully created ",
       status: StatusCodes.CREATED,
     });
   } catch (error) {

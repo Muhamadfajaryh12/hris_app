@@ -8,7 +8,7 @@ const page = async () => {
   const data = await LevelAPI.GetLevel();
   return (
     <MainLayout title={["Master Level"]}>
-      <MasterLevelComponent data={data} />
+      <MasterLevelComponent dataLevel={data} />
     </MainLayout>
   );
 };

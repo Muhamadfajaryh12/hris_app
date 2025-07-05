@@ -52,9 +52,22 @@ const UpdateShift = async ({ title, work_time, id }) => {
   }
 };
 
+const DeletedShift = async ({ id }) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/shift/${id}`);
+    return {
+      message: response.data.message,
+      status: response.data.status,
+      data: response.data.data,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
 export default {
   PostShift,
   GetShift,
   GetDetailShift,
   UpdateShift,
+  DeletedShift,
 };

@@ -7,7 +7,7 @@ const page = async () => {
   const data = await SectionAPI.GetSection();
   return (
     <MainLayout title={["Master Section"]}>
-      <MasterSectionComponent data={data} />
+      <MasterSectionComponent dataSection={data} />
     </MainLayout>
   );
 };

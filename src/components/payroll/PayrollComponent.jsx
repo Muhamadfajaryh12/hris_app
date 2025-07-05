@@ -24,15 +24,22 @@ const PayrollComponent = ({ dataPayroll }) => {
   const [type, setType] = useState(null);
 
   const handleClick = async (value) => {
-    const response = await PayRollAPI.UpdatePayRoll({
-      id: value,
-      //paydate
-      status: "Paid",
-    });
+    let response;
+
+    if (type == "delete") {
+      response = await PayRollAPI.DeletePayroll({ id: id });
+    } else {
+      response = await PayRollAPI.UpdatePayRoll({
+        id: value,
+        //paydate
+        status: "Paid",
+      });
+    }
+
     if (response.status == 200) {
       toast("Success");
       if (type == "delete") {
-        setData((prev) => prev.filter((item) => item.id !== response.id));
+        setData((prev) => prev.filter((item) => item.id != response.data.id));
       } else {
         setData((prev) =>
           prev.map((item) => (item.id === id ? response.data : item))

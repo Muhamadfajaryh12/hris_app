@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import CustomDataTable from "../CustomDataTable";
 import {
   DropdownMenu,
@@ -14,9 +14,13 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import CustomAlertDialog from "../CustomAlertDialog";
 import { useCurrency } from "@/hooks/useCurrency";
+import PositionAPI from "@/data/PositionAPI";
+import { toast } from "sonner";
 
-const MasterPositionComponent = ({ data }) => {
+const MasterPositionComponent = ({ dataPosition }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+  const [data, setData] = useState(dataPosition);
   const columns = [
     {
       accessorKey: "position",
@@ -57,11 +61,16 @@ const MasterPositionComponent = ({ data }) => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem>
-                <Link href={`/master/master_position/form/${row.original.id}`}>
+                <Link href={`/master_position/form/${row.original.id}`}>
                   Update
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setIsOpen(true)}>
+              <DropdownMenuItem
+                onClick={() => {
+                  setIsOpen(true);
+                  setSelectedId(row.original.id);
+                }}
+              >
                 Delete
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -72,15 +81,29 @@ const MasterPositionComponent = ({ data }) => {
       },
     },
   ];
+
+  const handleDelete = useCallback(async (id) => {
+    const response = await PositionAPI.DeletePosition({ id: id });
+    if (response.status == 200) {
+      toast(response.message);
+      setData((prev) => prev.filter((item) => item.id != response.data.id));
+    }
+  });
+
   return (
     <div>
       <CustomDataTable
         columns={columns}
-        link={"/master/master_position/form"}
+        link={"/master_position/form"}
         titleButton="Create Position"
         data={data}
       />
-      <CustomAlertDialog setIsOpen={setIsOpen} isOpen={isOpen} />
+      <CustomAlertDialog
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
+        id={selectedId}
+        handleClick={handleDelete}
+      />
     </div>
   );
 };

@@ -39,7 +39,26 @@ export async function PUT(req, { params }) {
     return NextResponse.json({
       data: result,
       status: StatusCodes.OK,
-      message: "Berhasil",
+      message: "Successfully updated",
+    });
+  } catch (error) {
+    return ErrorResponse(error);
+  }
+}
+
+export async function DELETE(req, { params }) {
+  try {
+    const { id } = await params;
+    const result = await prisma.position.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    return NextResponse.json({
+      data: result,
+      message: "Successfully deleted",
+      status: StatusCodes.OK,
     });
   } catch (error) {
     return ErrorResponse(error);

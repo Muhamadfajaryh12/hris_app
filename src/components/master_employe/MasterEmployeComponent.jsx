@@ -111,7 +111,7 @@ const MasterEmployee = ({ data }) => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem>
-                <Link href={`/master/master_employee/form/${row.original.id}`}>
+                <Link href={`/master_employee/form/${row.original.id}`}>
                   Update
                 </Link>
               </DropdownMenuItem>
@@ -154,7 +154,7 @@ const MasterEmployee = ({ data }) => {
       <CustomDataTable
         columns={columns}
         data={data}
-        link={"/master/master_employee/form"}
+        link={"/master_employee/form"}
         titleButton="Create employee"
         filterSearch="name"
         filterSelect={["section", "level"]}

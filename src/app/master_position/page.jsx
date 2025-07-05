@@ -7,7 +7,7 @@ const page = async () => {
   const data = await PositionAPI.GetPosition();
   return (
     <MainLayout title={["Master Position"]}>
-      <MasterPositionComponent data={data} />
+      <MasterPositionComponent dataPosition={data} />
     </MainLayout>
   );
 };

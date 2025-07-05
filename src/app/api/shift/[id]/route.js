@@ -39,7 +39,7 @@ export async function PUT(req, { params }) {
 
     return NextResponse.json({
       data: result,
-      message: "Successfuly",
+      message: "Successfully updated",
       status: StatusCodes.OK,
     });
   } catch (error) {
@@ -49,7 +49,7 @@ export async function PUT(req, { params }) {
 
 export async function DELETE(req, { params }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const result = await prisma.shift.delete({
       where: {
         id: Number(id),
@@ -58,7 +58,7 @@ export async function DELETE(req, { params }) {
     return NextResponse.json({
       data: result,
       status: StatusCodes.OK,
-      message: "Successfully",
+      message: "Successfully deleted",
     });
   } catch (error) {
     return ErrorResponse(error);
