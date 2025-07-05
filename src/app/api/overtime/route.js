@@ -33,6 +33,9 @@ export async function GET(req, res) {
         },
         shift: true,
       },
+      orderBy: {
+        date: "desc",
+      },
     });
 
     const result = await query;
@@ -90,7 +93,7 @@ export async function POST(req, res) {
 
     return NextResponse.json({
       data: result,
-      message: "Successfuly",
+      message: "Successfully created",
       status: StatusCodes.CREATED,
     });
   } catch (error) {

@@ -24,12 +24,13 @@ const formSchema = z.object({
 });
 
 const FormOvertime = ({ dataShift, dataOvertime }) => {
+  console.log(dataOvertime);
   const [uploadMode, setUploadMode] = useState(false);
   const form = useForm({
     // resolver: zodResolver(formSchema),
     defaultValues: {
       date: dataOvertime?.date || "",
-      shiftId: dataOvertime?.shiftId.toString() || "",
+      shiftId: dataOvertime?.shiftId?.toString() || "",
       work_note: dataOvertime?.work_note || "",
       upload: "",
       overtime_duration: MntToTime(dataOvertime?.overtime_duration) || "",

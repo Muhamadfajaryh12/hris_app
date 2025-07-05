@@ -8,10 +8,18 @@ export async function GET(req, res) {
     const result = await prisma.salary.findMany({
       include: {
         employee: {
-          include: {
-            position: true,
+          select: {
+            name: true,
+            position: {
+              select: {
+                position: true,
+              },
+            },
           },
         },
+      },
+      orderBy: {
+        end_date: "asc",
       },
     });
     return NextResponse.json({

@@ -12,8 +12,13 @@ export async function GET(req, { params }) {
       },
       include: {
         employee: {
-          include: {
-            position: true,
+          select: {
+            name: true,
+            position: {
+              select: {
+                position: true,
+              },
+            },
           },
         },
       },

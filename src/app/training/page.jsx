@@ -7,7 +7,7 @@ const page = async () => {
   const data = await TrainingAPI.GetTraining();
   return (
     <MainLayout title={["Training"]}>
-      <TrainingComponent data={data} />
+      <TrainingComponent dataTraining={data} />
     </MainLayout>
   );
 };

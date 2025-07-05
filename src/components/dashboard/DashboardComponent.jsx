@@ -8,6 +8,7 @@ import { useCurrency } from "@/hooks/useCurrency";
 import { LuCalendar } from "react-icons/lu";
 import { useFormattedDate } from "@/hooks/useFormattedDate";
 import { CustomLineChart } from "../CustomLineChart";
+import { format } from "date-fns";
 
 const DashboardComponent = ({ data }) => {
   const listScheduleCategory = (value) => {
@@ -90,7 +91,14 @@ const DashboardComponent = ({ data }) => {
         />
         <div className="flex flex-col gap-4">
           <div className=" border rounded-sm">
-            <Calendar mode="single" className="mx-auto" />
+            <Calendar
+              mode="single"
+              className="mx-auto"
+              formatters={{
+                formatDay: (date) => format(date, "d"),
+                formatCaption: (date) => format(date, "MMMM yyyy"),
+              }}
+            />
           </div>
           <div className="border rounded-sm p-2">
             <label htmlFor="" className="text-gray-400 text-sm">

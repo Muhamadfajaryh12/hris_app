@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import CustomDataTable from "../CustomDataTable";
 import {
   DropdownMenu,
@@ -12,9 +12,37 @@ import {
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import TrainingAPI from "@/data/TrainingAPI";
+import { toast } from "sonner";
+import CustomAlertDialog from "../CustomAlertDialog";
 
-const TrainingComponent = ({ data }) => {
+const categoryOptions = [
+  {
+    value: "Internal",
+  },
+  {
+    value: "Eksternal",
+  },
+];
+
+const typeOptions = [
+  {
+    value: "Workshop",
+  },
+  {
+    value: "On Site",
+  },
+  {
+    value: "Online",
+  },
+];
+
+const dataFilterSelect = [categoryOptions, typeOptions];
+
+const TrainingComponent = ({ dataTraining }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+  const [data, setData] = useState(dataTraining);
   const columns = [
     {
       id: "npk",
@@ -79,19 +107,20 @@ const TrainingComponent = ({ data }) => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem>
-                <Link href={`/request_leave/form/${row.original.id}`}>
-                  Update
-                </Link>
+                <Link href={`/training/form/${row.original.id}`}>Update</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setIsOpen(true)}>
+              <DropdownMenuItem
+                onClick={() => {
+                  setIsOpen(true);
+                  setSelectedId(row.original.id);
+                }}
+              >
                 Delete
               </DropdownMenuItem>
               <DropdownMenuSeparator />
 
               <DropdownMenuItem>
-                <Link href={`/request_leave/${row.original.id}`}>
-                  View Detail
-                </Link>
+                <Link href={`/training/${row.original.id}`}>View Detail</Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -100,28 +129,13 @@ const TrainingComponent = ({ data }) => {
     },
   ];
 
-  const categoryOptions = [
-    {
-      value: "Internal",
-    },
-    {
-      value: "Eksternal",
-    },
-  ];
-
-  const typeOptions = [
-    {
-      value: "Workshop",
-    },
-    {
-      value: "On Site",
-    },
-    {
-      value: "Online",
-    },
-  ];
-
-  const dataFilterSelect = [categoryOptions, typeOptions];
+  const handleDelete = useCallback(async (id) => {
+    const response = await TrainingAPI.DeleteTraining({ id: id });
+    if (response.status == 200) {
+      toast(response.message);
+      setData((prev) => prev.filter((item) => item.id != response.data.id));
+    }
+  });
   return (
     <div>
       <CustomDataTable
@@ -133,6 +147,12 @@ const TrainingComponent = ({ data }) => {
         filterSearch="name"
         filterSelect={["category", "type"]}
         dataFilterSelect={dataFilterSelect}
+      />
+      <CustomAlertDialog
+        handleClick={handleDelete}
+        id={selectedId}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
       />
     </div>
   );

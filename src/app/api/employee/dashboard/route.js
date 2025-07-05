@@ -71,12 +71,24 @@ export async function GET(req, res) {
       s.section as section_name,
       COUNT(c.id) FILTER (WHERE c.contract_type = 'Permanent')::integer as total_permanent,
       COUNT(c.id) FILTER (WHERE c.contract_type = 'Contract')::integer as total_contract,
-      COUNT(c.id) FILTER (WHERE c.contract_type = 'Internship')::integer as total_internship
+      COUNT(c.id) FILTER (WHERE c.contract_type = 'Internship')::integer as total_internship,
+      COALESCE(COUNT(c.id),0)::integer as total_count
       FROM "Section" s
       LEFT JOIN "User" u ON u."sectionId" = s.id
       LEFT JOIN "Contract" c ON c."employeeId" = u.id
       GROUP BY s.section
-      ORDER BY s.section
+      ORDER BY total_count DESC
+    `;
+
+    const countGenderBySection = await prisma.$queryRaw`
+    SELECT "Section".section,
+    COALESCE(COUNT(CASE WHEN "User".gender = 'Laki-Laki' then 1 else 0 end ),0)::integer as laki_total_count,
+    COALESCE(COUNT(CASE WHEN "User".gender = 'Perempuan' then 1 else 0 end),0)::integer as perempuan_total_count,
+    COALESCE(COUNT("User".id), 0)::integer as total_count
+    FROM "Section"
+    LEFT JOIN "User" ON "User"."sectionId" = "Section".id
+    GROUP BY "Section".section
+    ORDER BY total_count DESC
     `;
     return NextResponse.json({
       data: {
@@ -85,6 +97,7 @@ export async function GET(req, res) {
         countWorkTimeAndOvertimeBySection,
         countTrainingBySection,
         countContractTypeBySection,
+        countGenderBySection,
       },
     });
   } catch (error) {

@@ -9,10 +9,14 @@ export async function POST(req, res) {
   try {
     const body = await req.json();
     const { npk, password } = body;
-    console.log(password);
+
     const userValid = await prisma.user.findUnique({
       where: {
         npk: parseInt(npk),
+      },
+      select: {
+        id: true,
+        sectionId: true,
       },
     });
 
@@ -76,8 +80,9 @@ export async function POST(req, res) {
       data: {
         token: token,
         id: userValid.id,
+        section_id: userValid.sectionId,
       },
-      message: "Berhasil Login",
+      message: "Login Successfully",
       status: StatusCodes.OK,
     });
   } catch (error) {

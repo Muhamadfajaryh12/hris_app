@@ -49,6 +49,16 @@ const EmployeeAnalyticComponent = ({ data }) => {
     },
   };
 
+  const CHART_CONFIG_GENDER_BY_SECTION = {
+    laki_total_count: {
+      label: "Total Laki-Laki",
+      color: "#0087ff",
+    },
+    perempuan_total_count: {
+      label: "Total Perempuan",
+      color: "#65b3f8",
+    },
+  };
   return (
     <div className="grid grid-cols-2 gap-4">
       <CustomChartBar
@@ -92,6 +102,19 @@ const EmployeeAnalyticComponent = ({ data }) => {
           { dataKey: "total_permanent", fill: "#0087ff" },
           { dataKey: "total_contract", fill: "#65b3f8" },
           { dataKey: "total_internship", fill: "#65b3f8" },
+        ]}
+      />
+      <CustomChartBar
+        chartConfig={CHART_CONFIG_GENDER_BY_SECTION}
+        chartData={data?.countGenderBySection}
+        title="Total Gender by Section"
+        dataKeyX={"section"}
+        bars={[
+          { dataKey: "laki_total_count", fill: "#0087ff" },
+          {
+            dataKey: "perempuan_total_count",
+            fill: "#65b3f8",
+          },
         ]}
       />
     </div>

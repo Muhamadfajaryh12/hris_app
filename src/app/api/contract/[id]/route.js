@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { ErrorResponse } from "@/lib/response/ErrorResponse";
-import { UploadFile } from "@/lib/UploadFile";
+import { DeleteFile, UploadFile } from "@/lib/UploadFile";
 import { StatusCodes } from "http-status-codes";
 import { NextResponse } from "next/server";
 
@@ -38,7 +38,14 @@ export async function PUT(req, { params }) {
 
     let fileName;
 
+    const checkContract = await prisma.contract.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+
     if (file_contract && file_contract.size > 0) {
+      await DeleteFile(checkContract.file_contract);
       fileName = await UploadFile(file_contract);
     }
 
@@ -69,6 +76,14 @@ export async function PUT(req, { params }) {
 export async function DELETE(req, { params }) {
   try {
     const { id } = await params;
+    const checkContract = await prisma.contract.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    await DeleteFile(checkContract.file_contract);
+
     const result = await prisma.contract.delete({
       where: {
         id: Number(id),
@@ -78,7 +93,7 @@ export async function DELETE(req, { params }) {
     return NextResponse.json({
       data: result,
       status: StatusCodes.OK,
-      message: "Successfully",
+      message: "Successfully deleted",
     });
   } catch (error) {
     return ErrorResponse(error);

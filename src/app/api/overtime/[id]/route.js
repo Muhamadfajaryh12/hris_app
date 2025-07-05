@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import { ErrorResponse } from "@/lib/response/ErrorResponse";
 import { TimeToMnt } from "@/lib/TimeToMnt";
-import { UploadFile } from "@/lib/UploadFile";
+import { DeleteFile, UploadFile } from "@/lib/UploadFile";
 import { StatusCodes } from "http-status-codes";
 import { NextResponse } from "next/server";
 
@@ -24,6 +24,7 @@ export async function GET(req, { params }) {
         file: true,
         approval_leader: true,
         leaderId: true,
+        shiftId: true,
         leader: {
           select: {
             name: true,
@@ -94,7 +95,14 @@ export async function PUT(req, { params }) {
       }
     });
 
+    const checkOvertime = await prisma.overtime.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+
     if (file) {
+      await DeleteFile(checkOvertime.file);
       const fileName = await UploadFile(file);
       updateData.file = fileName;
     }
@@ -116,7 +124,7 @@ export async function PUT(req, { params }) {
     });
 
     return NextResponse.json({
-      message: "Berhasil",
+      message: "Successfully updated",
       status: StatusCodes.OK,
       data: result,
     });
@@ -128,9 +136,21 @@ export async function PUT(req, { params }) {
 export async function DELETE(req, { params }) {
   try {
     const { id } = await params;
+
+    const checkOvertime = await prisma.overtime.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    await DeleteFile(checkOvertime.file);
+
     const result = await prisma.overtime.delete({
       where: {
         id: Number(id),
+      },
+      select: {
+        id: true,
       },
     });
 

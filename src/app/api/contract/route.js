@@ -20,6 +20,9 @@ export async function GET(req, res) {
           },
         },
       },
+      orderBy: {
+        end_date: "asc",
+      },
     });
 
     const countContract = await prisma.$queryRaw`
@@ -28,7 +31,6 @@ export async function GET(req, res) {
     COALESCE(COUNT(contract_type),0) as total
     FROM "Contract"
     GROUP BY contract_type
-    
     `;
     return NextResponse.json({
       data: {
@@ -68,7 +70,7 @@ export async function POST(req, res) {
     return NextResponse.json({
       data: result,
       status: StatusCodes.CREATED,
-      message: "Successfully",
+      message: "Successfully created",
     });
   } catch (error) {
     return ErrorResponse(error);
