@@ -35,7 +35,9 @@ export default function Home() {
       password: data.password,
     });
     if (response.status == 200) {
-      route.push("/dashboard");
+      response.section == 6
+        ? route.push("admin/dashboard")
+        : route.push("attendence");
     } else {
       toast("Failed", {
         title: response?.message,

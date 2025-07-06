@@ -99,7 +99,7 @@ export async function PUT(req, { params }) {
 
     return NextResponse.json({
       data: result,
-      message: "successfully",
+      message: "Successfully",
       status: StatusCodes.OK,
     });
   } catch (error) {
@@ -118,7 +118,7 @@ export async function DELETE(req, { params }) {
     return NextResponse.json({
       data: result,
       status: StatusCodes.OK,
-      message: "Successfully delete payroll",
+      message: "Successfully deleted",
     });
   } catch (error) {
     return ErrorResponse(error);

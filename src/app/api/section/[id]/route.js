@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(req, { params }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const result = await prisma.section.findUnique({
       where: {
         id: Number(id),
@@ -22,7 +22,7 @@ export async function GET(req, { params }) {
 
 export async function PUT(req, { params }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await req.json();
     const { section } = body;
     const result = await prisma.section.update({
@@ -45,7 +45,7 @@ export async function PUT(req, { params }) {
 
 export async function DELETE(req, { params }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const result = await prisma.section.delete({
       where: {
         id: Number(id),

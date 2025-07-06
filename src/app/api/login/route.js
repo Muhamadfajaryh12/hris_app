@@ -9,14 +9,14 @@ export async function POST(req, res) {
   try {
     const body = await req.json();
     const { npk, password } = body;
-
     const userValid = await prisma.user.findUnique({
       where: {
-        npk: parseInt(npk),
+        npk: Number(npk),
       },
       select: {
         id: true,
         sectionId: true,
+        password: true,
       },
     });
 

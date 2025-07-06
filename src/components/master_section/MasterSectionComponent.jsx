@@ -75,7 +75,7 @@ const MasterSectionComponent = ({ dataSection }) => {
         columns={columns}
         data={data}
         link={"/master_section/form"}
-        titleButton="Create section"
+        titleButton="Create Section"
       />
       <CustomAlertDialog
         isOpen={isOpen}

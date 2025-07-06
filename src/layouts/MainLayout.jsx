@@ -5,12 +5,16 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { cookies } from "next/headers";
 import React from "react";
 
-const MainLayout = ({ children, title }) => {
+const MainLayout = async ({ children, title }) => {
+  const cookieStore = await cookies();
+  const section = cookieStore.get("section_id")?.value;
+
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar section={section} />
       <SidebarInset>
         <SiteHeader title={title} />
         <main className="w-full p-4">{children}</main>

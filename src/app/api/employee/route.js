@@ -18,6 +18,7 @@ export async function GET(req) {
         email: true,
         gender: true,
         no_telp: true,
+        sectionId: true,
         level: {
           select: {
             level: true,
@@ -54,7 +55,6 @@ export async function POST(req, res) {
     const {
       npk,
       email,
-      password,
       name,
       gender,
       no_telp,
@@ -62,18 +62,19 @@ export async function POST(req, res) {
       sectionId,
       positionId,
     } = body;
-    const hash = await bcrypt.hash(password, 10);
+
+    const hash = await bcrypt.hash(npk, 10);
     const result = await prisma.user.create({
       data: {
-        npk: parseInt(npk),
+        npk: Number(npk),
         email: email,
         password: hash,
         name: name,
         gender: gender,
         no_telp: no_telp,
-        levelId: parseInt(levelId),
-        sectionId: parseInt(sectionId),
-        positionId: parseInt(positionId),
+        levelId: Number(levelId),
+        sectionId: Number(sectionId),
+        positionId: Number(positionId),
       },
     });
     return NextResponse.json({

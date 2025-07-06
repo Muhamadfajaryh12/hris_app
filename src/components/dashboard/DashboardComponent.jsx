@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import { FaUser, FaUserGroup } from "react-icons/fa6";
 import CardDashboard from "../CardDashboard";
 import { Calendar } from "@/components/ui/calendar";
@@ -51,17 +51,15 @@ const DashboardComponent = ({ data }) => {
       color: "#ff0000",
     },
   };
-  const processReflectionData = () => {
-    return data?.get_reflection?.map(
-      (item) =>
-        ({
-          emotion: item.emotion,
-          count_emotion: parseInt(item.count_emotion) || 0,
-          fill: CHART_CONFIG[item.emotion]?.color,
-        } || [])
-    );
-  };
-  console.log(data);
+  const processReflectionData = useMemo(() => {
+    if (!data?.get_reflection) return [];
+
+    return data.get_reflection.map((item) => ({
+      emotion: item.emotion,
+      count_emotion: parseInt(item.count_emotion) || 0,
+      fill: CHART_CONFIG[item.emotion]?.color ?? "#ccc",
+    }));
+  }, [data?.get_reflection]);
   return (
     <div className="">
       <div className="grid grid-cols-4 gap-4">
@@ -104,36 +102,42 @@ const DashboardComponent = ({ data }) => {
             <label htmlFor="" className="text-gray-400 text-sm">
               Schedules
             </label>
-            {data?.schedule?.map((item) => (
-              <div className="flex gap-2 my-3 " key={item.id}>
-                {listScheduleCategory(item.category)}
-                <div className="w-full">
-                  <div className="flex items-center gap-2">
-                    <div className="p-2 bg-blue-200  border-blue-800 text-blue-800 rounded-sm">
-                      <LuCalendar />
-                    </div>
-                    <div className="flex justify-between w-full">
-                      <div className="">
-                        <h1 className="font-bold">{item.title}</h1>{" "}
-                        <label htmlFor="" className="text-xs ">
-                          {item.category} ({item.hours_start} - {item.hours_end}
-                          )
-                        </label>
+            {data?.schedule.length > 0 ? (
+              data?.schedule?.map((item) => (
+                <div className="flex gap-2 my-3 " key={item.id}>
+                  {listScheduleCategory(item.category)}
+                  <div className="w-full">
+                    <div className="flex items-center gap-2">
+                      <div className="p-2 bg-blue-200  border-blue-800 text-blue-800 rounded-sm">
+                        <LuCalendar />
                       </div>
-                      <h1 className="text-sm text-gray-400">
-                        {useFormattedDate(item.date)}
-                      </h1>
+                      <div className="flex justify-between w-full">
+                        <div className="">
+                          <h1 className="font-bold">{item.title}</h1>{" "}
+                          <label htmlFor="" className="text-xs ">
+                            {item.category} ({item.hours_start} -{" "}
+                            {item.hours_end})
+                          </label>
+                        </div>
+                        <h1 className="text-sm text-gray-400">
+                          {useFormattedDate(item.date)}
+                        </h1>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-sm text-center my-4 font-extralight">
+                No Results
+              </p>
+            )}
           </div>
         </div>
 
         <div className="">
           <CustomPieChart
-            chartData={processReflectionData()}
+            chartData={processReflectionData}
             title="Reflection Employee"
             periode="Month year"
             dataKey="count_emotion"
@@ -160,27 +164,33 @@ const DashboardComponent = ({ data }) => {
             <label htmlFor="" className="text-gray-400 text-sm">
               Request Leave
             </label>
-            {data?.get_request_leave?.map((item, index) => (
-              <div
-                className="flex gap-4 items-center my-2 justify-between"
-                key={index}
-              >
-                <div className="flex gap-4 items-center">
-                  <div className="p-2 bg-violet-200 border border-violet-800 text-violet-800 rounded-sm">
-                    <FaUser />
+            {data?.get_request_leave?.length > 0 ? (
+              data?.get_request_leave?.map((item, index) => (
+                <div
+                  className="flex gap-4 items-center my-2 justify-between"
+                  key={index}
+                >
+                  <div className="flex gap-4 items-center">
+                    <div className="p-2 bg-violet-200 border border-violet-800 text-violet-800 rounded-sm">
+                      <FaUser />
+                    </div>
+                    <div className="">
+                      <h6 className="text-sm font-semibold">
+                        {item?.user?.name}
+                      </h6>
+                      <p className="text-sm">{item?.type}</p>
+                    </div>
                   </div>
-                  <div className="">
-                    <h6 className="text-sm font-semibold">
-                      {item?.user?.name}
-                    </h6>
-                    <p className="text-sm">{item?.type}</p>
+                  <div className="bg-blue-200 text-blue-800 border border-blue-800 p-1 rounded-sm  ">
+                    <p className="text-xs">Need Confirmation</p>
                   </div>
                 </div>
-                <div className="bg-blue-200 text-blue-800 border border-blue-800 p-1 rounded-sm  ">
-                  <p className="text-xs">Need Confirmation</p>
-                </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-sm text-center my-4 font-extralight">
+                No Results
+              </p>
+            )}
           </div>
         </div>
       </div>

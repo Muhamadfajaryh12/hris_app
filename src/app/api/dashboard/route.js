@@ -28,22 +28,6 @@ export async function GET(req, res) {
     FROM "User"
     `;
 
-    // const get_schedule = await prisma.schedule_Event.findMany({
-    //   select: {
-    //     id: true,
-    //     title: true,
-    //     date: true,
-    //     date_end: true,
-    //     hours_end: true,
-    //     hours_start: true,
-    //     description: true,
-    //   },
-    //   take: 5,
-    //   orderBy: {
-    //     date: "asc",
-    //   },
-    // });
-
     const get_schedule = await prisma.$queryRaw`
     SELECT 
     id,title,date,date_end,hours_start,hours_end,description

@@ -11,6 +11,7 @@ const Login = async ({ npk, password }) => {
     return {
       status: response?.data?.status,
       message: response?.data?.message,
+      section: response?.data?.data?.section_id,
     };
   } catch (error) {
     console.log(error);

@@ -17,7 +17,7 @@ const page = async ({ params }) => {
     ]);
 
   return (
-    <MainLayout>
+    <MainLayout title={["Employee", "Form", "Edit"]}>
       <FormMasterEmployeComponent
         dataSection={dataSection}
         dataLevel={dataLevel}

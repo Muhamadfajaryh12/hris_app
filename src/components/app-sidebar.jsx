@@ -28,65 +28,80 @@ import { IoMdTime } from "react-icons/io";
 import { usePathname } from "next/navigation";
 import { FaChartLine, FaRegFile } from "react-icons/fa6";
 
-const AppSidebar = () => {
+const AppSidebar = ({ section }) => {
   const path = usePathname();
   const pathName = path.split("/").filter((segment) => segment != "");
-
+  const filterMenu = (items) => {
+    if (section == 6) return items;
+    return items.filter(
+      (item) => !item.protected || item.protected == "public"
+    );
+  };
   const dataSidebar = {
     dashboard: [
       {
-        link: "/dashboard",
+        link: "/admin/dashboard",
         name: "Dashboard",
         icon: <LuLayoutDashboard />,
+        protected: "admin",
       },
       {
-        link: "/analytic",
+        link: "/admin/analytic",
         name: "Analytic",
         icon: <FaChartLine />,
+        protected: "admin",
       },
     ],
     employeer: [
       {
-        link: "/master_employee",
+        link: "/admin/master_employee",
         name: "Employee",
         icon: <LuUsers />,
+        protected: "admin",
       },
       {
-        link: "/salary",
+        link: "/admin/salary",
         name: "Salary",
         icon: <LuDollarSign />,
+        protected: "admin",
       },
       {
-        link: "/payroll",
+        link: "/admin/payroll",
         name: "Payroll",
         icon: <TbMoneybag />,
+        protected: "admin",
       },
       {
-        link: "/contract",
+        link: "/admin/contract",
         name: "Contract",
         icon: <FaRegFile />,
+        protected: "admin",
       },
     ],
     master_data: [
       {
-        link: "/master_section",
+        link: "/admin/master_section",
         name: "Master Section",
         icon: <GoDatabase />,
+        protected: "admin",
       },
       {
-        link: "/master_level",
+        link: "/admin/master_level",
         name: "Master Level",
         icon: <GoDatabase />,
+        protected: "admin",
       },
       {
-        link: "/master_position",
+        link: "/admin/master_position",
         name: "Master Position",
         icon: <GoDatabase />,
+        protected: "admin",
       },
       {
-        link: "/master_shift",
+        link: "/admin/master_shift",
         name: "Master Shift",
         icon: <GoDatabase />,
+        protected: "admin",
       },
     ],
     attendence_and_time: [
@@ -94,16 +109,19 @@ const AppSidebar = () => {
         link: "/attendence",
         name: "Attendence",
         icon: <IoMdTime />,
+        protected: "public",
       },
       {
         link: "/overtime",
         name: "Overtime",
         icon: <IoMdTime />,
+        protected: "public",
       },
       {
         link: "/request_leave",
         name: "Request Leave",
         icon: <IoMdTime />,
+        protected: "public",
       },
     ],
     training_and_development: [
@@ -111,13 +129,15 @@ const AppSidebar = () => {
         link: "/training",
         name: "Training ",
         icon: <FiBook />,
+        protected: "public",
       },
     ],
     Schedule_and_Event: [
       {
-        link: "/schedule",
+        link: "/admin/schedule",
         name: "Schedule",
         icon: <AiOutlineSchedule />,
+        protected: "admin",
       },
     ],
   };
@@ -126,44 +146,54 @@ const AppSidebar = () => {
     <Sidebar>
       <SidebarHeader />
       <SidebarContent>
-        {Object.entries(dataSidebar).map(([primary, items]) => (
-          <Collapsible defaultOpen className="group/collapsible" key={primary}>
-            <SidebarGroup>
-              <SidebarGroupLabel asChild>
-                <CollapsibleTrigger>
-                  {primary
-                    .split("_")
-                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(" ")}
-                  <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
-                </CollapsibleTrigger>
-              </SidebarGroupLabel>
-              <CollapsibleContent>
-                <SidebarGroupContent>
-                  <SidebarMenu>
-                    {items.map((item, index) => (
-                      <SidebarMenuItem key={index}>
-                        <SidebarMenuButton
-                          asChild
-                          isActive={
-                            pathName.includes(item.link.replace("/", ""))
-                              ? true
-                              : false
-                          }
-                        >
-                          <Link href={item.link}>
-                            {item.icon}
-                            <span>{item.name}</span>
-                          </Link>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    ))}
-                  </SidebarMenu>
-                </SidebarGroupContent>
-              </CollapsibleContent>
-            </SidebarGroup>
-          </Collapsible>
-        ))}
+        {Object.entries(dataSidebar).map(([primary, items]) => {
+          const filteredItems = filterMenu(items);
+          if (filteredItems.length === 0) return null;
+          return (
+            <Collapsible
+              defaultOpen
+              className="group/collapsible"
+              key={primary}
+            >
+              <SidebarGroup>
+                <SidebarGroupLabel asChild>
+                  <CollapsibleTrigger>
+                    {primary
+                      .split("_")
+                      .map(
+                        (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                      )
+                      .join(" ")}
+                    <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                  </CollapsibleTrigger>
+                </SidebarGroupLabel>
+                <CollapsibleContent>
+                  <SidebarGroupContent>
+                    <SidebarMenu>
+                      {filteredItems.map((item, index) => (
+                        <SidebarMenuItem key={index}>
+                          <SidebarMenuButton
+                            asChild
+                            isActive={
+                              pathName.includes(item.link.replace("/", ""))
+                                ? true
+                                : false
+                            }
+                          >
+                            <Link href={item.link}>
+                              {item.icon}
+                              <span>{item.name}</span>
+                            </Link>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      ))}
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </CollapsibleContent>
+              </SidebarGroup>
+            </Collapsible>
+          );
+        })}
       </SidebarContent>
     </Sidebar>
   );

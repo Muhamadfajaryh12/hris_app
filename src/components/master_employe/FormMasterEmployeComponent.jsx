@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import CustomInput from "@/components/CustomInput";
@@ -94,46 +94,31 @@ const FormMasterEmployeComponent = ({
     }
   }, [dataEmployee]);
 
-  const Submit = async (data) => {
-    if (dataEmployee) {
-      const response = await EmployeeAPI.PutEmployee({
-        name: data.name,
-        email: data.email,
-        no_telp: data.no_telp,
-        npk: data.npk,
-        gender: data.gender,
-        levelId: data.level,
-        positionId: data.position,
-        sectionId: data.section,
-        positionId: data.position,
-        id: dataEmployee.id,
-      });
+  const Submit = useCallback(async (data) => {
+    const payload = {
+      name: data.name,
+      email: data.email,
+      no_telp: data.no_telp,
+      npk: data.npk,
+      gender: data.gender,
+      levelId: data.level,
+      positionId: data.position,
+      sectionId: data.section,
+      positionId: data.position,
+      ...(dataEmployee && { id: dataEmployee.id }),
+    };
 
-      if (response?.status == 200) {
-        toast("Successfully", {
-          description: response.message,
-        });
-      }
-    } else {
-      const response = await EmployeeAPI.PostEmployee({
-        name: data.name,
-        email: data.email,
-        no_telp: data.no_telp,
-        npk: data.npk,
-        gender: data.gender,
-        levelId: data.level,
-        positionId: data.position,
-        sectionId: data.section,
-        password: data.npk,
-      });
+    const response = dataEmployee
+      ? await EmployeeAPI.PutEmployee(payload)
+      : await EmployeeAPI.PostEmployee(payload);
 
-      if (response?.status == 201) {
-        toast("Successfully", {
-          description: response.message,
-        });
-      }
+    if ([200, 201].includes(response?.status)) {
+      toast("Successfully", {
+        description: response.message,
+      });
+      form.reset();
     }
-  };
+  });
   return (
     <Form {...form}>
       <form
@@ -146,7 +131,6 @@ const FormMasterEmployeComponent = ({
           label="Name"
           placeholder="name"
           type="text"
-          className="border-black"
         />
         <CustomInput
           control={form.control}
@@ -154,7 +138,6 @@ const FormMasterEmployeComponent = ({
           label="Email"
           placeholder="email"
           type="email"
-          className="border-black"
         />
         <div className="grid grid-cols-2 gap-4">
           <CustomInput
@@ -163,7 +146,6 @@ const FormMasterEmployeComponent = ({
             label="NPK"
             placeholder="0000"
             type="number"
-            className="border-black"
           />
           <CustomInput
             control={form.control}
@@ -171,7 +153,6 @@ const FormMasterEmployeComponent = ({
             label="Telephone"
             placeholder="0896"
             type="number"
-            className="border-black"
           />
         </div>
         <div className="grid grid-cols-4 gap-4">

@@ -38,23 +38,27 @@ const CustomPieChart = ({
         </CardTitle>
       </CardHeader>
       <CardContent className=" pb-0">
-        <ChartContainer
-          config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px] px-0"
-        >
-          <PieChart>
-            <ChartTooltip
-              content={<ChartTooltipContent nameKey={nameKey} hideLabel />}
-            />
-            <Pie
-              data={chartData}
-              dataKey={dataKey}
-              labelLine={false}
-              innerRadius={60}
-              nameKey={nameKey}
-            />
-          </PieChart>
-        </ChartContainer>
+        {chartData.length > 0 ? (
+          <ChartContainer
+            config={chartConfig}
+            className="mx-auto aspect-square max-h-[250px] px-0"
+          >
+            <PieChart>
+              <ChartTooltip
+                content={<ChartTooltipContent nameKey={nameKey} hideLabel />}
+              />
+              <Pie
+                data={chartData}
+                dataKey={dataKey}
+                labelLine={false}
+                innerRadius={60}
+                nameKey={nameKey}
+              />
+            </PieChart>
+          </ChartContainer>
+        ) : (
+          <p className="text-sm text-center my-4 font-extralight">No Results</p>
+        )}
       </CardContent>
     </Card>
   );

@@ -35,7 +35,6 @@ const EmployeeAPI = (() => {
     gender,
     levelId,
     sectionId,
-    password,
     positionId,
   }) => {
     try {
@@ -47,7 +46,6 @@ const EmployeeAPI = (() => {
         gender,
         levelId,
         sectionId,
-        password,
         positionId,
       });
       console.log(response);
